@@ -1,0 +1,1069 @@
+[
+  {
+    "beginRendering": {
+      "surfaceId": "comprehensive-demo",
+      "root": "root",
+      "styles": {
+        "font": "Inter, system-ui, sans-serif",
+        "primaryColor": "#8b5cf6"
+      }
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "comprehensive-demo",
+      "components": [
+        {
+          "id": "root",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "header-section",
+                  "display-section",
+                  "input-section",
+                  "layout-section"
+                ]
+              },
+              "distribution": "start",
+              "alignment": "stretch",
+              "spacing": 24
+            }
+          }
+        },
+        {
+          "id": "header-section",
+          "component": {
+            "Card": {
+              "child": "header-content"
+            }
+          }
+        },
+        {
+          "id": "header-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["title", "subtitle"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "A2UI 组件完整演示"
+              },
+              "usageHint": "h1"
+            }
+          }
+        },
+        {
+          "id": "subtitle",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "基于 shadcn-vue 的现代化 UI 组件库"
+              },
+              "usageHint": "caption"
+            }
+          }
+        },
+        {
+          "id": "display-section",
+          "component": {
+            "Card": {
+              "child": "display-content"
+            }
+          }
+        },
+        {
+          "id": "display-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "display-title",
+                  "text-demo",
+                  "icon-demo",
+                  "image-demo",
+                  "video-demo"
+                ]
+              },
+              "spacing": 16
+            }
+          }
+        },
+        {
+          "id": "display-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "📺 Display 组件"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "text-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["text-label", "text-h3", "text-body", "text-caption"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "text-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Text 组件** - 支持多种样式"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "text-h3",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是 H3 标题"
+              },
+              "usageHint": "h3"
+            }
+          }
+        },
+        {
+          "id": "text-body",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是正文文本，支持 **粗体**、*斜体* 和 `代码` 样式。"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "text-caption",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是说明文字（caption）"
+              },
+              "usageHint": "caption"
+            }
+          }
+        },
+        {
+          "id": "icon-demo",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["icon-label", "icon-home", "icon-user", "icon-settings"]
+              },
+              "spacing": 12,
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "icon-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Icon 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "icon-home",
+          "component": {
+            "Icon": {
+              "icon": "home",
+              "size": 24
+            }
+          }
+        },
+        {
+          "id": "icon-user",
+          "component": {
+            "Icon": {
+              "icon": "user",
+              "size": 24
+            }
+          }
+        },
+        {
+          "id": "icon-settings",
+          "component": {
+            "Icon": {
+              "icon": "settings",
+              "size": 24
+            }
+          }
+        },
+        {
+          "id": "image-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["image-label", "image-sample"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "image-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Image 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "image-sample",
+          "component": {
+            "Image": {
+              "url": "https://picsum.photos/400/200",
+              "alt": "示例图片",
+              "width": 400,
+              "height": 200
+            }
+          }
+        },
+        {
+          "id": "video-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["video-label", "video-sample"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "video-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Video 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "video-sample",
+          "component": {
+            "Video": {
+              "url": "https://www.w3schools.com/html/mov_bbb.mp4",
+              "controls": true,
+              "width": 400,
+              "height": 225
+            }
+          }
+        },
+        {
+          "id": "input-section",
+          "component": {
+            "Card": {
+              "child": "input-content"
+            }
+          }
+        },
+        {
+          "id": "input-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "input-title",
+                  "button-demo",
+                  "input-demo",
+                  "textarea-demo",
+                  "checkbox-demo",
+                  "radio-demo",
+                  "select-demo",
+                  "slider-demo",
+                  "datetime-demo"
+                ]
+              },
+              "spacing": 20
+            }
+          }
+        },
+        {
+          "id": "input-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "🎛️ Input 组件"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "button-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["button-label", "button-row"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "button-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Button 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "button-row",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["btn-primary", "btn-secondary", "btn-outline", "btn-ghost"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "btn-primary",
+          "component": {
+            "Button": {
+              "child": "btn-primary-text",
+              "primary": true,
+              "action": {
+                "name": "click_primary"
+              }
+            }
+          }
+        },
+        {
+          "id": "btn-primary-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Primary"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "btn-secondary",
+          "component": {
+            "Button": {
+              "child": "btn-secondary-text",
+              "variant": "secondary",
+              "action": {
+                "name": "click_secondary"
+              }
+            }
+          }
+        },
+        {
+          "id": "btn-secondary-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Secondary"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "btn-outline",
+          "component": {
+            "Button": {
+              "child": "btn-outline-text",
+              "variant": "outline",
+              "action": {
+                "name": "click_outline"
+              }
+            }
+          }
+        },
+        {
+          "id": "btn-outline-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Outline"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "btn-ghost",
+          "component": {
+            "Button": {
+              "child": "btn-ghost-text",
+              "variant": "ghost",
+              "action": {
+                "name": "click_ghost"
+              }
+            }
+          }
+        },
+        {
+          "id": "btn-ghost-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Ghost"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "input-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["input-label", "input-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "input-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**TextField 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "input-field",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "用户名"
+              },
+              "value": {
+                "path": "username"
+              },
+              "placeholder": "请输入用户名",
+              "multiline": false
+            }
+          }
+        },
+        {
+          "id": "textarea-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["textarea-label", "textarea-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "textarea-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Textarea 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "textarea-field",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "个人简介"
+              },
+              "value": {
+                "path": "bio"
+              },
+              "placeholder": "请输入个人简介",
+              "multiline": true
+            }
+          }
+        },
+        {
+          "id": "checkbox-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["checkbox-label", "checkbox-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "checkbox-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**CheckBox 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "checkbox-field",
+          "component": {
+            "CheckBox": {
+              "label": {
+                "literalString": "我同意服务条款"
+              },
+              "value": {
+                "path": "agreed"
+              }
+            }
+          }
+        },
+        {
+          "id": "radio-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["radio-label", "radio-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "radio-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Radio 组件 (MultipleChoice 单选):**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "radio-field",
+          "component": {
+            "MultipleChoice": {
+              "selections": {
+                "path": "gender"
+              },
+              "options": [
+                {
+                  "label": {
+                    "literalString": "男"
+                  },
+                  "value": "male"
+                },
+                {
+                  "label": {
+                    "literalString": "女"
+                  },
+                  "value": "female"
+                },
+                {
+                  "label": {
+                    "literalString": "其他"
+                  },
+                  "value": "other"
+                }
+              ],
+              "maxAllowedSelections": 1
+            }
+          }
+        },
+        {
+          "id": "select-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["select-label", "select-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "select-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**MultipleChoice 多选组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "select-field",
+          "component": {
+            "MultipleChoice": {
+              "selections": {
+                "path": "hobbies"
+              },
+              "options": [
+                {
+                  "label": {
+                    "literalString": "阅读"
+                  },
+                  "value": "reading"
+                },
+                {
+                  "label": {
+                    "literalString": "运动"
+                  },
+                  "value": "sports"
+                },
+                {
+                  "label": {
+                    "literalString": "音乐"
+                  },
+                  "value": "music"
+                },
+                {
+                  "label": {
+                    "literalString": "旅行"
+                  },
+                  "value": "travel"
+                }
+              ],
+              "maxAllowedSelections": 3
+            }
+          }
+        },
+        {
+          "id": "slider-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["slider-label", "slider-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "slider-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Slider 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "slider-field",
+          "component": {
+            "Slider": {
+              "label": {
+                "literalString": "音量"
+              },
+              "value": {
+                "path": "volume"
+              },
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
+          }
+        },
+        {
+          "id": "datetime-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["datetime-label", "datetime-field"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "datetime-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**DateTimeInput 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "datetime-field",
+          "component": {
+            "DateTimeInput": {
+              "label": {
+                "literalString": "选择日期"
+              },
+              "value": {
+                "path": "selectedDate"
+              }
+            }
+          }
+        },
+        {
+          "id": "layout-section",
+          "component": {
+            "Card": {
+              "child": "layout-content"
+            }
+          }
+        },
+        {
+          "id": "layout-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["layout-title", "flex-demo", "tabs-demo", "divider-demo"]
+              },
+              "spacing": 20
+            }
+          }
+        },
+        {
+          "id": "layout-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "📐 Layout 组件"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "flex-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["flex-label", "flex-row-sample", "flex-col-sample"]
+              },
+              "spacing": 12
+            }
+          }
+        },
+        {
+          "id": "flex-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Row & Column 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "flex-row-sample",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["flex-item-1", "flex-item-2", "flex-item-3"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "flex-item-1",
+          "component": {
+            "Card": {
+              "child": "flex-item-1-text"
+            }
+          }
+        },
+        {
+          "id": "flex-item-1-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Item 1"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "flex-item-2",
+          "component": {
+            "Card": {
+              "child": "flex-item-2-text"
+            }
+          }
+        },
+        {
+          "id": "flex-item-2-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Item 2"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "flex-item-3",
+          "component": {
+            "Card": {
+              "child": "flex-item-3-text"
+            }
+          }
+        },
+        {
+          "id": "flex-item-3-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Item 3"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "flex-col-sample",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["col-item-1", "col-item-2"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "col-item-1",
+          "component": {
+            "Card": {
+              "child": "col-item-1-text"
+            }
+          }
+        },
+        {
+          "id": "col-item-1-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "垂直排列 Item 1"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "col-item-2",
+          "component": {
+            "Card": {
+              "child": "col-item-2-text"
+            }
+          }
+        },
+        {
+          "id": "col-item-2-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "垂直排列 Item 2"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tabs-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["tabs-label", "tabs-component"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "tabs-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Tabs 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tabs-component",
+          "component": {
+            "Tabs": {
+              "tabItems": [
+                {
+                  "title": {
+                    "literalString": "标签页 1"
+                  },
+                  "child": "tab-content-1"
+                },
+                {
+                  "title": {
+                    "literalString": "标签页 2"
+                  },
+                  "child": "tab-content-2"
+                },
+                {
+                  "title": {
+                    "literalString": "标签页 3"
+                  },
+                  "child": "tab-content-3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "tab-content-1",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是第一个标签页的内容"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tab-content-2",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是第二个标签页的内容"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tab-content-3",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是第三个标签页的内容"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "divider-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["divider-label", "divider-component", "divider-text"]
+              },
+              "spacing": 8
+            }
+          }
+        },
+        {
+          "id": "divider-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Divider 组件:**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "divider-component",
+          "component": {
+            "Divider": {}
+          }
+        },
+        {
+          "id": "divider-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "分割线上方和下方的内容"
+              },
+              "usageHint": "caption"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "comprehensive-demo",
+      "updates": [
+        {
+          "path": "username",
+          "valueString": ""
+        },
+        {
+          "path": "bio",
+          "valueString": ""
+        },
+        {
+          "path": "agreed",
+          "valueBoolean": false
+        },
+        {
+          "path": "gender",
+          "valueList": []
+        },
+        {
+          "path": "hobbies",
+          "valueList": []
+        },
+        {
+          "path": "volume",
+          "valueNumber": 50
+        },
+        {
+          "path": "selectedDate",
+          "valueString": ""
+        }
+      ]
+    }
+  }
+]

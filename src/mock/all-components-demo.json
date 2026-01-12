@@ -1,0 +1,806 @@
+[
+  {
+    "beginRendering": {
+      "surfaceId": "all-components-demo",
+      "root": "root",
+      "styles": {
+        "font": "Inter, system-ui, sans-serif",
+        "primaryColor": "#0ea5e9"
+      }
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "all-components-demo",
+      "components": [
+        {
+          "id": "root",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["header-card", "display-card", "input-card", "layout-card"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "header-card",
+          "component": {
+            "Card": {
+              "child": "header-content"
+            }
+          }
+        },
+        {
+          "id": "header-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["title-text", "subtitle-text"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "title-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "# A2UI 组件库完整展示"
+              },
+              "usageHint": "h1"
+            }
+          }
+        },
+        {
+          "id": "subtitle-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "基于 shadcn-vue 和 TailwindCSS 的现代化 UI 组件"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "display-card",
+          "component": {
+            "Card": {
+              "child": "display-content"
+            }
+          }
+        },
+        {
+          "id": "display-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "display-title",
+                  "text-demo",
+                  "icon-demo",
+                  "image-demo",
+                  "divider-demo"
+                ]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "display-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "## 展示组件 (Display Components)"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "text-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "text-label",
+                  "text-h1",
+                  "text-h2",
+                  "text-h3",
+                  "text-body",
+                  "text-caption"
+                ]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "text-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Text 组件 - 各种文本样式：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "text-h1",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Title 1 - 最大标题"
+              },
+              "usageHint": "h1"
+            }
+          }
+        },
+        {
+          "id": "text-h2",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Title 2 - 二级标题"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "text-h3",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Title 3 - 三级标题"
+              },
+              "usageHint": "h3"
+            }
+          }
+        },
+        {
+          "id": "text-body",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Body - 正文文本，适合大段内容阅读。支持 **粗体**、*斜体*、`代码` 等 Markdown 格式"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "text-caption",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Caption - 辅助说明文本"
+              },
+              "usageHint": "caption"
+            }
+          }
+        },
+        {
+          "id": "icon-demo",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["icon-label", "icon-home", "icon-user", "icon-settings"]
+              },
+              "distribution": "start",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "icon-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Icon 组件：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "icon-home",
+          "component": {
+            "Icon": {
+              "name": {
+                "literalString": "home"
+              }
+            }
+          }
+        },
+        {
+          "id": "icon-user",
+          "component": {
+            "Icon": {
+              "name": {
+                "literalString": "person"
+              }
+            }
+          }
+        },
+        {
+          "id": "icon-settings",
+          "component": {
+            "Icon": {
+              "name": {
+                "literalString": "settings"
+              }
+            }
+          }
+        },
+        {
+          "id": "image-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["image-label", "image-sample"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "image-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Image 组件：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "image-sample",
+          "component": {
+            "Image": {
+              "url": {
+                "literalString": "https://picsum.photos/400/200"
+              },
+              "fit": "cover",
+              "usageHint": "mediumFeature"
+            }
+          }
+        },
+        {
+          "id": "divider-demo",
+          "component": {
+            "Divider": {
+              "axis": "horizontal"
+            }
+          }
+        },
+        {
+          "id": "input-card",
+          "component": {
+            "Card": {
+              "child": "input-content"
+            }
+          }
+        },
+        {
+          "id": "input-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["input-title", "button-demo", "textfield-demo", "checkbox-demo"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "input-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "## 输入组件 (Input Components)"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "button-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["button-label", "button-row"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "button-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Button 组件 - 多种样式：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "button-row",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["btn-primary", "btn-secondary", "btn-outline", "btn-ghost"]
+              },
+              "distribution": "start",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "btn-primary",
+          "component": {
+            "Button": {
+              "child": "btn-primary-text",
+              "primary": true
+            }
+          }
+        },
+        {
+          "id": "btn-primary-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Primary"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "btn-secondary",
+          "component": {
+            "Button": {
+              "child": "btn-secondary-text",
+              "variant": "secondary"
+            }
+          }
+        },
+        {
+          "id": "btn-secondary-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Secondary"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "btn-outline",
+          "component": {
+            "Button": {
+              "child": "btn-outline-text",
+              "variant": "outline"
+            }
+          }
+        },
+        {
+          "id": "btn-outline-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Outline"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "btn-ghost",
+          "component": {
+            "Button": {
+              "child": "btn-ghost-text",
+              "variant": "ghost"
+            }
+          }
+        },
+        {
+          "id": "btn-ghost-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Ghost"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "textfield-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["textfield-label", "textfield-short", "textfield-long"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "textfield-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**TextField 组件：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "textfield-short",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "用户名"
+              },
+              "text": {
+                "path": "username"
+              },
+              "textFieldType": "shortText"
+            }
+          }
+        },
+        {
+          "id": "textfield-long",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "个人简介"
+              },
+              "text": {
+                "path": "bio"
+              },
+              "textFieldType": "longText"
+            }
+          }
+        },
+        {
+          "id": "checkbox-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["checkbox-label", "checkbox-item"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "checkbox-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**CheckBox 组件：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "checkbox-item",
+          "component": {
+            "CheckBox": {
+              "label": {
+                "literalString": "我同意服务条款"
+              },
+              "value": {
+                "path": "agreed"
+              }
+            }
+          }
+        },
+        {
+          "id": "layout-card",
+          "component": {
+            "Card": {
+              "child": "layout-content"
+            }
+          }
+        },
+        {
+          "id": "layout-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["layout-title", "row-demo", "tabs-demo", "list-demo"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "layout-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "## 布局组件 (Layout Components)"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "row-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["row-label", "row-sample"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "row-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Row 组件 - 水平布局：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "row-sample",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["row-item1", "row-item2", "row-item3"]
+              },
+              "distribution": "spaceBetween",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "row-item1",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Item 1"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "row-item2",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Item 2"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "row-item3",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "Item 3"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tabs-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["tabs-label", "tabs-sample"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "tabs-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**Tabs 组件：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tabs-sample",
+          "component": {
+            "Tabs": {
+              "tabItems": [
+                {
+                  "title": {
+                    "literalString": "首页"
+                  },
+                  "child": "tab1-content"
+                },
+                {
+                  "title": {
+                    "literalString": "设置"
+                  },
+                  "child": "tab2-content"
+                },
+                {
+                  "title": {
+                    "literalString": "关于"
+                  },
+                  "child": "tab3-content"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "tab1-content",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是首页的内容"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tab2-content",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是设置页面的内容"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "tab3-content",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这是关于页面的内容"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "list-demo",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["list-label", "list-sample"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "list-label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "**List 组件 - 动态列表：**"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "list-sample",
+          "component": {
+            "List": {
+              "children": {
+                "template": {
+                  "componentId": "list-item-template",
+                  "dataBinding": "items"
+                }
+              },
+              "direction": "vertical"
+            }
+          }
+        },
+        {
+          "id": "list-item-template",
+          "component": {
+            "Text": {
+              "text": {
+                "path": "name"
+              },
+              "usageHint": "body"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "all-components-demo",
+      "updates": [
+        {
+          "path": "username",
+          "valueString": ""
+        },
+        {
+          "path": "bio",
+          "valueString": ""
+        },
+        {
+          "path": "agreed",
+          "valueBoolean": false
+        },
+        {
+          "path": "items",
+          "valueMap": {
+            "0": {
+              "valueMap": {
+                "name": {
+                  "valueString": "列表项 1"
+                }
+              }
+            },
+            "1": {
+              "valueMap": {
+                "name": {
+                  "valueString": "列表项 2"
+                }
+              }
+            },
+            "2": {
+              "valueMap": {
+                "name": {
+                  "valueString": "列表项 3"
+                }
+              }
+            },
+            "3": {
+              "valueMap": {
+                "name": {
+                  "valueString": "列表项 4"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

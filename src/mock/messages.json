@@ -1,0 +1,232 @@
+[
+  {
+    "beginRendering": {
+      "surfaceId": "demo-surface",
+      "root": "root-component",
+      "styles": {
+        "font": "Roboto, sans-serif",
+        "primaryColor": "#1976d2"
+      }
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "demo-surface",
+      "components": [
+        {
+          "id": "root-component",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["header", "divider-1", "content-card", "divider-2", "button-row"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "header",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "# A2UI 渲染器演示\n\n欢迎使用 A2UI 渲染器！这是一个完整的演示页面。"
+              },
+              "usageHint": "h1"
+            }
+          }
+        },
+        {
+          "id": "divider-1",
+          "component": {
+            "Divider": {
+              "axis": "horizontal"
+            }
+          }
+        },
+        {
+          "id": "content-card",
+          "component": {
+            "Card": {
+              "child": "card-content"
+            }
+          }
+        },
+        {
+          "id": "card-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["user-name", "user-email", "checkbox-demo", "slider-demo"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "user-name",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "用户名"
+              },
+              "text": {
+                "path": "/user/name"
+              },
+              "textFieldType": "shortText"
+            }
+          }
+        },
+        {
+          "id": "user-email",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "邮箱"
+              },
+              "text": {
+                "path": "/user/email"
+              },
+              "textFieldType": "shortText"
+            }
+          }
+        },
+        {
+          "id": "checkbox-demo",
+          "component": {
+            "CheckBox": {
+              "label": {
+                "literalString": "接收通知"
+              },
+              "value": {
+                "path": "/user/notifications"
+              }
+            }
+          }
+        },
+        {
+          "id": "slider-demo",
+          "component": {
+            "Slider": {
+              "value": {
+                "path": "/user/volume"
+              },
+              "minValue": 0,
+              "maxValue": 100
+            }
+          }
+        },
+        {
+          "id": "divider-2",
+          "component": {
+            "Divider": {
+              "axis": "horizontal"
+            }
+          }
+        },
+        {
+          "id": "button-row",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["submit-button", "cancel-button"]
+              },
+              "distribution": "end",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "submit-button",
+          "component": {
+            "Button": {
+              "child": "submit-text",
+              "primary": true,
+              "action": {
+                "name": "submit",
+                "context": [
+                  {
+                    "key": "userName",
+                    "value": {
+                      "path": "/user/name"
+                    }
+                  },
+                  {
+                    "key": "userEmail",
+                    "value": {
+                      "path": "/user/email"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "submit-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "提交"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "cancel-button",
+          "component": {
+            "Button": {
+              "child": "cancel-text",
+              "primary": false,
+              "action": {
+                "name": "cancel"
+              }
+            }
+          }
+        },
+        {
+          "id": "cancel-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "取消"
+              },
+              "usageHint": "body"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "demo-surface",
+      "path": "/",
+      "contents": [
+        {
+          "key": "user",
+          "valueMap": [
+            {
+              "key": "name",
+              "valueString": "张三"
+            },
+            {
+              "key": "email",
+              "valueString": "zhangsan@example.com"
+            },
+            {
+              "key": "notifications",
+              "valueBoolean": true
+            },
+            {
+              "key": "volume",
+              "valueNumber": 50
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

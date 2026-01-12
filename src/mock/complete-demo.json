@@ -1,0 +1,665 @@
+[
+  {
+    "beginRendering": {
+      "surfaceId": "chat-surface",
+      "root": "main-container",
+      "styles": {
+        "font": "Inter, system-ui, sans-serif",
+        "primaryColor": "#2563eb"
+      }
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "chat-surface",
+      "components": [
+        {
+          "id": "main-container",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "header-section",
+                  "divider-1",
+                  "tabs-section",
+                  "divider-2",
+                  "action-buttons"
+                ]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "header-section",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["app-icon", "header-text"]
+              },
+              "distribution": "start",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "app-icon",
+          "component": {
+            "Icon": {
+              "name": {
+                "literalString": "chat"
+              }
+            }
+          }
+        },
+        {
+          "id": "header-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "# AI 助手演示\n\n这是一个完整的 A2UI 消息演示"
+              },
+              "usageHint": "h1"
+            }
+          }
+        },
+        {
+          "id": "divider-1",
+          "component": {
+            "Divider": {
+              "axis": "horizontal"
+            }
+          }
+        },
+        {
+          "id": "tabs-section",
+          "component": {
+            "Tabs": {
+              "tabItems": [
+                {
+                  "title": {
+                    "literalString": "个人信息"
+                  },
+                  "child": "profile-tab"
+                },
+                {
+                  "title": {
+                    "literalString": "设置"
+                  },
+                  "child": "settings-tab"
+                },
+                {
+                  "title": {
+                    "literalString": "数据列表"
+                  },
+                  "child": "list-tab"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "profile-tab",
+          "component": {
+            "Card": {
+              "child": "profile-content"
+            }
+          }
+        },
+        {
+          "id": "profile-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": [
+                  "profile-image",
+                  "name-field",
+                  "email-field",
+                  "bio-field",
+                  "birthday-field"
+                ]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "profile-image",
+          "component": {
+            "Image": {
+              "url": {
+                "path": "/profile/avatar"
+              },
+              "fit": "cover",
+              "usageHint": "avatar"
+            }
+          }
+        },
+        {
+          "id": "name-field",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "姓名"
+              },
+              "text": {
+                "path": "/profile/name"
+              },
+              "textFieldType": "shortText"
+            }
+          }
+        },
+        {
+          "id": "email-field",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "邮箱"
+              },
+              "text": {
+                "path": "/profile/email"
+              },
+              "textFieldType": "shortText",
+              "validationRegexp": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+            }
+          }
+        },
+        {
+          "id": "bio-field",
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": "个人简介"
+              },
+              "text": {
+                "path": "/profile/bio"
+              },
+              "textFieldType": "longText"
+            }
+          }
+        },
+        {
+          "id": "birthday-field",
+          "component": {
+            "DateTimeInput": {
+              "value": {
+                "path": "/profile/birthday"
+              },
+              "enableDate": true,
+              "enableTime": false
+            }
+          }
+        },
+        {
+          "id": "settings-tab",
+          "component": {
+            "Card": {
+              "child": "settings-content"
+            }
+          }
+        },
+        {
+          "id": "settings-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["notifications-checkbox", "theme-choice", "volume-slider"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "notifications-checkbox",
+          "component": {
+            "CheckBox": {
+              "label": {
+                "literalString": "启用通知"
+              },
+              "value": {
+                "path": "/settings/notifications"
+              }
+            }
+          }
+        },
+        {
+          "id": "theme-choice",
+          "component": {
+            "MultipleChoice": {
+              "selections": {
+                "path": "/settings/theme"
+              },
+              "options": [
+                {
+                  "label": {
+                    "literalString": "浅色主题"
+                  },
+                  "value": "light"
+                },
+                {
+                  "label": {
+                    "literalString": "深色主题"
+                  },
+                  "value": "dark"
+                },
+                {
+                  "label": {
+                    "literalString": "自动"
+                  },
+                  "value": "auto"
+                }
+              ],
+              "maxAllowedSelections": 1
+            }
+          }
+        },
+        {
+          "id": "volume-slider",
+          "component": {
+            "Slider": {
+              "value": {
+                "path": "/settings/volume"
+              },
+              "minValue": 0,
+              "maxValue": 100
+            }
+          }
+        },
+        {
+          "id": "list-tab",
+          "component": {
+            "Card": {
+              "child": "list-content"
+            }
+          }
+        },
+        {
+          "id": "list-content",
+          "component": {
+            "List": {
+              "children": {
+                "template": {
+                  "componentId": "list-item-template",
+                  "dataBinding": "/items"
+                }
+              },
+              "direction": "vertical",
+              "alignment": "start"
+            }
+          }
+        },
+        {
+          "id": "list-item-template",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["item-icon", "item-text"]
+              },
+              "distribution": "start",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "item-icon",
+          "component": {
+            "Icon": {
+              "name": {
+                "literalString": "check_circle"
+              }
+            }
+          }
+        },
+        {
+          "id": "item-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "列表项"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "divider-2",
+          "component": {
+            "Divider": {
+              "axis": "horizontal"
+            }
+          }
+        },
+        {
+          "id": "action-buttons",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["save-button", "modal-button", "delete-button"]
+              },
+              "distribution": "spaceBetween",
+              "alignment": "center"
+            }
+          }
+        },
+        {
+          "id": "save-button",
+          "component": {
+            "Button": {
+              "child": "save-text",
+              "primary": true,
+              "action": {
+                "name": "save_profile",
+                "context": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "path": "/profile/name"
+                    }
+                  },
+                  {
+                    "key": "email",
+                    "value": {
+                      "path": "/profile/email"
+                    }
+                  },
+                  {
+                    "key": "bio",
+                    "value": {
+                      "path": "/profile/bio"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "save-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "保存"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "modal-button",
+          "component": {
+            "Modal": {
+              "entryPointChild": "modal-trigger",
+              "contentChild": "modal-content"
+            }
+          }
+        },
+        {
+          "id": "modal-trigger",
+          "component": {
+            "Button": {
+              "child": "modal-trigger-text",
+              "primary": false,
+              "action": {
+                "name": "open_modal"
+              }
+            }
+          }
+        },
+        {
+          "id": "modal-trigger-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "打开弹窗"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "modal-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["modal-title", "modal-body", "modal-video"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "modal-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "## 弹窗标题\n\n这是一个模态对话框示例"
+              },
+              "usageHint": "h2"
+            }
+          }
+        },
+        {
+          "id": "modal-body",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "这里可以放置任何内容，包括表单、图片、视频等。"
+              },
+              "usageHint": "body"
+            }
+          }
+        },
+        {
+          "id": "modal-video",
+          "component": {
+            "Video": {
+              "url": {
+                "literalString": "https://www.w3schools.com/html/mov_bbb.mp4"
+              }
+            }
+          }
+        },
+        {
+          "id": "delete-button",
+          "component": {
+            "Button": {
+              "child": "delete-text",
+              "primary": false,
+              "action": {
+                "name": "delete_surface"
+              }
+            }
+          }
+        },
+        {
+          "id": "delete-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "删除 Surface"
+              },
+              "usageHint": "body"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "chat-surface",
+      "path": "/",
+      "contents": [
+        {
+          "key": "profile",
+          "valueMap": [
+            {
+              "key": "name",
+              "valueString": "李明"
+            },
+            {
+              "key": "email",
+              "valueString": "liming@example.com"
+            },
+            {
+              "key": "bio",
+              "valueString": "热爱技术的全栈开发工程师，专注于前端和 AI 应用开发。"
+            },
+            {
+              "key": "birthday",
+              "valueString": "1990-05-15"
+            },
+            {
+              "key": "avatar",
+              "valueString": "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+            }
+          ]
+        },
+        {
+          "key": "settings",
+          "valueMap": [
+            {
+              "key": "notifications",
+              "valueBoolean": true
+            },
+            {
+              "key": "theme",
+              "valueArray": ["light"]
+            },
+            {
+              "key": "volume",
+              "valueNumber": 75
+            }
+          ]
+        },
+        {
+          "key": "items",
+          "valueMap": [
+            {
+              "key": "item1",
+              "valueString": "第一个列表项"
+            },
+            {
+              "key": "item2",
+              "valueString": "第二个列表项"
+            },
+            {
+              "key": "item3",
+              "valueString": "第三个列表项"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "chat-surface",
+      "path": "/profile/name",
+      "contents": [
+        {
+          "key": "",
+          "valueString": "李明（已更新）"
+        }
+      ]
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "chat-surface",
+      "path": "/items",
+      "contents": [
+        {
+          "key": "item4",
+          "valueString": "新增的第四个列表项"
+        }
+      ]
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "chat-surface",
+      "components": [
+        {
+          "id": "save-text",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "已保存 ✓"
+              },
+              "usageHint": "body"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "beginRendering": {
+      "surfaceId": "secondary-surface",
+      "root": "secondary-root",
+      "styles": {
+        "font": "Roboto, sans-serif",
+        "primaryColor": "#10b981"
+      }
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "secondary-surface",
+      "components": [
+        {
+          "id": "secondary-root",
+          "component": {
+            "Card": {
+              "child": "secondary-content"
+            }
+          }
+        },
+        {
+          "id": "secondary-content",
+          "component": {
+            "Column": {
+              "children": {
+                "explicitList": ["secondary-title", "secondary-description"]
+              },
+              "distribution": "start",
+              "alignment": "stretch"
+            }
+          }
+        },
+        {
+          "id": "secondary-title",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "### 第二个 Surface\n\n这是另一个独立的渲染表面"
+              },
+              "usageHint": "h3"
+            }
+          }
+        },
+        {
+          "id": "secondary-description",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "A2UI 支持同时管理多个 Surface，每个 Surface 都有独立的组件树和数据模型。"
+              },
+              "usageHint": "body"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "deleteSurface": {
+      "surfaceId": "secondary-surface"
+    }
+  }
+]
