@@ -1,24 +1,21 @@
-# A2UI Renderer
+# A2UI Vue
 
-基于 Vue 3 的 A2UI (Agent to UI) 渲染器，实现了 Google A2UI 规范 v0.8，用于 AI 生成动态用户界面。
+> AI-driven UI component library for Vue 3
 
-## 技术栈
+基于 Vue 3 的 A2UI (Agent to UI) 渲染器组件库，实现了 Google A2UI 规范 v0.8，用于 AI 生成动态用户界面。
 
-- **Vue 3** + **TypeScript** + **Vite**
-- **Pinia** (状态管理)
-- **shadcn-vue** + **Tailwind CSS** (UI 组件)
-- **Vue Router** (路由)
+[![npm version](https://img.shields.io/npm/v/a2ui-vue.svg)](https://www.npmjs.com/package/a2ui-vue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 核心模块
+## ✨ 特性
 
-| 模块            | 说明           | 关键文件                                |
 | --------------- | -------------- | --------------------------------------- |
-| **Core**        | A2UI 核心逻辑  | `src/core/A2UIManager.js`, `Surface.js` |
-| **Components**  | 18个 A2UI 组件 | `src/components/a2ui/`                  |
-| **Composables** | Vue 组合式函数 | `src/composables/`                      |
-| **Stores**      | Pinia 状态管理 | `src/stores/`                           |
-| **Message**     | 消息处理系统   | `src/message/`                          |
-| **Types**       | 类型定义       | `src/types/`                            |
+| **Core** | A2UI 核心逻辑 | `src/core/A2UIManager.js`, `Surface.js` |
+| **Components** | 18个 A2UI 组件 | `src/components/a2ui/` |
+| **Composables** | Vue 组合式函数 | `src/composables/` |
+| **Stores** | Pinia 状态管理 | `src/stores/` |
+| **Message** | 消息处理系统 | `src/message/` |
+| **Types** | 类型定义 | `src/types/` |
 
 ## A2UI 组件
 
@@ -41,53 +38,73 @@ Button, TextField, CheckBox, DateTimeInput, MultipleChoice, Slider
 - **实时更新** - SSE 支持
 - **事件系统** - 完整的动作处理
 
-## 项目结构
+## 📁 项目结构
 
 ```
-src/
-├── components/
-│   ├── a2ui/           # A2UI 组件
-│   │   ├── display/    # 展示组件
-│   │   ├── input/      # 交互组件
-│   │   └── layout/     # 布局组件
-│   └── ui/             # shadcn-vue 基础组件
-├── composables/        # Vue composables
-├── core/              # A2UI 核心逻辑
-├── message/           # 消息处理
-├── stores/            # Pinia 状态管理
-├── types/             # 类型定义
-└── views/             # 示例页面
+a2ui-vue/
+├── src/                    # 组件库源代码
+│   ├── components/         # A2UI 组件
+│   │   ├── a2ui/          # 子组件
+│   │   │   ├── display/   # 展示组件
+│   │   │   ├── input/     # 交互组件
+│   │   │   └── layout/    # 布局组件
+│   │   └── ui/            # shadcn-vue 基础组件
+│   ├── composables/       # Vue composables
+│   ├── core/             # A2UI 核心逻辑
+│   ├── message/          # 消息处理
+│   ├── types/            # 类型定义
+│   └── index.js          # 库入口
+├── examples/             # 示例应用
+│   ├── basic/           # 基础示例
+│   └── advanced/        # 高级示例
+├── dist/                # 构建输出
+└── docs/                # 文档
 ```
 
-## 项目设置
+## 🔧 开发
 
-```sh
-pnpm install
+### 本地开发
+
+```bash
+# 安装依赖
+npm install
+
+# 构建组件库
+npm run build
+
+# 运行示例应用
+npm run dev  # 运行 examples/advanced
 ```
 
-### 开发
+### 运行示例
 
-```sh
-pnpm dev
+```bash
+# 基础示例
+cd examples/basic
+npm install
+npm run dev
+
+# 高级示例
+cd examples/advanced
+npm install
+npm run dev
 ```
 
-### 构建
+## 📚 文档
 
-```sh
-pnpm build
-```
+- [设计文档](./requirements/v9/restructure-design.md)
+- [示例说明](./examples/README.md)
 
-### 代码检查
+## 🤝 贡献
 
-```sh
-pnpm lint
-```
+欢迎贡献代码！
 
-## 推荐 IDE
+## 📄 License
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+MIT © [Your Name]
 
-## 推荐 浏览器
+## 🔗 相关链接
 
-- [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-- 开启 DevTools 自定义对象格式化
+- [Google A2UI 规范](https://github.com/google/a2ui)
+- [Vue 3](https://vuejs.org/)
+- [shadcn-vue](https://www.shadcn-vue.com/)
