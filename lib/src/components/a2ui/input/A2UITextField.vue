@@ -44,6 +44,7 @@ const labelText = computed(() => resolveValue(props.label) || '')
 const initialValue = computed(() => resolveValue(props.text) || '')
 
 const inputValue = ref(initialValue.value)
+const isComposing = ref(false)
 
 watch(initialValue, (newVal) => {
   inputValue.value = newVal
@@ -79,7 +80,22 @@ const isValid = computed(() => {
   return validationPattern.value.test(inputValue.value)
 })
 
+const handleCompositionStart = () => {
+  isComposing.value = true
+}
+
+const handleCompositionEnd = () => {
+  isComposing.value = false
+  updateDataModel()
+}
+
 const handleInput = () => {
+  if (!isComposing.value) {
+    updateDataModel()
+  }
+}
+
+const updateDataModel = () => {
   const path = getPath(props.text)
   if (path && manager) {
     manager.updateData(surfaceId.value, path, inputValue.value)
@@ -99,6 +115,8 @@ const handleInput = () => {
       :class="{ 'border-destructive': !isValid }"
       rows="4"
       @input="handleInput"
+      @compositionstart="handleCompositionStart"
+      @compositionend="handleCompositionEnd"
     />
     <Input
       v-else
@@ -107,6 +125,8 @@ const handleInput = () => {
       :class="{ 'border-destructive': !isValid }"
       v-bind="$attrs"
       @input="handleInput"
+      @compositionstart="handleCompositionStart"
+      @compositionend="handleCompositionEnd"
     />
     <p v-if="!isValid" class="text-sm text-destructive font-medium">Invalid input</p>
   </div>

@@ -23,7 +23,7 @@ const handleAction = (actionData) => {
 let unsubscribe = null
 
 onMounted(() => {
-  console.log('[A2UIRender] Mounted')
+  console.log('组件挂在了-------[A2UIRender] Mounted')
   console.log(
     '[A2UIRender] Existing surfaces (will be ignored):',
     Array.from(manager.state.surfaces.keys()),

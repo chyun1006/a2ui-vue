@@ -2,6 +2,13 @@
 import { ref, computed, watch, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 
@@ -91,18 +98,39 @@ const updateDataModel = () => {
   }
   emit('change', selectedValues.value)
 }
+
+// 单选处理
+const handleSingleSelect = (value) => {
+  selectedValues.value = [value]
+  updateDataModel()
+}
+
+// 单选显示文本
+const singleSelectedLabel = computed(() => {
+  if (selectedValues.value.length === 0) return ''
+  const selected = optionsList.value.find((o) => o.value === selectedValues.value[0])
+  return selected?.label || ''
+})
 </script>
 
 <template>
-  <div class="space-y-3">
-    <!-- 单选模式 -->
-    <RadioGroup v-if="isSingleChoice" v-model="radioValue">
-      <div v-for="option in optionsList" :key="option.value" class="flex items-center space-x-2">
-        <RadioGroupItem :id="option.value" :value="option.value" />
-        <Label :for="`${option.value}`">{{ option.label }}</Label>
-      </div>
-    </RadioGroup>
-
+  <div class="space-y-3 w-full">
+    <Select
+      v-if="isSingleChoice"
+      :model-value="selectedValues[0]"
+      @update:model-value="handleSingleSelect"
+    >
+      <SelectTrigger class="w-full">
+        <SelectValue placeholder="请选择">
+          {{ singleSelectedLabel || '请选择' }}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem v-for="option in optionsList" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </SelectItem>
+      </SelectContent>
+    </Select>
     <!-- 多选模式 -->
     <div v-else class="space-y-2">
       <div v-for="option in optionsList" :key="option.value" class="flex items-center space-x-2">

@@ -1,0 +1,91 @@
+[
+  {
+    "beginRendering": {
+      "surfaceId": "chat_input_surface",
+      "root": "input_row",
+      "styles": {
+        "primaryColor": "#1A73E8"
+      }
+    }
+  },
+  {
+    "dataModelUpdate": {
+      "surfaceId": "chat_input_surface",
+      "contents": [
+        {
+          "key": "chat",
+          "valueMap": [
+            {
+              "key": "input_text",
+              "valueString": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "surfaceUpdate": {
+      "surfaceId": "chat_input_surface",
+      "components": [
+        {
+          "id": "input_row",
+          "component": {
+            "Row": {
+              "children": {
+                "explicitList": ["message_input", "send_button"]
+              },
+              "alignment": "center",
+              "distribution": "start"
+            }
+          }
+        },
+        {
+          "id": "message_input",
+          "weight": 1,
+          "component": {
+            "TextField": {
+              "label": {
+                "literalString": ""
+              },
+              "text": {
+                "path": "/chat/input_text"
+              },
+              "textFieldType": "shortText"
+            }
+          }
+        },
+        {
+          "id": "send_button",
+          "component": {
+            "Button": {
+              "child": "send_button_label",
+              "primary": true,
+              "action": {
+                "name": "on_send_click",
+                "context": [
+                  {
+                    "key": "submitted_text",
+                    "value": {
+                      "path": "/chat/input_text"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "send_button_label",
+          "component": {
+            "Text": {
+              "text": {
+                "literalString": "发送"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,755 @@
+{
+  "components": {
+    "AudioPlayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "object",
+          "description": "数据绑定对象，包含音频 URL",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "description": {
+          "type": "object",
+          "description": "数据绑定对象，包含音频描述文本 默认值: null",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "url"
+      ]
+    },
+    "Icon": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "object",
+          "description": "数据绑定对象，包含图标名称（驼峰格式）",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "icon": {
+          "type": "object",
+          "description": "数据绑定对象，包含图标名称（向后兼容）",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "name",
+        "icon"
+      ]
+    },
+    "Image": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "object",
+          "description": "数据绑定对象，包含图片 URL",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "fit": {
+          "type": "string",
+          "description": "图片适配模式：contain, cover, fill, none 或 scale-down 默认值: 'cover'",
+          "enum": [
+            "contain",
+            "cover",
+            "fill",
+            "none",
+            "scale-down"
+          ]
+        },
+        "usageHint": {
+          "type": "string",
+          "description": "尺寸预设：icon, avatar, smallFeature, mediumFeature, largeFeature 或 header 默认值: 'mediumFeature'",
+          "enum": [
+            "icon",
+            "avatar",
+            "smallFeature",
+            "mediumFeature",
+            "largeFeature",
+            "header"
+          ]
+        }
+      },
+      "required": [
+        "url"
+      ]
+    },
+    "Text": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "object",
+          "description": "数据绑定对象，包含要显示的文本内容",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "usageHint": {
+          "type": "string",
+          "description": "文本样式提示：h1, h2, h3, h4, h5, caption 或 body 默认值: 'body'",
+          "enum": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "caption",
+            "body"
+          ]
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "Video": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "object",
+          "description": "数据绑定对象，包含视频 URL",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "url"
+      ]
+    },
+    "Button": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "child": {
+          "type": "string",
+          "description": "要在按钮内渲染的子组件 ID"
+        },
+        "primary": {
+          "type": "boolean",
+          "description": "是否为主要按钮（已弃用，请使用 variant） 默认值: false"
+        },
+        "variant": {
+          "type": "string",
+          "description": "按钮样式变体：default, primary, secondary, outline, ghost, destructive 或 link 默认值: 'default'",
+          "enum": [
+            "default",
+            "primary",
+            "secondary",
+            "outline",
+            "ghost",
+            "destructive",
+            "link"
+          ]
+        },
+        "size": {
+          "type": "string",
+          "description": "按钮尺寸：default, sm, lg 或 icon 默认值: 'default'",
+          "enum": [
+            "default",
+            "sm",
+            "lg",
+            "icon"
+          ]
+        },
+        "action": {
+          "type": "object",
+          "description": "点击按钮时要执行的动作对象",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "context": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "object",
+                    "description": "要包含在上下文中的值",
+                    "additionalProperties": false,
+                    "properties": {
+                      "path": {
+                        "type": "string"
+                      },
+                      "literalString": {
+                        "type": "string"
+                      },
+                      "literalNumber": {
+                        "type": "number"
+                      },
+                      "literalBoolean": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ]
+              }
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      "required": [
+        "child",
+        "action"
+      ]
+    },
+    "CheckBox": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "object",
+          "description": "数据绑定对象，包含复选框标签文本",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "value": {
+          "type": "object",
+          "description": "数据绑定对象，包含选中状态（布尔值）",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "literalNumber": {
+              "type": "number"
+            },
+            "literalBoolean": {
+              "type": "boolean"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ]
+    },
+    "DateTimeInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "object",
+          "description": "数据绑定对象，包含当前日期时间值",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "literalNumber": {
+              "type": "number"
+            },
+            "literalBoolean": {
+              "type": "boolean"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "enableDate": {
+          "type": "boolean",
+          "description": "是否启用日期选择 默认值: true"
+        },
+        "enableTime": {
+          "type": "boolean",
+          "description": "是否启用时间选择 默认值: false"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "MultipleChoice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selections": {
+          "type": "object",
+          "description": "数据绑定对象，包含已选值的数组",
+          "additionalProperties": false,
+          "properties": {
+            "literalArray": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "options": {
+          "type": "array",
+          "description": "选项对象数组，每个对象包含 label（数据绑定）和 value",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "object",
+                "description": "此选项显示的文本",
+                "additionalProperties": false,
+                "properties": {
+                  "literalString": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  }
+                }
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label",
+              "value"
+            ]
+          }
+        },
+        "maxAllowedSelections": {
+          "type": "number",
+          "description": "允许的最大选择数；设置为 1 时启用单选模式 默认值: null"
+        }
+      },
+      "required": [
+        "selections",
+        "options"
+      ]
+    },
+    "Slider": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "object",
+          "description": "数据绑定对象，包含滑块标签文本 默认值: null",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "value": {
+          "type": "object",
+          "description": "数据绑定对象，包含当前滑块值",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "literalNumber": {
+              "type": "number"
+            },
+            "literalBoolean": {
+              "type": "boolean"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "min": {
+          "type": "number",
+          "description": "滑块最小值 默认值: 0"
+        },
+        "max": {
+          "type": "number",
+          "description": "滑块最大值 默认值: 100"
+        },
+        "step": {
+          "type": "number",
+          "description": "滑块步长 默认值: 1"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "TextField": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "object",
+          "description": "数据绑定对象，包含输入框标签文本",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "text": {
+          "type": "object",
+          "description": "数据绑定对象，包含初始值和当前输入值 默认值: null",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "textFieldType": {
+          "type": "string",
+          "description": "输入类型：date, longText, number, shortText 或 obscured 默认值: 'shortText'",
+          "enum": [
+            "date",
+            "longText",
+            "number",
+            "shortText",
+            "obscured"
+          ]
+        },
+        "validationRegexp": {
+          "type": "string",
+          "description": "输入验证的正则表达式模式 默认值: null"
+        }
+      },
+      "required": [
+        "label"
+      ]
+    },
+    "Card": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "child": {
+          "type": "string",
+          "description": "要在卡片内渲染的子元素组件 ID"
+        }
+      },
+      "required": [
+        "child"
+      ]
+    },
+    "Column": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "type": "object",
+          "description": "包含 explicitList（组件 ID 数组）或 template（用于动态子组件）的对象",
+          "additionalProperties": false,
+          "properties": {
+            "explicitList": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "template": {
+              "type": "object",
+              "description": "从数据模型列表生成动态子组件列表的模板",
+              "additionalProperties": false,
+              "properties": {
+                "componentId": {
+                  "type": "string"
+                },
+                "dataBinding": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "componentId",
+                "dataBinding"
+              ]
+            }
+          }
+        },
+        "distribution": {
+          "type": "string",
+          "description": "水平分布方式：start, center, end, spaceBetween, spaceAround 或 spaceEvenly 默认值: 'start'",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "spaceBetween",
+            "spaceAround",
+            "spaceEvenly"
+          ]
+        },
+        "alignment": {
+          "type": "string",
+          "description": "垂直对齐方式：start, center, end 或 stretch 默认值: 'start'",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ]
+        }
+      },
+      "required": [
+        "children"
+      ]
+    },
+    "Divider": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "axis": {
+          "type": "string",
+          "description": "分隔线方向：horizontal 或 vertical 默认值: 'horizontal'",
+          "enum": [
+            "horizontal",
+            "vertical"
+          ]
+        }
+      }
+    },
+    "List": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "type": "object",
+          "description": "包含 explicitList（组件 ID 数组）或 template（用于动态子组件）的对象",
+          "additionalProperties": false,
+          "properties": {
+            "explicitList": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "template": {
+              "type": "object",
+              "description": "从数据模型列表生成动态子组件列表的模板",
+              "additionalProperties": false,
+              "properties": {
+                "componentId": {
+                  "type": "string"
+                },
+                "dataBinding": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "componentId",
+                "dataBinding"
+              ]
+            }
+          }
+        },
+        "direction": {
+          "type": "string",
+          "description": "列表方向：vertical 或 horizontal 默认值: 'vertical'",
+          "enum": [
+            "vertical",
+            "horizontal"
+          ]
+        },
+        "alignment": {
+          "type": "string",
+          "description": "交叉轴对齐方式：start, center, end 或 stretch 默认值: 'start'",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ]
+        }
+      },
+      "required": [
+        "children"
+      ]
+    },
+    "Modal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entryPointChild": {
+          "type": "string",
+          "description": "点击时触发模态框的元素组件 ID"
+        },
+        "contentChild": {
+          "type": "string",
+          "description": "要显示的模态框内容组件 ID"
+        }
+      },
+      "required": [
+        "entryPointChild",
+        "contentChild"
+      ]
+    },
+    "Row": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": {
+          "type": "object",
+          "description": "包含 explicitList（组件 ID 数组）或 template（用于动态子组件）的对象",
+          "additionalProperties": false,
+          "properties": {
+            "explicitList": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "template": {
+              "type": "object",
+              "description": "从数据模型列表生成动态子组件列表的模板",
+              "additionalProperties": false,
+              "properties": {
+                "componentId": {
+                  "type": "string"
+                },
+                "dataBinding": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "componentId",
+                "dataBinding"
+              ]
+            }
+          }
+        },
+        "distribution": {
+          "type": "string",
+          "description": "水平分布方式：start, center, end, spaceBetween, spaceAround 或 spaceEvenly 默认值: 'start'",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "spaceBetween",
+            "spaceAround",
+            "spaceEvenly"
+          ]
+        },
+        "alignment": {
+          "type": "string",
+          "description": "垂直对齐方式：start, center, end 或 stretch 默认值: 'start'",
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ]
+        }
+      },
+      "required": [
+        "children"
+      ]
+    },
+    "Tabs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tabItems": {
+          "type": "array",
+          "description": "标签对象数组，每个对象包含 title（数据绑定）和 child（组件 ID）"
+        }
+      },
+      "required": [
+        "tabItems"
+      ]
+    }
+  },
+  "styles": {
+    "font": {
+      "type": "string",
+      "description": "UI 的主要字体"
+    },
+    "primaryColor": {
+      "type": "string",
+      "description": "UI 的主要颜色，十六进制代码（如 #00BFFF）",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    }
+  }
+}

@@ -18,7 +18,12 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["header-card", "display-card", "input-card", "layout-card"]
+                "explicitList": [
+                  "header-card",
+                  "display-card",
+                  "input-card",
+                  "layout-card"
+                ]
               },
               "distribution": "start",
               "alignment": "stretch"
@@ -194,7 +199,12 @@
           "component": {
             "Row": {
               "children": {
-                "explicitList": ["icon-label", "icon-home", "icon-user", "icon-settings"]
+                "explicitList": [
+                  "icon-label",
+                  "icon-home",
+                  "icon-user",
+                  "icon-settings"
+                ]
               },
               "distribution": "start",
               "alignment": "center"
@@ -298,7 +308,12 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["input-title", "button-demo", "textfield-demo", "checkbox-demo"]
+                "explicitList": [
+                  "input-title",
+                  "button-demo",
+                  "textfield-demo",
+                  "checkbox-demo"
+                ]
               },
               "distribution": "start",
               "alignment": "stretch"
@@ -344,7 +359,12 @@
           "component": {
             "Row": {
               "children": {
-                "explicitList": ["btn-primary", "btn-secondary", "btn-outline", "btn-ghost"]
+                "explicitList": [
+                  "btn-primary",
+                  "btn-secondary",
+                  "btn-outline",
+                  "btn-ghost"
+                ]
               },
               "distribution": "start",
               "alignment": "center"
@@ -436,7 +456,11 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["textfield-label", "textfield-short", "textfield-long"]
+                "explicitList": [
+                  "textfield-label",
+                  "textfield-short",
+                  "textfield-long"
+                ]
               },
               "distribution": "start",
               "alignment": "stretch"
@@ -531,7 +555,12 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["layout-title", "row-demo", "tabs-demo", "list-demo"]
+                "explicitList": [
+                  "layout-title",
+                  "row-demo",
+                  "tabs-demo",
+                  "list-demo"
+                ]
               },
               "distribution": "start",
               "alignment": "stretch"
