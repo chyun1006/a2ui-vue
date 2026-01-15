@@ -54,7 +54,7 @@ const timeString = computed(() => {
     </div> -->
 
     <!-- Message Content -->
-    <div class="flex flex-col" :class="isUser ? 'items-end' : 'items-start'">
+    <div class="flex flex-col w-full" :class="isUser ? 'items-end' : 'items-start'">
       <div class="flex items-center mb-2">
         <div
           v-if="isAgent || isLoader"
@@ -85,17 +85,17 @@ const timeString = computed(() => {
       </div>
 
       <!-- Agent Widget/Content -->
-      <div v-else class="flex flex-col gap-2 w-full">
+      <div v-else class="flex flex-col gap-2">
         <!-- Thought/Reasoning (Optional) -->
         <div
           v-if="message.thought"
-          class="bg-indigo-50/50 rounded-xl p-3 border border-indigo-100/50 inline-block w-full"
+          class="flex bg-indigo-50/50 rounded-xl p-3 border border-indigo-100/50 inline-block w-full"
         >
           <div class="flex items-center gap-1.5 mb-1">
             <Sparkles class="w-3 h-3 text-indigo-400" />
-            <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide"
+            <!-- <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide"
               >思考中...</span
-            >
+            > -->
           </div>
           <p class="text-[11px] text-indigo-800/80 leading-relaxed italic">{{ message.thought }}</p>
         </div>

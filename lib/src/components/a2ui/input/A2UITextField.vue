@@ -2,7 +2,6 @@
 import { ref, computed, watch, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
 import { getGlobalManager } from '../../../core/singleton.js'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 
@@ -153,7 +152,7 @@ const updateDataModel = () => {
     <Textarea
       v-if="isTextarea"
       v-model="inputValue"
-      class="bg-slate-100 rounded-md border-transparent focus:border-blue-200 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm px-4 py-2.5 shadow-none resize-none transition-all"
+      class="bg-slate-100 rounded-md border border-transparent focus:border-blue-200 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm px-4 py-2.5 shadow-none resize-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
       :class="{ 'border-destructive': !isValid }"
       rows="4"
       placeholder="请输入"

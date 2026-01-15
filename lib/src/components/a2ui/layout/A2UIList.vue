@@ -1,6 +1,7 @@
 <script setup>
 import { computed, inject } from 'vue'
 import { FLEX_ALIGN_ITEMS_MAP } from '../../../types/components.js'
+import { getGlobalManager } from '../../../core/singleton.js'
 import A2UIRenderer from '../../A2UIRenderer.vue'
 import A2UIListItem from './A2UIListItem.vue'
 
@@ -31,8 +32,7 @@ const props = defineProps({
 
 const emit = defineEmits(['action'])
 
-// manager no longer needed
-// surfaceId no longer needed
+const surface = inject('a2ui-surface')
 
 const alignItems = computed(() => FLEX_ALIGN_ITEMS_MAP[props.alignment] || 'flex-start')
 
@@ -44,8 +44,16 @@ const childrenList = computed(() => {
   }
 
   if (children.template) {
+    const manager = getGlobalManager()
+    const surfaceId = surface?.value?.id
+
+    if (!manager || !surfaceId) {
+      console.warn('[A2UIList] manager or surfaceId not found')
+      return []
+    }
+
     const { componentId, dataBinding } = children.template
-    const data = manager.getData(surfaceId.value, dataBinding)
+    const data = manager.getData(surfaceId, dataBinding)
 
     if (data && typeof data === 'object') {
       // 支持 Map 对象 (从 Adapter 返回的 vals)
@@ -77,7 +85,7 @@ const handleAction = (actionData) => {
 <template>
   <ul :class="['a2ui-list', `a2ui-list--${direction}`]" :style="{ alignItems }">
     <li
-      v-for="(childId, index) in childrenList"
+      v-for="childId in childrenList"
       :key="typeof childId === 'string' ? childId : childId.id"
       class="a2ui-list-item"
     >

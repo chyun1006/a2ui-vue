@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick, watch, shallowRef } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, watch, shallowRef } from "vue";
 import {
   Mic,
   SendHorizontal,
@@ -93,25 +93,235 @@ const showLeftPanel = ref(false);
 const showRightPanel = ref(false);
 const messagesEndRef = ref(null);
 const fileInputRef = ref(null);
+let chatObserver = null;
 
+const mockadadad = [
+  {
+    beginRendering: {
+      surfaceId: "crew_directory_view",
+      root: "directory_column",
+      styles: {
+        primaryColor: "#2E7D32",
+      },
+    },
+  },
+  {
+    surfaceUpdate: {
+      surfaceId: "crew_directory_view",
+      components: [
+        {
+          id: "directory_column",
+          component: {
+            Column: {
+              children: {
+                explicitList: [
+                  "header_text",
+                  "summary_text",
+                  "crew_card_1",
+                  "crew_card_2",
+                  "crew_card_3",
+                  "crew_card_4",
+                  "crew_card_5",
+                  "crew_card_6",
+                  "footer_hint",
+                ],
+              },
+              distribution: "start",
+              alignment: "stretch",
+            },
+          },
+        },
+        {
+          id: "header_text",
+          component: {
+            Text: {
+              text: { literalString: "航空公司机组人员名录" },
+              usageHint: "h2",
+            },
+          },
+        },
+        {
+          id: "summary_text",
+          component: {
+            Text: {
+              text: {
+                literalString: "当前系统内共有 20 名机组人员，包含机长、副驾驶、乘务员及安全员。",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "crew_card_1",
+          component: { Card: { child: "c1_row" } },
+        },
+        {
+          id: "c1_row",
+          component: {
+            Row: {
+              children: { explicitList: ["c1_info", "c1_status"] },
+              distribution: "spaceBetween",
+            },
+          },
+        },
+        {
+          id: "c1_info",
+          component: {
+            Text: { text: { literalString: "李强 | 机长 (18年经验)" }, usageHint: "h3" },
+          },
+        },
+        {
+          id: "c1_status",
+          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
+        },
+
+        {
+          id: "crew_card_2",
+          component: { Card: { child: "c2_row" } },
+        },
+        {
+          id: "c2_row",
+          component: {
+            Row: {
+              children: { explicitList: ["c2_info", "c2_status"] },
+              distribution: "spaceBetween",
+            },
+          },
+        },
+        {
+          id: "c2_info",
+          component: {
+            Text: { text: { literalString: "吴磊 | 副驾驶 (4年经验)" }, usageHint: "h3" },
+          },
+        },
+        {
+          id: "c2_status",
+          component: { Text: { text: { literalString: "休息" }, usageHint: "caption" } },
+        },
+
+        {
+          id: "crew_card_3",
+          component: { Card: { child: "c3_row" } },
+        },
+        {
+          id: "c3_row",
+          component: {
+            Row: {
+              children: { explicitList: ["c3_info", "c3_status"] },
+              distribution: "spaceBetween",
+            },
+          },
+        },
+        {
+          id: "c3_info",
+          component: {
+            Text: { text: { literalString: "王静 | 乘务长 (22年经验)" }, usageHint: "h3" },
+          },
+        },
+        {
+          id: "c3_status",
+          component: { Text: { text: { literalString: "培训中" }, usageHint: "caption" } },
+        },
+
+        {
+          id: "crew_card_4",
+          component: { Card: { child: "c4_row" } },
+        },
+        {
+          id: "c4_row",
+          component: {
+            Row: {
+              children: { explicitList: ["c4_info", "c4_status"] },
+              distribution: "spaceBetween",
+            },
+          },
+        },
+        {
+          id: "c4_info",
+          component: {
+            Text: { text: { literalString: "赵洋 | 副驾驶 (23年经验)" }, usageHint: "h3" },
+          },
+        },
+        {
+          id: "c4_status",
+          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
+        },
+
+        {
+          id: "crew_card_5",
+          component: { Card: { child: "c5_row" } },
+        },
+        {
+          id: "c5_row",
+          component: {
+            Row: {
+              children: { explicitList: ["c5_info", "c5_status"] },
+              distribution: "spaceBetween",
+            },
+          },
+        },
+        {
+          id: "c5_info",
+          component: {
+            Text: { text: { literalString: "黄敏 | 安全员 (21年经验)" }, usageHint: "h3" },
+          },
+        },
+        {
+          id: "c5_status",
+          component: { Text: { text: { literalString: "培训中" }, usageHint: "caption" } },
+        },
+
+        {
+          id: "crew_card_6",
+          component: { Card: { child: "c6_row" } },
+        },
+        {
+          id: "c6_row",
+          component: {
+            Row: {
+              children: { explicitList: ["c6_info", "c6_status"] },
+              distribution: "spaceBetween",
+            },
+          },
+        },
+        {
+          id: "c6_info",
+          component: {
+            Text: { text: { literalString: "周强 | 乘务长 (22年经验)" }, usageHint: "h3" },
+          },
+        },
+        {
+          id: "c6_status",
+          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
+        },
+
+        {
+          id: "footer_hint",
+          component: {
+            Text: {
+              text: {
+                literalString: "您可以根据姓名、角色（机长/副驾驶/乘务员）或基地进行筛选查询。",
+              },
+              usageHint: "caption",
+            },
+          },
+        },
+      ],
+    },
+  },
+];
+
+// Scroll to bottom
 // Scroll to bottom
 // Scroll to bottom
 const scrollToBottom = async () => {
   await nextTick();
-  if (messagesEndRef.value) {
-    messagesEndRef.value.scrollIntoView({ behavior: "smooth", block: "end" });
-
-    // Retry to handle async component rendering (like A2UI)
-    setTimeout(() => {
-      if (messagesEndRef.value) {
-        messagesEndRef.value.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
-    }, 100);
-    setTimeout(() => {
-      if (messagesEndRef.value) {
-        messagesEndRef.value.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
-    }, 500);
+  if (messagesEndRef.value && messagesEndRef.value.parentElement) {
+    const container = messagesEndRef.value.parentElement;
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: "smooth",
+    });
   }
 };
 
@@ -519,7 +729,8 @@ const apiFlag = ref("order_ticket");
 const callGeminiDirectly = async (message, systemInstruction) => {
   const maxRetries = 3;
   const apiMap = {
-    refund_ticket: "/api/ticket/change",
+    // refund_ticket: "/api/ticket/change",
+    refund_ticket: "/api/agent/chat",
     order_ticket: "/api/chat",
   };
   try {
@@ -548,7 +759,6 @@ const callGeminiDirectly = async (message, systemInstruction) => {
     });
 
     const data = await res.json();
-    let surfaces = [];
     // 浩哥的数据结构
     if (apiFlag.value == "refund_ticket") {
       if (data.needUi) {
@@ -562,10 +772,26 @@ const callGeminiDirectly = async (message, systemInstruction) => {
       const [rawText, jsonText] = data.message.split("---a2ui_JSON---");
       if (jsonText) {
         const cc = JSON.parse(jsonText);
-        return {
-          parsedA2UI: cc,
-          rawText: rawText,
-        };
+
+        // 判断cc 是否是数组
+        if (Array.isArray(cc)) {
+          return {
+            parsedA2UI: cc,
+            rawText: rawText,
+          };
+        } else {
+          const surfaces = [];
+          Object.keys(cc).forEach((key) => {
+            surfaces.push({
+              key: cc[key],
+            });
+          });
+
+          return {
+            parsedA2UI: surfaces,
+            rawText: rawText,
+          };
+        }
       }
     }
   } catch (e) {
@@ -581,7 +807,7 @@ const triggerDirectAIGeneration = async (prompt) => {
     type: "LOADER",
     timestamp: new Date(),
   });
-
+  scrollToBottom();
   try {
     const history = [
       {
@@ -621,6 +847,7 @@ const triggerDirectAIGeneration = async (prompt) => {
       timestamp: new Date(),
     });
   }
+  scrollToBottom();
 };
 
 const startNewSession = async (directGenerationPrompt) => {
@@ -742,6 +969,7 @@ const processUserMessage = async (text) => {
       };
     }
   } catch (error) {
+    debugger;
     console.error("AI Error", error);
     // 出错时也替换掉 loader
     const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
@@ -754,6 +982,8 @@ const processUserMessage = async (text) => {
         timestamp: new Date(),
       };
     }
+
+    scrollToBottom();
   }
 };
 
@@ -863,6 +1093,8 @@ const processUserAction = async (action) => {
       };
     }
   }
+  debugger;
+  scrollToBottom();
 };
 
 const handleSendMessage = async () => {
@@ -911,6 +1143,25 @@ onMounted(() => {
     hasInitialized.value = true;
 
     startNewSession();
+  }
+
+  // Auto-scroll observer
+  if (messagesEndRef.value && messagesEndRef.value.parentElement) {
+    const container = messagesEndRef.value.parentElement;
+    chatObserver = new MutationObserver((mutations) => {
+      scrollToBottom();
+    });
+    chatObserver.observe(container, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (chatObserver) {
+    chatObserver.disconnect();
   }
 });
 </script>
@@ -1077,6 +1328,7 @@ onMounted(() => {
         <!-- More Button -->
         <button
           @click="toggleGrid('business')"
+          style="z-index: 999"
           class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 backdrop-blur-md border"
           :class="
             activeGrid === 'business'
