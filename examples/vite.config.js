@@ -14,7 +14,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://10.22.15.165:8856", // 立哥
-        // target: "http://10.22.12.253:8067", // 老唐
+        // target: "http://10.22.12.152:8067", // 老唐
         // target: "http://10.22.13.93:8080", // 杰哥
         // target: "http://10.22.14.136:8080", // 浩哥
         changeOrigin: true,

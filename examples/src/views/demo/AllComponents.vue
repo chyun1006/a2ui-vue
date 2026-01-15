@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted } from "vue";
 import { createSignalA2uiMessageProcessor, a2uiRender } from "a2ui-vue";
-import demoMessages from "../mock/comprehensive-demo.json";
+import demoMessages from "../../mock/comprehensive-demo.json";
 
 // 使用全局 manager，确保与 A2UIRender 组件共享同一个 manager
 const processor = createSignalA2uiMessageProcessor({ useGlobalManager: true });
