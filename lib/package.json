@@ -44,6 +44,7 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
+    "@a2ui/lit": "^0.8.1",
     "@vueuse/core": "^14.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

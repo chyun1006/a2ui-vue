@@ -1,6 +1,7 @@
 <script setup>
 import { computed, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
+import * as LucideIcons from 'lucide-vue-next' // 示例：使用 Lucide 图标库
 
 /**
  * @component A2UIIcon
@@ -26,20 +27,17 @@ const { resolveValue } = useDataBinding(surfaceId.value)
 const iconBinding = computed(() => props.icon || props.name)
 const iconName = computed(() => resolveValue(iconBinding.value) || '')
 
-const materialIconName = computed(() => {
-  const name = iconName.value
-  return name
-    .replace(/([A-Z])/g, '_$1')
-    .toLowerCase()
-    .replace(/^_/, '')
+const resolvedIcon = computed(() => {
+  if (iconName.value) {
+    const a = iconName.value
+    return LucideIcons[a]
+  }
+  return LucideIcons.HelpCircle
 })
 </script>
 
 <template>
-  <span v-if="iconName" class="a2ui-icon material-icons" :aria-label="iconName">
-    {{ materialIconName }}
-  </span>
-  <span v-else class="a2ui-icon-placeholder">?</span>
+  <component :is="resolvedIcon" class="a2ui-icon" />
 </template>
 
 <style scoped>

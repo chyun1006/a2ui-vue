@@ -25,7 +25,11 @@ const componentDef = computed(() => {
     return null
   }
   const surface = manager.getSurface(surfaceId.value)
-  return surface?.getComponent(props.componentId)
+  if (!surface) {
+    return null
+  }
+  // @a2ui/lit 的 surface 对象中，components 是一个 Map
+  return surface.components?.get(props.componentId) || null
 })
 
 const componentType = computed(() => getComponentType(componentDef.value))

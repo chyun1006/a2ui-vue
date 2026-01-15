@@ -2,6 +2,7 @@
 import { computed, inject } from 'vue'
 import { FLEX_ALIGN_ITEMS_MAP } from '../../../types/components.js'
 import A2UIRenderer from '../../A2UIRenderer.vue'
+import A2UIListItem from './A2UIListItem.vue'
 
 /**
  * @component A2UIList
@@ -47,6 +48,16 @@ const childrenList = computed(() => {
     const data = manager.getData(surfaceId.value, dataBinding)
 
     if (data && typeof data === 'object') {
+      // 支持 Map 对象 (从 Adapter 返回的 vals)
+      if (data instanceof Map) {
+        return Array.from(data.keys()).map((key) => ({
+          id: `${componentId}-${key}`,
+          componentId,
+          dataKey: key,
+        }))
+      }
+
+      // 支持普通对象
       return Object.keys(data).map((key) => ({
         id: `${componentId}-${key}`,
         componentId,
@@ -70,7 +81,15 @@ const handleAction = (actionData) => {
       :key="typeof childId === 'string' ? childId : childId.id"
       class="a2ui-list-item"
     >
+      <A2UIListItem
+        v-if="typeof childId === 'object' && childId.dataKey"
+        :context-path="`/${children.template.dataBinding}/${childId.dataKey}`"
+      >
+        <A2UIRenderer :component-id="childId.componentId" @action="handleAction" />
+      </A2UIListItem>
+
       <A2UIRenderer
+        v-else
         :component-id="typeof childId === 'string' ? childId : childId.componentId"
         @action="handleAction"
       />

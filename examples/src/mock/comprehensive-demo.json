@@ -113,7 +113,12 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["text-label", "text-h3", "text-body", "text-caption"]
+                "explicitList": [
+                  "text-label",
+                  "text-h3",
+                  "text-body",
+                  "text-caption"
+                ]
               },
               "spacing": 8
             }
@@ -168,7 +173,12 @@
           "component": {
             "Row": {
               "children": {
-                "explicitList": ["icon-label", "icon-home", "icon-user", "icon-settings"]
+                "explicitList": [
+                  "icon-label",
+                  "icon-home",
+                  "icon-user",
+                  "icon-settings"
+                ]
               },
               "spacing": 12,
               "alignment": "center"
@@ -190,7 +200,9 @@
           "id": "icon-home",
           "component": {
             "Icon": {
-              "icon": "home",
+              "name": {
+                "literalString": "home"
+              },
               "size": 24
             }
           }
@@ -199,7 +211,9 @@
           "id": "icon-user",
           "component": {
             "Icon": {
-              "icon": "user",
+              "name": {
+                "literalString": "user"
+              },
               "size": 24
             }
           }
@@ -208,7 +222,9 @@
           "id": "icon-settings",
           "component": {
             "Icon": {
-              "icon": "settings",
+              "name": {
+                "literalString": "settings"
+              },
               "size": 24
             }
           }
@@ -239,7 +255,9 @@
           "id": "image-sample",
           "component": {
             "Image": {
-              "url": "https://picsum.photos/400/200",
+              "url": {
+                "literalString": "https://picsum.photos/400/200"
+              },
               "alt": "示例图片",
               "width": 400,
               "height": 200
@@ -272,7 +290,9 @@
           "id": "video-sample",
           "component": {
             "Video": {
-              "url": "https://www.w3schools.com/html/mov_bbb.mp4",
+              "url": {
+                "literalString": "https://www.w3schools.com/html/mov_bbb.mp4"
+              },
               "controls": true,
               "width": 400,
               "height": 225
@@ -346,7 +366,12 @@
           "component": {
             "Row": {
               "children": {
-                "explicitList": ["btn-primary", "btn-secondary", "btn-outline", "btn-ghost"]
+                "explicitList": [
+                  "btn-primary",
+                  "btn-secondary",
+                  "btn-outline",
+                  "btn-ghost"
+                ]
               },
               "spacing": 8
             }
@@ -751,7 +776,12 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["layout-title", "flex-demo", "tabs-demo", "divider-demo"]
+                "explicitList": [
+                  "layout-title",
+                  "flex-demo",
+                  "tabs-demo",
+                  "divider-demo"
+                ]
               },
               "spacing": 20
             }
@@ -773,7 +803,11 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["flex-label", "flex-row-sample", "flex-col-sample"]
+                "explicitList": [
+                  "flex-label",
+                  "flex-row-sample",
+                  "flex-col-sample"
+                ]
               },
               "spacing": 12
             }
@@ -994,7 +1028,11 @@
           "component": {
             "Column": {
               "children": {
-                "explicitList": ["divider-label", "divider-component", "divider-text"]
+                "explicitList": [
+                  "divider-label",
+                  "divider-component",
+                  "divider-text"
+                ]
               },
               "spacing": 8
             }
@@ -1034,33 +1072,33 @@
   {
     "dataModelUpdate": {
       "surfaceId": "comprehensive-demo",
-      "updates": [
+      "contents": [
         {
-          "path": "username",
+          "key": "username",
           "valueString": ""
         },
         {
-          "path": "bio",
+          "key": "bio",
           "valueString": ""
         },
         {
-          "path": "agreed",
+          "key": "agreed",
           "valueBoolean": false
         },
         {
-          "path": "gender",
+          "key": "gender",
           "valueList": []
         },
         {
-          "path": "hobbies",
+          "key": "hobbies",
           "valueList": []
         },
         {
-          "path": "volume",
+          "key": "volume",
           "valueNumber": 50
         },
         {
-          "path": "selectedDate",
+          "key": "selectedDate",
           "valueString": ""
         }
       ]

@@ -63,7 +63,7 @@ const mockData = [
           component: {
             Text: {
               text: {
-                path: "/orderNumber",
+                path: "orderNumber",
               },
               usageHint: "body",
             },
@@ -80,13 +80,13 @@ const mockData = [
                   {
                     key: "orderNumber",
                     value: {
-                      path: "/orderNumber",
+                      path: "orderNumber",
                     },
                   },
                   {
                     key: "method",
                     value: {
-                      path: "/method",
+                      path: "method",
                     },
                   },
                 ],
@@ -117,12 +117,18 @@ const mockData = [
           key: "orders",
           valueMap: [
             {
-              key: "orderNumber",
-              valueString: "260112180225620309",
+              key: "0", // 第一个订单的索引
+              valueMap: [
+                { key: "orderNumber", valueString: "260112180225620309" },
+                { key: "method", valueString: "queryRefundOrderDetail" },
+              ],
             },
             {
-              key: "method",
-              valueString: "queryRefundOrderDetail",
+              key: "1",
+              valueMap: [
+                { key: "orderNumber", valueString: "1234" },
+                { key: "method", valueString: "queryRefundO啊啊谁懂发rderDetail" },
+              ],
             },
           ],
         },
@@ -134,8 +140,8 @@ const mockData = [
 onMounted(() => {
   // 清空所有 surfaces，确保从干净状态开始`
   processor.clearSurfaces();
-  // processor.processMessages(initSurface);
-  processor.processMessages(mockData);
+  processor.processMessages(initSurface);
+  // processor.processMessages(mockData);
 });
 
 onUnmounted(() => {
@@ -144,15 +150,22 @@ onUnmounted(() => {
 });
 
 // 从 A2UI TextField 发送消息
-const sendMsgFromA2UI = async (text) => {
+const sendMsgFromA2UI = async (action) => {
   try {
     const payload = {
       userId: "123456",
       memberId: "232568004001",
       sessionId: "12345689",
-      query: text,
+      query: JSON.stringify(action),
     };
-    const res = await fetch("/api/agent/chat", {
+    // const res = await fetch("/api/agent/chat", {
+    //   body: JSON.stringify(payload),
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // });
+    const res = await fetch("/api/ticket/change", {
       body: JSON.stringify(payload),
       method: "POST",
       headers: {
@@ -172,12 +185,13 @@ const sendMsgFromA2UI = async (text) => {
 
 const handleAction = (action) => {
   console.log("Action received:", action);
-  // 从 action.context 中获取提交的文本
-  const submittedText = action.context?.submitted_text;
-  if (submittedText && submittedText.trim()) {
-    // 使用 A2UI TextField 中的文本发送消息
-    sendMsgFromA2UI(submittedText);
-  }
+  sendMsgFromA2UI(action);
+  // // 从 action.context 中获取提交的文本
+  // const submittedText = action.context?.submitted_text;
+  // if (submittedText && submittedText.trim()) {
+  //   // 使用 A2UI TextField 中的文本发送消息
+  //   sendMsgFromA2UI(action);
+  // }
 };
 </script>
 

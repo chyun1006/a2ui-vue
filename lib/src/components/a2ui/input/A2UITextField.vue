@@ -38,6 +38,13 @@ const emit = defineEmits(['change'])
 
 const surfaceId = inject('a2ui-surface-id')
 const manager = inject('a2ui-manager')
+
+console.log('[TextField] Component created')
+console.log('[TextField] surfaceId:', surfaceId?.value)
+console.log('[TextField] manager:', manager)
+console.log('[TextField] props.text:', props.text)
+console.log('[TextField] props.textFieldType:', props.textFieldType)
+
 const { resolveValue, getPath } = useDataBinding(surfaceId.value)
 
 const labelText = computed(() => resolveValue(props.label) || '')
@@ -89,16 +96,25 @@ const handleCompositionEnd = () => {
   updateDataModel()
 }
 
-const handleInput = () => {
+const handleInput = (event) => {
+  console.log('[TextField.handleInput] Event triggered', event)
+  console.log('[TextField.handleInput] isComposing:', isComposing.value)
+  console.log('[TextField.handleInput] inputValue:', inputValue.value)
+
   if (!isComposing.value) {
     updateDataModel()
+  } else {
+    console.log('[TextField.handleInput] Skipped due to composition')
   }
 }
 
 const updateDataModel = () => {
   const path = getPath(props.text)
+
   if (path && manager) {
     manager.updateData(surfaceId.value, path, inputValue.value)
+  } else {
+    console.warn('[TextField.updateDataModel] Skipped: path or manager is missing')
   }
   emit('change', inputValue.value)
 }

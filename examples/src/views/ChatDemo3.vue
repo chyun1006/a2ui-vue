@@ -14,291 +14,58 @@ const markdownText = ref("");
 const mockData = [
   {
     beginRendering: {
-      surfaceId: "flight-card",
+      surfaceId: "flight-card-success",
       root: "root",
-      styles: {
-        primaryColor: "#FF0000",
-        font: "Roboto",
-      },
+      styles: { primaryColor: "#FF0000", font: "Roboto" },
     },
   },
   {
     surfaceUpdate: {
-      surfaceId: "flight-card",
+      surfaceId: "flight-card-success",
       components: [
-        { id: "root", component: { Card: { child: "mainColumn" } } },
+        { id: "root", component: { Card: { child: "cardContent" } } },
         {
-          id: "mainColumn",
+          id: "cardContent",
           component: {
             Column: {
-              children: {
-                explicitList: ["applicantSection", "travelSection", "submitButtonWrapper"],
-              },
+              children: { explicitList: ["titleRow", "descLine1", "descLine2"] },
               distribution: "start",
               alignment: "stretch",
             },
           },
         },
         {
-          id: "applicantSection",
-          component: {
-            Column: {
-              children: { explicitList: ["applicantTitle", "applicantRow1", "applicantRow2"] },
-              distribution: "start",
-              alignment: "stretch",
-            },
-          },
-        },
-        {
-          id: "applicantTitle",
-          component: { Text: { text: { literalString: "申请人信息：" }, usageHint: "h3" } },
-        },
-        {
-          id: "applicantRow1",
+          id: "titleRow",
           component: {
             Row: {
-              children: { explicitList: ["nameField", "employeeIdField"] },
-              distribution: "spaceBetween",
-              alignment: "start",
-            },
-          },
-        },
-        {
-          id: "nameField",
-          component: {
-            TextField: {
-              label: { literalString: "姓名" },
-              text: { path: "/applicant/realName" },
-              textFieldType: "shortText",
-            },
-          },
-        },
-        {
-          id: "employeeIdField",
-          component: {
-            TextField: {
-              label: { literalString: "工号" },
-              text: { path: "/applicant/workNo" },
-              textFieldType: "shortText",
-            },
-          },
-        },
-        {
-          id: "applicantRow2",
-          component: {
-            Row: {
-              children: { explicitList: ["phoneField"] },
+              children: { explicitList: ["titleIcon", "titleText"] },
               distribution: "start",
               alignment: "center",
             },
           },
         },
+        { id: "titleIcon", component: { Icon: { name: { literalString: "check" } } } },
         {
-          id: "phoneField",
+          id: "titleText",
+          component: { Text: { text: { literalString: "提交成功！" }, usageHint: "h5" } },
+        },
+        {
+          id: "descLine1",
           component: {
-            TextField: {
-              label: { literalString: "电话号码" },
-              text: { path: "/applicant/phone" },
-              textFieldType: "shortText",
-            },
+            Text: { text: { literalString: "您的申请已提交，正在等待审批：" }, usageHint: "body" },
           },
         },
         {
-          id: "travelSection",
-          component: {
-            Column: {
-              children: {
-                explicitList: [
-                  "travelTitle",
-                  "travelFlightNumber",
-                  "travelDeparture",
-                  "travelDestination",
-                  "travelDate",
-                  "travelIdCard",
-                  "travelRemarks",
-                ],
-              },
-              distribution: "start",
-              alignment: "stretch",
-            },
-          },
-        },
-        {
-          id: "travelTitle",
-          component: { Text: { text: { literalString: "行程信息：" }, usageHint: "h3" } },
-        },
-        {
-          id: "travelFlightNumber",
-          component: {
-            Column: {
-              children: { explicitList: ["travelFlightNumberLabel", "travelFlightNumberMC"] },
-            },
-          },
-        },
-        {
-          id: "travelFlightNumberLabel",
-          component: { Text: { text: { literalString: "航班号" }, usageHint: "body" } },
-        },
-        {
-          id: "travelFlightNumberMC",
-          component: {
-            MultipleChoice: {
-              selections: { path: "/travel/flightNumber" },
-              options: [
-                { label: { literalString: "HU7604" }, value: "HU7604" },
-                { label: { literalString: "HU7608" }, value: "HU7608" },
-                { label: { literalString: "HU7602" }, value: "HU7602" },
-                { label: { literalString: "HU7610" }, value: "HU7610" },
-              ],
-              maxAllowedSelections: 1,
-            },
-          },
-        },
-        {
-          id: "travelDeparture",
-          component: {
-            Column: { children: { explicitList: ["travelDepartureLabel", "travelDepartureMC"] } },
-          },
-        },
-        {
-          id: "travelDepartureLabel",
-          component: { Text: { text: { literalString: "出发地" }, usageHint: "body" } },
-        },
-        {
-          id: "travelDepartureMC",
-          component: {
-            MultipleChoice: {
-              selections: { path: "/travel/departure" },
-              options: [
-                { label: { literalString: "长沙" }, value: "111" },
-                { label: { literalString: "北京" }, value: "222" },
-                { label: { literalString: "上海" }, value: "333" },
-                { label: { literalString: "广州" }, value: "444" },
-              ],
-              maxAllowedSelections: 1,
-            },
-          },
-        },
-        {
-          id: "travelDestination",
-          component: {
-            Column: {
-              children: { explicitList: ["travelDestinationLabel", "travelDestinationMC"] },
-            },
-          },
-        },
-        {
-          id: "travelDestinationLabel",
-          component: { Text: { text: { literalString: "目的地" }, usageHint: "body" } },
-        },
-        {
-          id: "travelDestinationMC",
-          component: {
-            MultipleChoice: {
-              selections: { path: "/travel/arrival" },
-              options: [
-                { label: { literalString: "北京" }, value: "222" },
-                { label: { literalString: "上海" }, value: "333" },
-                { label: { literalString: "广州" }, value: "444" },
-                { label: { literalString: "深圳" }, value: "555" },
-                { label: { literalString: "成都" }, value: "666" },
-              ],
-              maxAllowedSelections: 1,
-            },
-          },
-        },
-        {
-          id: "travelDate",
-          component: {
-            DateTimeInput: { value: { path: "/travel/date" }, enableDate: true, enableTime: false },
-          },
-        },
-        {
-          id: "travelIdCard",
-          component: {
-            TextField: {
-              label: { literalString: "身份证" },
-              text: { path: "/travel/idCard" },
-              textFieldType: "shortText",
-            },
-          },
-        },
-        {
-          id: "travelRemarks",
-          component: {
-            TextField: {
-              label: { literalString: "备注" },
-              text: { path: "/travel/remarks" },
-              textFieldType: "longText",
-            },
-          },
-        },
-        {
-          id: "submitButtonWrapper",
-          component: {
-            Row: {
-              children: { explicitList: ["submitButton"] },
-              distribution: "center",
-              alignment: "center",
-            },
-          },
-        },
-        {
-          id: "submitButton",
-          component: {
-            Button: {
-              child: "submitButtonText",
-              primary: true,
-              action: {
-                name: "submitApplication",
-                context: [
-                  // 申请人信息
-                  { key: "realName", value: { path: "/applicant/realName" } },
-                  { key: "workNo", value: { path: "/applicant/workNo" } },
-                  { key: "phone", value: { path: "/applicant/phone" } },
-                  // 行程信息
-                  { key: "flightNumber", value: { path: "/travel/flightNumber" } },
-                  { key: "departure", value: { path: "/travel/departure" } },
-                  { key: "arrival", value: { path: "/travel/arrival" } },
-                  { key: "date", value: { path: "/travel/date" } },
-                  { key: "idCard", value: { path: "/travel/idCard" } },
-                  { key: "remarks", value: { path: "/travel/remarks" } },
-                ],
-              },
-            },
-          },
-        },
-        {
-          id: "submitButtonText",
-          component: { Text: { text: { literalString: "提交申请" }, usageHint: "body" } },
+          id: "descLine2",
+          component: { Text: { text: { path: "/dynamicText" }, usageHint: "body" } },
         },
       ],
     },
   },
   {
     dataModelUpdate: {
-      surfaceId: "flight-card",
-      contents: [
-        {
-          key: "applicant",
-          valueMap: [
-            { key: "realName", valueString: "李立灏" },
-            { key: "workNo", valueString: "1760007" },
-            { key: "phone", valueString: "" },
-          ],
-        },
-        {
-          key: "travel",
-          valueMap: [
-            { key: "flightNumber", valueString: "" },
-            { key: "departure", valueString: "" },
-            { key: "arrival", valueString: "" },
-            { key: "date", valueString: "" },
-            { key: "idCard", valueString: "" },
-            { key: "remarks", valueString: "" },
-          ],
-        },
-      ],
+      surfaceId: "flight-card-success",
+      contents: [{ key: "dynamicText", valueString: "张强(1760000)" }],
     },
   },
 ];
@@ -306,7 +73,8 @@ const mockData = [
 onMounted(() => {
   // 清空所有 surfaces，确保从干净状态开始
   processor.clearSurfaces();
-  processor.processMessages(initSurface);
+  // processor.processMessages(initSurface);
+  processor.processMessages(mockData);
 });
 
 onUnmounted(() => {
@@ -319,7 +87,7 @@ const sendMsgFromA2UI = async (message) => {
   isLoading.value = true;
   try {
     const payload = {
-      message: JSON.stringify(message),
+      message: message,
       sessionId: +new Date(),
       workNo: "1760023",
     };
@@ -348,7 +116,8 @@ const sendMsgFromA2UI = async (message) => {
     if (b) {
       const aa = b.trim("");
       const cc = JSON.parse(aa);
-      console.log("哈哈哈哈", cc);
+      processor.clearSurfaces();
+      markdownText.value = "";
       processor.processMessages(cc, { clearBefore: true });
     }
   } catch (error) {
@@ -363,16 +132,11 @@ const handleAction = (action) => {
 
   // 防止重复提交
   if (isLoading.value) {
-    console.warn("请求进行中，请勿重复提交");
+    console.warn("请求进行中,请勿重复提交");
     return;
   }
 
-  // 从 action.context 中获取提交的文本
-  const submittedText = action.context;
-  if (submittedText) {
-    // 使用 A2UI TextField 中的文本发送消息
-    sendMsgFromA2UI(action);
-  }
+  sendMsgFromA2UI(action);
 };
 </script>
 

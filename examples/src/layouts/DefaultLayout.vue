@@ -19,8 +19,8 @@ import AppNavigation from "../components/AppNavigation.vue";
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: #f5f5f5;
 }
 
@@ -32,6 +32,6 @@ body {
 
 .main-content {
   /* flex: 1; */
-  /* padding: 20px; */
+  padding: 6px 10px;
 }
 </style>

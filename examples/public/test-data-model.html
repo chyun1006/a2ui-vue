@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Data Model</title>
+  </head>
+  <body>
+    <h1>测试数据模型</h1>
+    <p>打开控制台查看测试结果</p>
+
+    <script type="module">
+      // 测试说明：
+      // 1. 在 ChatDemo3 页面打开控制台
+      // 2. 输入以下命令查看数据模型状态：
+
+      console.log(`
+=== 数据模型调试命令 ===
+
+1. 获取全局 manager:
+   const manager = window.__A2UI_GLOBAL_MANAGER__
+
+2. 查看所有 surfaces:
+   manager.adapter.litProcessor.getSurfaces()
+
+3. 查看 chat_input_surface 的数据模型:
+   const surface = manager.adapter.litProcessor.getSurfaces().get('chat_input_surface')
+   console.log('Surface:', surface)
+   console.log('DataModel:', surface?.dataModel)
+   
+4. 尝试获取数据:
+   manager.getData('chat_input_surface', '/chat/input_text')
+   
+5. 尝试手动设置数据:
+   manager.updateData('chat_input_surface', '/chat/input_text', '测试数据')
+   
+6. 再次获取数据验证:
+   manager.getData('chat_input_surface', '/chat/input_text')
+
+7. 查看 dataModel 的原始结构:
+   const dm = surface.dataModel.peek ? surface.dataModel.peek() : surface.dataModel
+   console.log('Raw dataModel:', dm)
+   console.log('dataModel.vals:', dm.vals)
+   console.log('dataModel.vals keys:', Array.from(dm.vals.keys()))
+   
+8. 查看 chat 对象:
+   const chat = dm.vals.get('chat')
+   console.log('chat:', chat)
+   const chatValue = chat.peek ? chat.peek() : chat
+   console.log('chat value:', chatValue)
+   console.log('chat.vals:', chatValue.vals)
+   console.log('input_text:', chatValue.vals.get('input_text'))
+    `);
+    </script>
+  </body>
+</html>

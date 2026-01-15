@@ -5,14 +5,22 @@ import A2UISurface from './A2UISurface.vue'
 
 const emit = defineEmits(['action'])
 
+// 获取全局 manager (可能是 A2UIManager 或 A2UIVueAdapter)
 const manager = getGlobalManager()
 
 // 记录当前组件创建的 surface IDs（只记录挂载后创建的）
 const currentSurfaceIds = ref([])
 
 const surfaces = computed(() => {
+  // 兼容新旧架构
+  const surfacesMap = manager.state?.surfaces || manager.adapter?.state?.surfaces
+  if (!surfacesMap) {
+    console.warn('[A2UIRender] No surfaces map found in manager')
+    return []
+  }
+
   // 只渲染当前组件创建的 surfaces
-  return currentSurfaceIds.value.filter((id) => manager.state.surfaces.has(id))
+  return currentSurfaceIds.value.filter((id) => surfacesMap.has(id))
 })
 
 const handleAction = (actionData) => {
@@ -24,10 +32,12 @@ let unsubscribe = null
 
 onMounted(() => {
   console.log('组件挂在了-------[A2UIRender] Mounted')
-  console.log(
-    '[A2UIRender] Existing surfaces (will be ignored):',
-    Array.from(manager.state.surfaces.keys()),
-  )
+
+  // 兼容新旧架构
+  const surfacesMap = manager.state?.surfaces || manager.adapter?.state?.surfaces
+  const existingSurfaces = surfacesMap ? Array.from(surfacesMap.keys()) : []
+
+  console.log('[A2UIRender] Existing surfaces (will be ignored):', existingSurfaces)
 
   // 监听新 surface 的创建（只渲染当前组件挂载后创建的 surfaces）
   unsubscribe = manager.on('surface:created', ({ surfaceId }) => {
@@ -55,7 +65,11 @@ onUnmounted(() => {
     console.log('[A2UIRender] Surface deleted:', surfaceId, 'success:', deleted)
   })
 
-  console.log('[A2UIRender] Surfaces after cleanup:', Array.from(manager.state.surfaces.keys()))
+  // 兼容新旧架构
+  const surfacesMap = manager.state?.surfaces || manager.adapter?.state?.surfaces
+  const remainingSurfaces = surfacesMap ? Array.from(surfacesMap.keys()) : []
+  console.log('[A2UIRender] Surfaces after cleanup:', remainingSurfaces)
+
   currentSurfaceIds.value = []
 
   console.log('[A2UIRender] Unmounted, cleared surfaces')
