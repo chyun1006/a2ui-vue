@@ -6,21 +6,33 @@ import A2UIRenderer from './A2UIRenderer.vue'
 const props = defineProps({
   surfaceId: {
     type: String,
-    required: true,
+    default: '',
   },
   manager: {
     type: Object,
-    required: true,
+    default: null,
+  },
+  surface: {
+    type: Object,
+    default: null,
   },
 })
 
 const emit = defineEmits(['action', 'error'])
 
-const surface = computed(() => props.manager.getSurface(props.surfaceId))
+const surfaceObj = computed(() => {
+  if (props.surface) {
+    return props.surface
+  }
+  if (props.manager && props.surfaceId) {
+    return props.manager.getSurface(props.surfaceId)
+  }
+  return null
+})
 
-const rootComponentId = computed(() => surface.value?.rootComponentId)
+const rootComponentId = computed(() => surfaceObj.value?.rootComponentId)
 
-const styles = computed(() => surface.value?.styles || {})
+const styles = computed(() => surfaceObj.value?.styles || {})
 
 const cssVariables = computed(() => {
   const vars = {}
@@ -43,11 +55,13 @@ const handleAction = (actionData) => {
 let unsubscribe = null
 
 onMounted(() => {
-  unsubscribe = props.manager.on('surface:updated', (data) => {
-    if (data.surfaceId === props.surfaceId) {
-      console.log('Surface updated:', data)
-    }
-  })
+  if (props.manager) {
+    unsubscribe = props.manager.on('surface:updated', (data) => {
+      if (data.surfaceId === props.surfaceId) {
+        console.log('Surface updated:', data)
+      }
+    })
+  }
 })
 
 watch(
@@ -66,12 +80,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="surface && rootComponentId" class="a2ui-surface" :style="cssVariables">
-    <A2UIProvider :manager="manager" :surface-id="surfaceId">
+  <div v-if="surfaceObj && rootComponentId" class="a2ui-surface" :style="cssVariables">
+    <A2UIProvider
+      :manager="manager"
+      :surface-id="props.surfaceId || (surfaceObj ? surfaceObj.id : '')"
+    >
       <A2UIRenderer :component-id="rootComponentId" @action="handleAction" />
     </A2UIProvider>
   </div>
-  <div v-else-if="!surface" class="a2ui-surface-error">Surface not found: {{ surfaceId }}</div>
+  <div v-else-if="!surfaceObj" class="a2ui-surface-error">Surface not found: {{ surfaceId }}</div>
   <div v-else class="a2ui-surface-loading">Loading surface...</div>
 </template>
 

@@ -158,20 +158,20 @@ const sendMsgFromA2UI = async (action) => {
       sessionId: "12345689",
       query: JSON.stringify(action),
     };
-    // const res = await fetch("/api/agent/chat", {
-    //   body: JSON.stringify(payload),
-    //   method: "POST",
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    // });
-    const res = await fetch("/api/ticket/change", {
+    const res = await fetch("/api/agent/chat", {
       body: JSON.stringify(payload),
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
     });
+    // const res = await fetch("/api/ticket/change", {
+    //   body: JSON.stringify(payload),
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // });
 
     const data = await res.json();
     if (data.needUi) {

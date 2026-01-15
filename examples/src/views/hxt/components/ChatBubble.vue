@@ -1,13 +1,18 @@
 <script setup>
 import { computed } from "vue";
 import { User, Sparkles, Loader2 } from "lucide-vue-next";
-import HongXiaoTongLogo from "./HongXiaoTongLogo.vue";
+// import HongXiaoTongLogo from "./HongXiaoTongLogo.vue";
 import HXTWidgetRenderer from "./HXTWidgetRenderer.vue";
+import { a2uiRender } from "a2ui-vue";
 
 const props = defineProps({
   message: {
     type: Object,
     required: true,
+  },
+  manager: {
+    type: Object,
+    default: null,
   },
 });
 
@@ -41,7 +46,8 @@ const timeString = computed(() => {
       v-if="isAgent || isLoader"
       class="w-8 h-8 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center mr-2 shrink-0 overflow-hidden"
     >
-      <HongXiaoTongLogo class="w-5 h-5" />
+      <!-- <HongXiaoTongLogo class="w-5 h-5" /> -->
+      <img src="@/assets/logo.png" alt="" srcset="" />
     </div>
 
     <!-- Message Content -->
@@ -114,6 +120,12 @@ const timeString = computed(() => {
               v-if="message.widgetPayload?.rootNode"
               :node="message.widgetPayload.rootNode"
             /> -->
+
+            <a2uiRender
+              v-if="message.widgetPayload?.rootNode"
+              :surfaceList="message.widgetPayload.rootNode"
+              :manager="manager"
+            ></a2uiRender>
           </div>
         </div>
       </div>

@@ -24,7 +24,12 @@ import {
 } from "lucide-vue-next";
 import ChatBubble from "./components/ChatBubble.vue";
 import FunctionGrid from "./components/FunctionGrid.vue";
-import HongXiaoTongLogo from "./components/HongXiaoTongLogo.vue";
+// import HongXiaoTongLogo from "./components/HongXiaoTongLogo.vue";
+import { createSignalA2uiMessageProcessor, a2uiRender } from "a2ui-vue";
+// import initSurface from "../../mock/init-surface.json";
+
+// 使用全局 manager，确保与 A2UIRender 组件共享同一个 manager
+const processor = createSignalA2uiMessageProcessor({ useGlobalManager: true });
 
 // --- CONSTANTS & MOCK DATA ---
 const PROXY_HOST = "api.kuai.host";
@@ -590,63 +595,90 @@ const processUserMessage = async (text) => {
     // So React manually pushed: `history.push({ role: 'user', parts: [{ text: text }] });`
     // In Vue, `messages.value` HAS IT. So `historyForApi` HAS IT.
 
-    const rawText = await callGeminiDirectly(historyForApi, SYSTEM_INSTRUCTION);
+    const mockData = `这是模拟的AI回复文本
+---a2ui_JSON---
+[{"beginRendering":{"surfaceId":"flight-card","root":"root","styles":{"primaryColor":"#FF0000","font":"Roboto"}}},{"surfaceUpdate":{"surfaceId":"flight-card","components":[{"id":"root","component":{"Card":{"child":"mainColumn"}}},{"id":"mainColumn","component":{"Column":{"children":{"explicitList":["applicantSection","travelSection","submitButtonWrapper"]},"distribution":"start","alignment":"stretch"}}},{"id":"applicantSection","component":{"Column":{"children":{"explicitList":["applicantTitle","applicantRow1","applicantRow2"]},"distribution":"start","alignment":"stretch"}}},{"id":"applicantTitle","component":{"Text":{"text":{"literalString":"申请人信息："},"usageHint":"h3"}}},{"id":"applicantRow1","component":{"Row":{"children":{"explicitList":["nameField","employeeIdField"]},"distribution":"spaceBetween","alignment":"start"}}},{"id":"nameField","component":{"TextField":{"label":{"literalString":"姓名"},"text":{"path":"/applicant/realName"},"textFieldType":"shortText"}}},{"id":"employeeIdField","component":{"TextField":{"label":{"literalString":"工号"},"text":{"path":"/applicant/workNo"},"textFieldType":"shortText"}}},{"id":"applicantRow2","component":{"Row":{"children":{"explicitList":["phoneField"]},"distribution":"start","alignment":"center"}}},{"id":"phoneField","component":{"TextField":{"label":{"literalString":"电话号码"},"text":{"path":"/applicant/phone"},"textFieldType":"shortText"}}},{"id":"travelSection","component":{"Column":{"children":{"explicitList":["travelTitle","travelFlightNumber","travelDeparture","travelDestination","travelDate","travelIdCard","travelRemarks"]},"distribution":"start","alignment":"stretch"}}},{"id":"travelTitle","component":{"Text":{"text":{"literalString":"行程信息："},"usageHint":"h3"}}},{"id":"travelFlightNumber","component":{"Column":{"children":{"explicitList":["travelFlightNumberLabel","travelFlightNumberMC"]}}}},{"id":"travelFlightNumberLabel","component":{"Text":{"text":{"literalString":"航班号"},"usageHint":"body"}}},{"id":"travelFlightNumberMC","component":{"MultipleChoice":{"selections":{"path":"/travel/flightNumber"},"options":[{"label":{"literalString":"A67719"},"value":"A67719"}],"maxAllowedSelections":1}}},{"id":"travelDeparture","component":{"Column":{"children":{"explicitList":["travelDepartureLabel","travelDepartureMC"]}}}},{"id":"travelDepartureLabel","component":{"Text":{"text":{"literalString":"出发地"},"usageHint":"body"}}},{"id":"travelDepartureMC","component":{"MultipleChoice":{"selections":{"path":"/travel/departure"},"options":[{"label":{"literalString":"昆明"},"value":"KMG"},{"label":{"literalString":"长沙"},"value":"CSX"},{"label":{"literalString":"无锡"},"value":"WUX"},{"label":{"literalString":"成都天府"},"value":"TFU"}],"maxAllowedSelections":1}}},{"id":"travelDestination","component":{"Column":{"children":{"explicitList":["travelDestinationLabel","travelDestinationMC"]}}}},{"id":"travelDestinationLabel","component":{"Text":{"text":{"literalString":"目的地"},"usageHint":"body"}}},{"id":"travelDestinationMC","component":{"MultipleChoice":{"selections":{"path":"/travel/arrival"},"options":[{"label":{"literalString":"昆明"},"value":"KMG"},{"label":{"literalString":"长沙"},"value":"CSX"},{"label":{"literalString":"无锡"},"value":"WUX"},{"label":{"literalString":"成都天府"},"value":"TFU"}],"maxAllowedSelections":1}}},{"id":"travelDate","component":{"DateTimeInput":{"value":{"path":"/travel/date"},"enableDate":true,"enableTime":false}}},{"id":"travelIdCard","component":{"TextField":{"label":{"literalString":"身份证"},"text":{"path":"/travel/idCard"},"textFieldType":"shortText"}}},{"id":"travelRemarks","component":{"TextField":{"label":{"literalString":"备注"},"text":{"path":"/travel/remarks"},"textFieldType":"longText"}}},{"id":"submitButtonWrapper","component":{"Row":{"children":{"explicitList":["submitButton"]},"distribution":"center","alignment":"center"}}},{"id":"submitButton","component":{"Button":{"child":"submitButtonText","primary":true,"action":{"name":"我要订员工票，这是我的订票信息","context":[{"key":"realName","value":{"path":"/applicant/realName"}},{"key":"workNo","value":{"path":"/applicant/workNo"}},{"key":"phone","value":{"path":"/applicant/phone"}},{"key":"flightNumber","value":{"path":"/travel/flightNumber"}},{"key":"departure","value":{"path":"/travel/departure"}},{"key":"arrival","value":{"path":"/travel/arrival"}},{"key":"departureDate","value":{"path":"/travel/date"}},{"key":"idCard","value":{"path":"/travel/idCard"}},{"key":"remark","value":{"path":"/travel/remarks"}}]}}}},{"id":"submitButtonText","component":{"Text":{"text":{"literalString":"提交申请"},"usageHint":"body"}}}]}},{"dataModelUpdate":{"surfaceId":"flight-card","contents":[{"key":"applicant","valueMap":[{"key":"realName","valueString":""},{"key":"workNo","valueString":"1760007"},{"key":"phone","valueString":""}]},{"key":"travel","valueMap":[{"key":"flightNumber","valueString":""},{"key":"departure","valueString":""},{"key":"arrival","valueString":""},{"key":"date","valueString":""},{"key":"idCard","valueString":""},{"key":"remarks","valueString":""}]}]}}]`;
 
-    let jsonResponse = {};
+    // 先移除loader并创建消息对象
+    messages.value = messages.value.filter((m) => m.id !== loaderId);
+
+    // 生成唯一的消息ID和时间戳
+    const messageId = Date.now().toString() + "_ai";
+    const messageTimestamp = new Date();
+
+    let jsonResponse = [];
     try {
-      const cleanText = rawText
-        .replace(/^```json/, "")
-        .replace(/^```/, "")
-        .replace(/```$/, "")
-        .trim();
-      jsonResponse = JSON.parse(cleanText);
+      const [rawText, jsonText] = mockData.split("---a2ui_JSON---");
+
+      const parsedA2UI = JSON.parse(jsonText);
+
+      // 使用消息ID作为唯一后缀，确保Surface ID与消息强关联
+      const uniqueSuffix = `_${messageId}`;
+
+      // Extract Surface IDs and rewrite them to be unique
+      const surfaceIds = new Set();
+
+      parsedA2UI.forEach((msg) => {
+        // Identify the target surface ID
+        let originalId = null;
+        if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
+        else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
+        else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
+
+        if (originalId) {
+          const newId = originalId + uniqueSuffix;
+
+          // Rewrite the ID in the instruction
+          if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
+          if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
+          if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
+
+          surfaceIds.add(newId);
+        }
+      });
+      console.log("Processed Unique A2UI Messages:", parsedA2UI);
+
+      jsonResponse = Array.from(surfaceIds);
+
+      // 先创建消息对象并添加到列表
+      const newMessage = {
+        id: messageId,
+        sender: "AGENT",
+        type: "A2UI_WIDGET",
+        thought: "分析完成，界面已生成。",
+        content: "已为您生成相关业务办理界面：",
+        widgetPayload: {
+          title: "智能助理",
+          rootNode: [...jsonResponse],
+        },
+        timestamp: messageTimestamp,
+      };
+
+      messages.value.push(newMessage);
+
+      // 确保消息已经在DOM中后，再处理A2UI
+      await nextTick();
+
+      // 使用全局processor处理A2UI消息
+      processor.processMessages(parsedA2UI);
     } catch (e) {
       console.error("JSON Parse Error", e);
-      jsonResponse = {};
+      jsonResponse = [];
+
+      // 即使出错也要添加消息
+      messages.value.push({
+        id: messageId,
+        sender: "AGENT",
+        type: "A2UI_WIDGET",
+        thought: "分析完成，界面已生成。",
+        content: "已为您生成相关业务办理界面：",
+        widgetPayload: {
+          title: "智能助理",
+          rootNode: [...jsonResponse],
+        },
+        timestamp: messageTimestamp,
+      });
     }
-
-    let finalRootNode = jsonResponse.rootNode;
-    if (!finalRootNode && jsonResponse.type) finalRootNode = jsonResponse;
-
-    if (!finalRootNode) {
-      finalRootNode = {
-        type: "container",
-        style: { className: "p-3 bg-red-50 rounded-xl border border-red-100" },
-        children: [
-          {
-            type: "container",
-            style: { className: "flex items-center gap-2 text-red-600 font-bold mb-1" },
-            children: [
-              {
-                type: "icon",
-                props: { iconName: "AlertTriangle" },
-                style: { className: "w-4 h-4" },
-              },
-              { type: "text", props: { text: "界面生成异常" } },
-            ],
-          },
-          {
-            type: "text",
-            props: { text: "请尝试补充更多细节或重新提问。" },
-            style: { className: "text-[10px] text-red-500" },
-          },
-        ],
-      };
-    }
-
-    messages.value = messages.value.filter((m) => m.id !== loaderId);
-    messages.value.push({
-      id: Date.now().toString() + "_ai",
-      sender: "AGENT",
-      type: "A2UI_WIDGET",
-      thought: jsonResponse.thought || "分析完成，界面已生成。",
-      content: jsonResponse.summary || "已为您生成相关业务办理界面：",
-      widgetPayload: {
-        title: jsonResponse.title || "智能助理",
-        rootNode: finalRootNode,
-      },
-      timestamp: new Date(),
-    });
   } catch (error) {
     console.error("AI Error", error);
     messages.value = messages.value.filter((m) => m.id !== loaderId);
@@ -843,6 +875,7 @@ onMounted(() => {
         v-for="msg in messages"
         :key="msg.id"
         :message="msg"
+        :manager="processor"
         @actionClick="processUserMessage"
       />
       <div ref="messagesEndRef" />
