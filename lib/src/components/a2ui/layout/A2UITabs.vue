@@ -19,8 +19,8 @@ const props = defineProps({
 
 const emit = defineEmits(['action'])
 
-const surfaceId = inject('a2ui-surface-id')
-const { resolveValue } = useDataBinding(surfaceId.value)
+// surfaceId no longer needed
+const { resolveValue } = useDataBinding()
 
 const tabs = computed(() => {
   return props.tabItems.map((item, index) => ({

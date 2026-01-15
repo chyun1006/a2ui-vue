@@ -31,8 +31,8 @@ const props = defineProps({
 
 const emit = defineEmits(['action'])
 
-const manager = inject('a2ui-manager')
-const surfaceId = inject('a2ui-surface-id')
+// manager no longer needed
+// surfaceId no longer needed
 
 const justifyContent = computed(() => FLEX_JUSTIFY_CONTENT_MAP[props.distribution] || 'flex-start')
 const alignItems = computed(() => FLEX_ALIGN_ITEMS_MAP[props.alignment] || 'flex-start')

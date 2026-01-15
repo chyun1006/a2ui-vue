@@ -3,26 +3,20 @@ import { provide, readonly, toRef } from 'vue'
 
 /**
  * A2UI Provider 组件
- * 通过 provide/inject 机制向子组件提供 manager 和 surfaceId
- * 解决 manager 需要层层传递的问题
+ * 通过 provide/inject 机制向子组件提供 surface 对象
  */
 
 const props = defineProps({
-  manager: {
+  surface: {
     type: Object,
-    required: true,
-  },
-  surfaceId: {
-    type: String,
     required: true,
   },
 })
 
-const surfaceIdRef = toRef(props, 'surfaceId')
+const surfaceRef = toRef(props, 'surface')
 
-// 提供 manager 和 surfaceId 给所有子组件
-provide('a2ui-manager', props.manager)
-provide('a2ui-surface-id', readonly(surfaceIdRef))
+// 提供 surface 对象给所有子组件
+provide('a2ui-surface', readonly(surfaceRef))
 </script>
 
 <template>

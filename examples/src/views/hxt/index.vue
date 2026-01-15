@@ -31,11 +31,6 @@ import { createSignalA2uiMessageProcessor, a2uiRender } from "a2ui-vue";
 // 使用全局 manager，确保与 A2UIRender 组件共享同一个 manager
 const processor = createSignalA2uiMessageProcessor({ useGlobalManager: true });
 
-// --- CONSTANTS & MOCK DATA ---
-const PROXY_HOST = "api.kuai.host";
-const API_KEY = "sk-tD5WANykuBesDGn17HDMsZ3Pk8BkkmKFz7rtfeHw2KrelIIP";
-const MODEL_NAME = "gemini-3-flash-preview";
-
 const ROLES = ["营销主控", "维修席位", "航班生产控制席位", "签派放行席位"];
 
 const NOTIFICATIONS = [
@@ -72,7 +67,7 @@ const HISTORY_SESSIONS = [
 const FUNCTION_ITEMS = [
   { id: "flight", label: "我要改期", icon: Plane },
   { id: "report", label: "我要改签", icon: FileText },
-  { id: "crew", label: "定员工票", icon: Users },
+  { id: "crew", label: "我要定员工票", icon: Users },
   // { id: "mro", label: "维修工单", icon: Wrench },
   // { id: "dispatch", label: "签派放行", icon: Plane },
   // { id: "marketing", label: "营销数据", icon: FileText },
@@ -377,8 +372,138 @@ const generateLocalBriefing = (role) => {
   };
 };
 
+const mockData = [
+  {
+    beginRendering: {
+      surfaceId: "default",
+      root: "root",
+      styles: {
+        primaryColor: "#FF0000",
+        font: "Roboto",
+      },
+    },
+  },
+  {
+    surfaceUpdate: {
+      surfaceId: "default",
+      components: [
+        {
+          id: "root",
+          component: {
+            List: {
+              children: {
+                template: {
+                  componentId: "orderCard",
+                  dataBinding: "/orders",
+                },
+              },
+              direction: "vertical",
+              alignment: "stretch",
+            },
+          },
+        },
+        {
+          id: "orderCard",
+          component: {
+            Card: {
+              child: "orderCardContent",
+            },
+          },
+        },
+        {
+          id: "orderCardContent",
+          component: {
+            Row: {
+              children: {
+                explicitList: ["orderNumberText", "detailButton"],
+              },
+              distribution: "spaceBetween",
+              alignment: "center",
+            },
+          },
+        },
+        {
+          id: "orderNumberText",
+          component: {
+            Text: {
+              text: {
+                path: "orderNumber",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "detailButton",
+          component: {
+            Button: {
+              child: "detailButtonText",
+              action: {
+                name: "s_m_s_refundTicketSkill",
+                context: [
+                  {
+                    key: "orderNumber",
+                    value: {
+                      path: "orderNumber",
+                    },
+                  },
+                  {
+                    key: "method",
+                    value: {
+                      path: "method",
+                    },
+                  },
+                ],
+              },
+              primary: true,
+            },
+          },
+        },
+        {
+          id: "detailButtonText",
+          component: {
+            Text: {
+              text: {
+                literalString: "详情",
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+  {
+    dataModelUpdate: {
+      surfaceId: "default",
+      path: "/",
+      contents: [
+        {
+          key: "orders",
+          valueMap: [
+            {
+              key: "0", // 第一个订单的索引
+              valueMap: [
+                { key: "orderNumber", valueString: "260112180225620309" },
+                { key: "method", valueString: "queryRefundOrderDetail" },
+              ],
+            },
+            {
+              key: "1",
+              valueMap: [
+                { key: "orderNumber", valueString: "1234" },
+                { key: "method", valueString: "queryRefundO啊啊谁懂发rderDetail" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
+];
+
+const apiFlag = ref("order_ticket");
 // API Call
-const callGeminiDirectly = async (history, systemInstruction) => {
+const callGeminiDirectly = async (message, systemInstruction) => {
   // const url = `https://${PROXY_HOST}/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
   // const payload = {
@@ -393,9 +518,17 @@ const callGeminiDirectly = async (history, systemInstruction) => {
 
   // let lastError;
   const maxRetries = 3;
-
+  const apiMap = {
+    refund_ticket: "/api/agent/chat",
+    order_ticket: "/api/chat",
+  };
   try {
-    const response = await fetch(url, {
+    const payload = {
+      message: message,
+      sessionId: +new Date(),
+      workNo: "1760023",
+    };
+    const res = await fetch(apiMap[apiFlag.value], {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -403,20 +536,42 @@ const callGeminiDirectly = async (history, systemInstruction) => {
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      if (response.status === 503) {
-        throw new Error(`503 Service Unavailable (Attempt ${attempt + 1})`);
+    const data = await res.json();
+    let surfaces = [];
+    // 浩哥的数据结构
+    if (apiFlag.value == "refund_ticket") {
+      if (data.needUi) {
+        return {
+          parsedA2UI: data.response,
+          rawText: "",
+        };
       }
-      const errorText = await response.text();
-      throw new Error(
-        `API Request Failed: ${response.status} ${response.statusText} - ${errorText}`,
-      );
+    } else {
+      // 立哥
+      const [rawText, jsonText] = data.message.split("---a2ui_JSON---");
+      if (jsonText) {
+        const cc = JSON.parse(jsonText);
+        return {
+          parsedA2UI: cc,
+          rawText: rawText,
+        };
+      }
     }
 
-    const data = await response.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    // if (!response.ok) {
+    //   if (response.status === 503) {
+    //     throw new Error(`503 Service Unavailable (Attempt ${attempt + 1})`);
+    //   }
+    //   const errorText = await response.text();
+    //   throw new Error(
+    //     `API Request Failed: ${response.status} ${response.statusText} - ${errorText}`,
+    //   );
+    // }
+
+    // const data = await response.json();
+    // return data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
   } catch (e) {
-    console.warn(`Gemini API Request failed (Attempt ${attempt + 1}/${maxRetries}):`, e);
+    console.warn(` API Request failed `, e);
   }
 };
 
@@ -441,37 +596,38 @@ const triggerDirectAIGeneration = async (prompt) => {
       },
     ];
 
-    const rawText = await callGeminiDirectly(history, SYSTEM_INSTRUCTION);
+    // mockData
+    const res = await callGeminiDirectly(history);
 
-    let jsonResponse = {};
-    try {
-      const cleanText = rawText
-        .replace(/^```json/, "")
-        .replace(/^```/, "")
-        .replace(/```$/, "")
-        .trim();
-      jsonResponse = JSON.parse(cleanText);
-    } catch (e) {
-      console.error("JSON Parse Error", e);
-      jsonResponse = {};
-    }
+    // let jsonResponse = {};
+    // try {
+    //   const cleanText = rawText
+    //     .replace(/^```json/, "")
+    //     .replace(/^```/, "")
+    //     .replace(/```$/, "")
+    //     .trim();
+    //   jsonResponse = JSON.parse(cleanText);
+    // } catch (e) {
+    //   console.error("JSON Parse Error", e);
+    //   jsonResponse = {};
+    // }
 
-    let finalRootNode = jsonResponse.rootNode;
-    if (!finalRootNode && jsonResponse.type) finalRootNode = jsonResponse;
+    // let finalRootNode = jsonResponse.rootNode;
+    // if (!finalRootNode && jsonResponse.type) finalRootNode = jsonResponse;
 
-    if (!finalRootNode) {
-      finalRootNode = {
-        type: "container",
-        style: { className: "p-3 bg-red-50 rounded-xl border border-red-100" },
-        children: [
-          {
-            type: "text",
-            props: { text: "无法生成该通知的详情界面。" },
-            style: { className: "text-xs text-red-500" },
-          },
-        ],
-      };
-    }
+    // if (!finalRootNode) {
+    //   finalRootNode = {
+    //     type: "container",
+    //     style: { className: "p-3 bg-red-50 rounded-xl border border-red-100" },
+    //     children: [
+    //       {
+    //         type: "text",
+    //         props: { text: "无法生成该通知的详情界面。" },
+    //         style: { className: "text-xs text-red-500" },
+    //       },
+    //     ],
+    //   };
+    // }
 
     messages.value = messages.value.filter((m) => m.id !== loaderId);
     messages.value.push({
@@ -482,7 +638,7 @@ const triggerDirectAIGeneration = async (prompt) => {
       content: jsonResponse.summary || "",
       widgetPayload: {
         title: jsonResponse.title || "详情",
-        rootNode: finalRootNode,
+        surfaces: res.surfaces,
       },
       timestamp: new Date(),
     });
@@ -515,11 +671,10 @@ const startNewSession = async (directGenerationPrompt) => {
     id: "init_" + Date.now(),
     sender: "AGENT",
     type: "A2UI_WIDGET",
-    thought: `识别到您的身份为【${randomRole}】，已接入生产运行数据库 (本地直连)...`,
-    content: `您好，我是鸿小通。今天是 2024年5月20日，以下是为您生成的【${randomRole}】专属运行态势简报：`,
+    // thought: `识别到您的身份为【${randomRole}】，已接入生产运行数据库 (本地直连)...`,
+    content: `您好，我是鸿小通，有什么可以帮到你的吗？`,
     widgetPayload: {
-      title: `当日运行态势 (${randomRole})`,
-      rootNode: localData,
+      title: `您好，我是鸿小通，有什么可以帮到你的吗？`,
     },
     timestamp: new Date(),
   };
@@ -534,6 +689,114 @@ const processUserMessage = async (text) => {
     sender: "USER",
     type: "TEXT",
     content: text,
+    timestamp: new Date(),
+  };
+  messages.value.push(userMsg);
+
+  const loaderId = "loader_" + Date.now();
+  // 核心修改 1: 添加 loader 消息到列表
+  messages.value.push({
+    id: loaderId,
+    sender: "AGENT",
+    type: "LOADER",
+    timestamp: new Date(),
+  });
+
+  try {
+    const actionPayload = {
+      context: { submitted_text: text },
+      name: "user_input",
+    };
+
+    console.time("API Request");
+    const { rawText, parsedA2UI } = await callGeminiDirectly(actionPayload);
+    console.timeEnd("API Request");
+
+    // 核心修改 2: 不要 filter 删除 loader，而是找到它并在原位更新
+    const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
+    if (loaderIndex === -1) return; // 异常情况
+
+    const messageId = Date.now().toString() + "_ai";
+    const messageTimestamp = new Date();
+
+    try {
+      const uniqueSuffix = `_${messageId}`;
+
+      console.time("Surface Rewrite");
+      if (Array.isArray(parsedA2UI)) {
+        parsedA2UI.forEach((msg) => {
+          let originalId = null;
+          if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
+          else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
+          else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
+
+          if (originalId) {
+            const newId = originalId + uniqueSuffix;
+            if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
+            if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
+            if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
+          }
+        });
+      }
+      console.timeEnd("Surface Rewrite");
+
+      console.time("Processor");
+      const surfaces = processor.processMessages(parsedA2UI);
+      console.log("Received surfaces from processor:", surfaces);
+      console.timeEnd("Processor");
+
+      // 核心修改 3: 直接替换数组中的该项
+      console.time("Vue Update");
+      messages.value[loaderIndex] = {
+        id: messageId,
+        sender: "AGENT",
+        type: "A2UI_WIDGET",
+        thought: surfaces.length ? "分析完成，界面已生成。" : "思考完成",
+        content: surfaces.length ? "已为您生成相关业务办理界面：" : rawText,
+        widgetPayload: {
+          surfaces: surfaces,
+        },
+        timestamp: messageTimestamp,
+      };
+      console.timeEnd("Vue Update");
+    } catch (e) {
+      console.error("JSON Parse Error", e);
+      messages.value[loaderIndex] = {
+        id: messageId,
+        sender: "AGENT",
+        type: "A2UI_WIDGET",
+        // thought: "分析完成，界面已生成。",
+        content: "服务端错误",
+        widgetPayload: {
+          surfaces: [],
+        },
+        timestamp: messageTimestamp,
+      };
+    }
+  } catch (error) {
+    console.error("AI Error", error);
+    // 出错时也替换掉 loader
+    const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
+    if (loaderIndex !== -1) {
+      messages.value[loaderIndex] = {
+        id: Date.now().toString() + "_err",
+        sender: "AGENT",
+        type: "TEXT",
+        content: "抱歉，网络连接或服务暂时不可用，请稍后再试。",
+        timestamp: new Date(),
+      };
+    }
+  }
+};
+
+const processUserAction = async (action) => {
+  // if (!text.trim()) return;
+
+  const userMsg = {
+    id: Date.now().toString(),
+    sender: "USER",
+    type: "TEXT",
+    content: action.action || action.name,
     timestamp: new Date(),
   };
   messages.value.push(userMsg);
@@ -560,121 +823,74 @@ const processUserMessage = async (text) => {
         };
       });
 
-    // Add current msg
-    // Note: In React code, `messages` was updated immediately but `processUserMessage` read from existing `messages`.
-    // In Vue, `messages.value` already has userMsg due to `.push` above.
-    // However, the `history` construction above includes the just added userMsg because typical chat app logic usually sends history UP TO current.
-    // Wait, the React code did: setMessages(prev => [...prev, userMsg]); THEN history construction used `messages` (closure value? No, React state update is async, so `messages` inside `processUserMessage` is OLD state).
-    // In Vue, `messages.value.push` is sync. So `history` includes `userMsg`.
-    // The Gemini logic: "history" should likely NOT include the *current* user prompt in `contents` array if `callGeminiDirectly` appends it?
-    // React code:
-    // `history.push({ role: 'user', parts: [{ text: text }] });`
-    // And `history` started from `messages.map`.
-    // So assume `history` needs the current user message too.
+    const { parsedA2UI } = await callGeminiDirectly(action);
 
-    // In Vue `history` ALREADY has the last user message because I pushed it.
-    // So I don't need to push it again.
-    // BUT! `callGeminiDirectly` expects `contents` which is history.
-    // I should ensure the structure is correct.
+    // 核心修改: 原位替换 loader
+    const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
+    if (loaderIndex === -1) return;
 
-    // Let's refine history construction for Vue:
-    // Filter out the LOADER we just added.
-    const historyForApi = messages.value
-      .filter((m) => m.id !== loaderId) // exclude current loader
-      .map((m) => {
-        let contentText = m.content || "";
-        if (m.sender === "AGENT" && m.widgetPayload) {
-          contentText += `\n\n[System Context - Rendered UI]: ${JSON.stringify(m.widgetPayload)}`;
-        }
-        return {
-          role: m.sender === "USER" ? "user" : "model",
-          parts: [{ text: contentText }],
-        };
-      });
-    // In React code, `text` was `inputValue`. The `messages` state didn't have it yet effectively for `history` variable construction (closure).
-    // So React manually pushed: `history.push({ role: 'user', parts: [{ text: text }] });`
-    // In Vue, `messages.value` HAS IT. So `historyForApi` HAS IT.
-
-    const mockData = `这是模拟的AI回复文本
----a2ui_JSON---
-[{"beginRendering":{"surfaceId":"flight-card","root":"root","styles":{"primaryColor":"#FF0000","font":"Roboto"}}},{"surfaceUpdate":{"surfaceId":"flight-card","components":[{"id":"root","component":{"Card":{"child":"mainColumn"}}},{"id":"mainColumn","component":{"Column":{"children":{"explicitList":["applicantSection","travelSection","submitButtonWrapper"]},"distribution":"start","alignment":"stretch"}}},{"id":"applicantSection","component":{"Column":{"children":{"explicitList":["applicantTitle","applicantRow1","applicantRow2"]},"distribution":"start","alignment":"stretch"}}},{"id":"applicantTitle","component":{"Text":{"text":{"literalString":"申请人信息："},"usageHint":"h3"}}},{"id":"applicantRow1","component":{"Row":{"children":{"explicitList":["nameField","employeeIdField"]},"distribution":"spaceBetween","alignment":"start"}}},{"id":"nameField","component":{"TextField":{"label":{"literalString":"姓名"},"text":{"path":"/applicant/realName"},"textFieldType":"shortText"}}},{"id":"employeeIdField","component":{"TextField":{"label":{"literalString":"工号"},"text":{"path":"/applicant/workNo"},"textFieldType":"shortText"}}},{"id":"applicantRow2","component":{"Row":{"children":{"explicitList":["phoneField"]},"distribution":"start","alignment":"center"}}},{"id":"phoneField","component":{"TextField":{"label":{"literalString":"电话号码"},"text":{"path":"/applicant/phone"},"textFieldType":"shortText"}}},{"id":"travelSection","component":{"Column":{"children":{"explicitList":["travelTitle","travelFlightNumber","travelDeparture","travelDestination","travelDate","travelIdCard","travelRemarks"]},"distribution":"start","alignment":"stretch"}}},{"id":"travelTitle","component":{"Text":{"text":{"literalString":"行程信息："},"usageHint":"h3"}}},{"id":"travelFlightNumber","component":{"Column":{"children":{"explicitList":["travelFlightNumberLabel","travelFlightNumberMC"]}}}},{"id":"travelFlightNumberLabel","component":{"Text":{"text":{"literalString":"航班号"},"usageHint":"body"}}},{"id":"travelFlightNumberMC","component":{"MultipleChoice":{"selections":{"path":"/travel/flightNumber"},"options":[{"label":{"literalString":"A67719"},"value":"A67719"}],"maxAllowedSelections":1}}},{"id":"travelDeparture","component":{"Column":{"children":{"explicitList":["travelDepartureLabel","travelDepartureMC"]}}}},{"id":"travelDepartureLabel","component":{"Text":{"text":{"literalString":"出发地"},"usageHint":"body"}}},{"id":"travelDepartureMC","component":{"MultipleChoice":{"selections":{"path":"/travel/departure"},"options":[{"label":{"literalString":"昆明"},"value":"KMG"},{"label":{"literalString":"长沙"},"value":"CSX"},{"label":{"literalString":"无锡"},"value":"WUX"},{"label":{"literalString":"成都天府"},"value":"TFU"}],"maxAllowedSelections":1}}},{"id":"travelDestination","component":{"Column":{"children":{"explicitList":["travelDestinationLabel","travelDestinationMC"]}}}},{"id":"travelDestinationLabel","component":{"Text":{"text":{"literalString":"目的地"},"usageHint":"body"}}},{"id":"travelDestinationMC","component":{"MultipleChoice":{"selections":{"path":"/travel/arrival"},"options":[{"label":{"literalString":"昆明"},"value":"KMG"},{"label":{"literalString":"长沙"},"value":"CSX"},{"label":{"literalString":"无锡"},"value":"WUX"},{"label":{"literalString":"成都天府"},"value":"TFU"}],"maxAllowedSelections":1}}},{"id":"travelDate","component":{"DateTimeInput":{"value":{"path":"/travel/date"},"enableDate":true,"enableTime":false}}},{"id":"travelIdCard","component":{"TextField":{"label":{"literalString":"身份证"},"text":{"path":"/travel/idCard"},"textFieldType":"shortText"}}},{"id":"travelRemarks","component":{"TextField":{"label":{"literalString":"备注"},"text":{"path":"/travel/remarks"},"textFieldType":"longText"}}},{"id":"submitButtonWrapper","component":{"Row":{"children":{"explicitList":["submitButton"]},"distribution":"center","alignment":"center"}}},{"id":"submitButton","component":{"Button":{"child":"submitButtonText","primary":true,"action":{"name":"我要订员工票，这是我的订票信息","context":[{"key":"realName","value":{"path":"/applicant/realName"}},{"key":"workNo","value":{"path":"/applicant/workNo"}},{"key":"phone","value":{"path":"/applicant/phone"}},{"key":"flightNumber","value":{"path":"/travel/flightNumber"}},{"key":"departure","value":{"path":"/travel/departure"}},{"key":"arrival","value":{"path":"/travel/arrival"}},{"key":"departureDate","value":{"path":"/travel/date"}},{"key":"idCard","value":{"path":"/travel/idCard"}},{"key":"remark","value":{"path":"/travel/remarks"}}]}}}},{"id":"submitButtonText","component":{"Text":{"text":{"literalString":"提交申请"},"usageHint":"body"}}}]}},{"dataModelUpdate":{"surfaceId":"flight-card","contents":[{"key":"applicant","valueMap":[{"key":"realName","valueString":""},{"key":"workNo","valueString":"1760007"},{"key":"phone","valueString":""}]},{"key":"travel","valueMap":[{"key":"flightNumber","valueString":""},{"key":"departure","valueString":""},{"key":"arrival","valueString":""},{"key":"date","valueString":""},{"key":"idCard","valueString":""},{"key":"remarks","valueString":""}]}]}}]`;
-
-    // 先移除loader
-    messages.value = messages.value.filter((m) => m.id !== loaderId);
-
-    // 生成唯一的消息ID和时间戳
     const messageId = Date.now().toString() + "_ai";
     const messageTimestamp = new Date();
 
     try {
-      const [rawText, jsonText] = mockData.split("---a2ui_JSON---");
-      const parsedA2UI = JSON.parse(jsonText);
-
-      // 使用消息ID作为唯一后缀，确保Surface ID与消息强关联
       const uniqueSuffix = `_${messageId}`;
 
-      // Rewrite Surface IDs to be unique
-      parsedA2UI.forEach((msg) => {
-        let originalId = null;
-        if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
-        else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
-        else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
+      if (Array.isArray(parsedA2UI)) {
+        parsedA2UI.forEach((msg) => {
+          let originalId = null;
+          if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
+          else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
+          else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
 
-        if (originalId) {
-          const newId = originalId + uniqueSuffix;
-          if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
-          if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
-          if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
-        }
-      });
+          if (originalId) {
+            const newId = originalId + uniqueSuffix;
+            if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
+            if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
+            if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
+          }
+        });
+      }
 
-      // 处理A2UI消息，获取Surface对象数组
       const surfaces = processor.processMessages(parsedA2UI);
-
       console.log("Received surfaces from processor:", surfaces);
 
-      // 创建消息对象并添加到列表
-      const newMessage = {
+      messages.value[loaderIndex] = {
         id: messageId,
         sender: "AGENT",
         type: "A2UI_WIDGET",
         thought: "分析完成，界面已生成。",
         content: "已为您生成相关业务办理界面：",
         widgetPayload: {
-          title: "智能助理",
-          surfaces: surfaces, // 直接存储Surface对象数组
+          surfaces: surfaces,
         },
         timestamp: messageTimestamp,
       };
-
-      messages.value.push(newMessage);
     } catch (e) {
       console.error("JSON Parse Error", e);
-
-      // 即使出错也要添加消息
-      messages.value.push({
+      messages.value[loaderIndex] = {
         id: messageId,
         sender: "AGENT",
         type: "A2UI_WIDGET",
         thought: "分析完成，界面已生成。",
         content: "已为您生成相关业务办理界面：",
         widgetPayload: {
-          title: "智能助理",
-          surfaces: [], // 空的surfaces数组
+          surfaces: [],
         },
         timestamp: messageTimestamp,
-      });
+      };
     }
   } catch (error) {
     console.error("AI Error", error);
-    messages.value = messages.value.filter((m) => m.id !== loaderId);
-    messages.value.push({
-      id: Date.now().toString() + "_err",
-      sender: "AGENT",
-      type: "TEXT",
-      content: "抱歉，网络连接或服务暂时不可用，请稍后再试。",
-      timestamp: new Date(),
-    });
+    const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
+    if (loaderIndex !== -1) {
+      messages.value[loaderIndex] = {
+        id: Date.now().toString() + "_err",
+        sender: "AGENT",
+        type: "TEXT",
+        content: "抱歉，网络连接或服务暂时不可用，请稍后再试。",
+        timestamp: new Date(),
+      };
+    }
   }
 };
 
@@ -726,7 +942,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen bg-white max-w-md mx-auto relative shadow-2xl overflow-hidden">
+  <div class="flex flex-col h-screen bg-white max-w-md relative shadow-2xl overflow-hidden">
     <!-- Left Sidebar (Drawer) -->
     <div v-if="showLeftPanel" class="absolute inset-0 z-50 flex">
       <div class="w-[80%] h-full bg-white shadow-xl animate-slide-in-left flex flex-col">
@@ -861,7 +1077,7 @@ onMounted(() => {
         v-for="msg in messages"
         :key="msg.id"
         :message="msg"
-        @actionClick="processUserMessage"
+        @actionClick="processUserAction"
       />
       <div ref="messagesEndRef" />
     </main>
@@ -877,7 +1093,7 @@ onMounted(() => {
           <button
             v-for="item in FUNCTION_ITEMS"
             :key="item.id"
-            @click="processUserMessage(item.label)"
+            @click="processUserAction({ action: item.label })"
             class="flex-shrink-0 bg-white/90 backdrop-blur-sm border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1"
           >
             <span>{{ item.label }}</span>
@@ -936,12 +1152,12 @@ onMounted(() => {
               </button>
             </template>
             <template v-else>
-              <button
+              <!-- <button
                 @click="fileInputRef?.click()"
                 class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600 active:scale-90"
               >
                 <CameraIcon class="w-6 h-6" />
-              </button>
+              </button> -->
               <button
                 @click="toggleGrid('media')"
                 class="p-2 rounded-full transition-all duration-300 active:scale-90"

@@ -1,35 +1,35 @@
 <script setup>
 import { ref, computed, watch, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
+import { getGlobalManager } from '../../../core/singleton.js'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 
 /**
  * @component A2UICheckBox
- * @description 复选框输入组件，支持标签
- * @param {Object} label - 数据绑定对象，包含复选框标签文本
- * @param {Object} value - 数据绑定对象，包含选中状态（布尔值）
- * @emits {boolean} change - 复选框状态变化时发出，带有新的选中值
+ * @description 复选框组件
+ * @param {Object} label - 数据绑定对象，包含标签文本
+ * @param {Object} [selected=null] - 数据绑定对象，绑定布尔值
+ * @emits {boolean} change - 状态变化时发出
  */
 const props = defineProps({
   label: {
     type: Object,
     required: true,
   },
-  value: {
+  selected: {
     type: Object,
-    required: true,
+    default: null,
   },
 })
 
 const emit = defineEmits(['change'])
 
-const surfaceId = inject('a2ui-surface-id')
-const manager = inject('a2ui-manager')
-const { resolveValue, getPath } = useDataBinding(surfaceId.value)
+const surface = inject('a2ui-surface')
+const { resolveValue, getPath } = useDataBinding()
 
 const labelText = computed(() => resolveValue(props.label) || '')
-const initialChecked = computed(() => resolveValue(props.value) || false)
+const initialChecked = computed(() => resolveValue(props.selected) || false)
 
 const isChecked = ref(initialChecked.value)
 
@@ -37,24 +37,54 @@ watch(initialChecked, (newVal) => {
   isChecked.value = newVal
 })
 
-const handleChange = () => {
-  const path = getPath(props.value)
-  if (path && manager) {
-    manager.updateData(surfaceId.value, path, isChecked.value)
+const updateDataModel = () => {
+  const path = getPath(props.selected)
+  if (!path) return
+
+  if (!surface?.value) {
+    console.warn('[CheckBox.updateDataModel] surface is missing')
+    return
   }
 
+  const surfaceId = surface.value.id
+  if (!surfaceId) {
+    console.warn('[CheckBox.updateDataModel] surfaceId is missing')
+    return
+  }
+
+  try {
+    const processor = getGlobalManager()
+    if (processor && typeof processor.updateData === 'function') {
+      processor.updateData(surfaceId, path, isChecked.value)
+      console.log(
+        '[CheckBox.updateDataModel] Updated via processor:',
+        surfaceId,
+        path,
+        '=',
+        isChecked.value,
+      )
+    } else {
+      console.error('[CheckBox.updateDataModel] processor.updateData not available')
+    }
+  } catch (error) {
+    console.error('[CheckBox.updateDataModel] Error:', error)
+  }
   emit('change', isChecked.value)
+}
+
+const handleCheckedChange = (checked) => {
+  isChecked.value = checked
+  updateDataModel()
 }
 </script>
 
 <template>
   <div class="flex items-center space-x-2">
-    <Checkbox :id="labelText" :checked="isChecked" @update:checked="handleChange" />
-    <Label
-      :for="labelText"
-      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-    >
-      {{ labelText }}
-    </Label>
+    <Checkbox
+      :id="'checkbox-' + $.uid"
+      :checked="isChecked"
+      @update:checked="handleCheckedChange"
+    />
+    <Label :for="'checkbox-' + $.uid">{{ labelText }}</Label>
   </div>
 </template>

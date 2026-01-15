@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
+import { getGlobalManager } from '../../../core/singleton.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
@@ -37,9 +38,8 @@ const props = defineProps({
 
 const emit = defineEmits(['change'])
 
-const surfaceId = inject('a2ui-surface-id')
-const manager = inject('a2ui-manager')
-const { resolveValue, getPath } = useDataBinding(surfaceId.value)
+const surface = inject('a2ui-surface')
+const { resolveValue, getPath } = useDataBinding()
 
 const initialSelections = computed(() => resolveValue(props.selections) || [])
 
@@ -93,9 +93,37 @@ const toggleCheckbox = (value, checked) => {
 
 const updateDataModel = () => {
   const path = getPath(props.selections)
-  if (path) {
-    manager?.updateData(surfaceId.value, path, selectedValues.value)
+  if (!path) return
+
+  if (!surface?.value) {
+    console.warn('[MultipleChoice.updateDataModel] surface is missing')
+    return
   }
+
+  const surfaceId = surface.value.id
+  if (!surfaceId) {
+    console.warn('[MultipleChoice.updateDataModel] surfaceId is missing')
+    return
+  }
+
+  try {
+    const processor = getGlobalManager()
+    if (processor && typeof processor.updateData === 'function') {
+      processor.updateData(surfaceId, path, selectedValues.value)
+      console.log(
+        '[MultipleChoice.updateDataModel] Updated via processor:',
+        surfaceId,
+        path,
+        '=',
+        selectedValues.value,
+      )
+    } else {
+      console.error('[MultipleChoice.updateDataModel] processor.updateData not available')
+    }
+  } catch (error) {
+    console.error('[MultipleChoice.updateDataModel] Error:', error)
+  }
+
   emit('change', selectedValues.value)
 }
 

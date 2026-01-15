@@ -44,6 +44,9 @@ watch(
   () => props.surface,
   (newSurface) => {
     console.log('Surface changed:', newSurface?.id)
+    console.log('Surface root:', newSurface?.root)
+    console.log('Surface components:', newSurface?.components)
+    console.log('Full surface object:', newSurface)
   },
   { immediate: true },
 )
@@ -51,14 +54,11 @@ watch(
 
 <template>
   <div v-if="surfaceObj && rootComponentId" class="a2ui-surface" :style="cssVariables">
-    <A2UIProvider
-      :manager="manager"
-      :surface-id="props.surfaceId || (surfaceObj ? surfaceObj.id : '')"
-    >
+    <A2UIProvider :surface="surfaceObj">
       <A2UIRenderer :component-id="rootComponentId" @action="handleAction" />
     </A2UIProvider>
   </div>
-  <div v-else-if="!surfaceObj" class="a2ui-surface-error">Surface not found: {{ surfaceId }}</div>
+  <div v-else-if="!surfaceObj" class="a2ui-surface-error">Surface object is missing</div>
   <div v-else class="a2ui-surface-loading">Loading surface...</div>
 </template>
 

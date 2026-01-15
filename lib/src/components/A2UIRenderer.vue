@@ -12,24 +12,18 @@ const props = defineProps({
 
 const emit = defineEmits(['action'])
 
-// 从 A2UIProvider 注入 manager 和 surfaceId
-const manager = inject('a2ui-manager')
-const surfaceId = inject('a2ui-surface-id')
+// 从 A2UIProvider 注入 surface 对象
+const surface = inject('a2ui-surface')
 
 const componentDef = computed(() => {
-  if (!manager) {
-    console.error('A2UIRenderer: manager is undefined', {
-      surfaceId: surfaceId?.value,
+  if (!surface?.value) {
+    console.error('A2UIRenderer: surface is undefined', {
       componentId: props.componentId,
     })
     return null
   }
-  const surface = manager.getSurface(surfaceId.value)
-  if (!surface) {
-    return null
-  }
   // @a2ui/lit 的 surface 对象中，components 是一个 Map
-  return surface.components?.get(props.componentId) || null
+  return surface.value.components?.get(props.componentId) || null
 })
 
 const componentType = computed(() => getComponentType(componentDef.value))
@@ -86,9 +80,7 @@ const handleAction = (actionData) => {
   <component
     :is="dynamicComponent"
     v-if="componentDef && dynamicComponent"
-    :surface-id="surfaceId?.value"
     :component-id="componentId"
-    :manager="manager"
     v-bind="componentProps"
     :style="componentStyle"
     @action="handleAction"

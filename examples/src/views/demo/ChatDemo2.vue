@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { createSignalA2uiMessageProcessor, a2uiRender } from "a2ui-vue";
 import initSurface from "../../mock/init-surface.json";
 
@@ -7,6 +7,9 @@ import initSurface from "../../mock/init-surface.json";
 const processor = createSignalA2uiMessageProcessor({ useGlobalManager: true });
 
 const message = ref("我要退票");
+
+// 存储Surface对象数组
+const surfaces = ref([]);
 
 const mockData = [
   {
@@ -26,81 +29,288 @@ const mockData = [
         {
           id: "root",
           component: {
-            List: {
-              children: {
-                template: {
-                  componentId: "orderCard",
-                  dataBinding: "/orders",
-                },
-              },
-              direction: "vertical",
-              alignment: "stretch",
-            },
-          },
-        },
-        {
-          id: "orderCard",
-          component: {
             Card: {
-              child: "orderCardContent",
+              child: "form",
             },
           },
         },
         {
-          id: "orderCardContent",
+          id: "form",
           component: {
-            Row: {
+            Column: {
               children: {
-                explicitList: ["orderNumberText", "detailButton"],
+                explicitList: [
+                  "line1",
+                  "line2",
+                  "line3",
+                  "line4",
+                  "line5",
+                  "flightDatePicker",
+                  "confirmBtn",
+                ],
               },
-              distribution: "spaceBetween",
-              alignment: "center",
+              distribution: "start",
+              alignment: "start",
             },
           },
         },
         {
-          id: "orderNumberText",
+          id: "line1",
           component: {
             Text: {
               text: {
-                path: "orderNumber",
+                literalString: "原航班信息",
+              },
+              usageHint: "h4",
+            },
+          },
+        },
+        {
+          id: "line2",
+          component: {
+            Row: {
+              children: {
+                explicitList: [
+                  "depCityNameText",
+                  "arrowText",
+                  "arrCityNameText",
+                  "originalDeptDateText",
+                  "departureSuffixText",
+                ],
+              },
+              distribution: "start",
+              alignment: "center",
+              spacing: 2,
+            },
+          },
+        },
+        {
+          id: "depCityNameText",
+          component: {
+            Text: {
+              text: {
+                path: "/form/depCityName",
               },
               usageHint: "body",
             },
           },
         },
         {
-          id: "detailButton",
+          id: "arrowText",
           component: {
-            Button: {
-              child: "detailButtonText",
-              action: {
-                name: "s_m_s_refundTicketSkill",
-                context: [
-                  {
-                    key: "orderNumber",
-                    value: {
-                      path: "orderNumber",
-                    },
-                  },
-                  {
-                    key: "method",
-                    value: {
-                      path: "method",
-                    },
-                  },
-                ],
+            Text: {
+              text: {
+                literalString: "->",
               },
-              primary: true,
+              usageHint: "body",
             },
           },
         },
         {
-          id: "detailButtonText",
+          id: "arrCityNameText",
           component: {
             Text: {
               text: {
-                literalString: "详情",
+                path: "/form/arrCityName",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "originalDeptDateText",
+          component: {
+            Text: {
+              text: {
+                path: "/form/originalDeptDate",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "departureSuffixText",
+          component: {
+            Text: {
+              text: {
+                literalString: " 起飞",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "line3",
+          component: {
+            Text: {
+              text: {
+                literalString: "填写改期信息",
+              },
+              usageHint: "h4",
+            },
+          },
+        },
+        {
+          id: "line4",
+          component: {
+            Row: {
+              children: {
+                explicitList: ["passengerLabel", "passengerNameText"],
+              },
+              distribution: "start",
+              alignment: "center",
+            },
+          },
+        },
+        {
+          id: "passengerLabel",
+          component: {
+            Text: {
+              text: {
+                literalString: "旅客姓名：",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "passengerNameText",
+          component: {
+            Text: {
+              text: {
+                path: "/form/passengerName",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "line5",
+          component: {
+            Text: {
+              text: {
+                literalString: "选择改期日期",
+              },
+              usageHint: "h4",
+            },
+          },
+        },
+        {
+          id: "flightDatePicker",
+          component: {
+            DateTimeInput: {
+              value: {
+                path: "/form/deptDate",
+              },
+              enableDate: true,
+              enableTime: false,
+            },
+          },
+        },
+        {
+          id: "confirmBtn",
+          component: {
+            Button: {
+              child: "confirmBtnText",
+              primary: true,
+              action: {
+                name: "s_m_checkchange",
+                context: [
+                  {
+                    key: "firstIssueTime",
+                    value: {
+                      path: "/firstIssueTime",
+                    },
+                  },
+                  {
+                    key: "passengerName",
+                    value: {
+                      path: "/passengerName",
+                    },
+                  },
+                  {
+                    key: "issueTime",
+                    value: {
+                      path: "/issueTime",
+                    },
+                  },
+                  {
+                    key: "passengerType",
+                    value: {
+                      path: "/passengerType",
+                    },
+                  },
+                  {
+                    key: "pnr",
+                    value: {
+                      path: "/pnr",
+                    },
+                  },
+                  {
+                    key: "ticketPnr",
+                    value: {
+                      path: "/ticketPnr",
+                    },
+                  },
+                  {
+                    key: "ticketStatus",
+                    value: {
+                      path: "/ticketStatus",
+                    },
+                  },
+                  {
+                    key: "gender",
+                    value: {
+                      path: "/gender",
+                    },
+                  },
+                  {
+                    key: "originalSerialNo",
+                    value: {
+                      path: "/originalSerialNo",
+                    },
+                  },
+                  {
+                    key: "tripType",
+                    value: {
+                      path: "/tripType",
+                    },
+                  },
+                  {
+                    key: "canChange",
+                    value: {
+                      path: "/canChange",
+                    },
+                  },
+                  {
+                    key: "flightNo",
+                    value: {
+                      path: "/flightNo",
+                    },
+                  },
+                  {
+                    key: "arrAirportCode",
+                    value: {
+                      path: "/arrAirportCode",
+                    },
+                  },
+                  {
+                    key: "deptAirportCode",
+                    value: {
+                      path: "/deptAirportCode",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+        {
+          id: "confirmBtnText",
+          component: {
+            Text: {
+              text: {
+                literalString: "去改期",
               },
             },
           },
@@ -114,23 +324,93 @@ const mockData = [
       path: "/",
       contents: [
         {
-          key: "orders",
+          key: "form",
           valueMap: [
             {
-              key: "0", // 第一个订单的索引
-              valueMap: [
-                { key: "orderNumber", valueString: "260112180225620309" },
-                { key: "method", valueString: "queryRefundOrderDetail" },
-              ],
+              key: "depCityName",
+              valueString: "长沙",
             },
             {
-              key: "1",
-              valueMap: [
-                { key: "orderNumber", valueString: "1234" },
-                { key: "method", valueString: "queryRefundO啊啊谁懂发rderDetail" },
-              ],
+              key: "arrCityName",
+              valueString: "昆明",
+            },
+            {
+              key: "originalDeptDate",
+              valueString: "2026-03-23",
+            },
+            {
+              key: "passengerName",
+              valueString: "测试",
+            },
+            {
+              key: "deptDate",
+              valueString: "2026-03-24",
+            },
+            {
+              key: "origIssueDate",
+              valueString: "2026-01-15 17:20:00",
             },
           ],
+        },
+        {
+          key: "firstIssueTime",
+          valueString: "2026-01-15 17:20:00",
+        },
+        {
+          key: "passengerName",
+          valueString: "测试",
+        },
+        {
+          key: "issueTime",
+          valueString: "2026-01-15 17:20:00",
+        },
+        {
+          key: "passengerType",
+          valueString: "ADT",
+        },
+        {
+          key: "pnr",
+          valueString: "NV0178",
+        },
+        {
+          key: "ticketPnr",
+          valueString: "NV0178",
+        },
+        {
+          key: "ticketStatus",
+          valueString: "OPEN FOR USE",
+        },
+        {
+          key: "gender",
+          valueString: "F",
+        },
+        {
+          key: "originalSerialNo",
+          valueString: "260115171854118341",
+        },
+        {
+          key: "tripType",
+          valueString: "OW",
+        },
+        {
+          key: "birthday",
+          valueString: "20050728",
+        },
+        {
+          key: "canChange",
+          valueString: "true",
+        },
+        {
+          key: "flightNo",
+          valueString: "A67120",
+        },
+        {
+          key: "arrAirportCode",
+          valueString: "KMG",
+        },
+        {
+          key: "depAirportCode",
+          valueString: "CSX",
         },
       ],
     },
@@ -138,15 +418,12 @@ const mockData = [
 ];
 
 onMounted(() => {
-  // 清空所有 surfaces，确保从干净状态开始`
-  processor.clearSurfaces();
-  processor.processMessages(initSurface);
-  // processor.processMessages(mockData);
-});
-
-onUnmounted(() => {
-  // 组件卸载时销毁 processor
-  processor.destroy();
+  // 处理初始Surface并存储
+  const initialSurfaces = processor.processMessages(mockData);
+  surfaces.value = initialSurfaces;
+  console.log("Loaded initial surfaces:", initialSurfaces);
+  // 如果要使用mockData，取消注释下面这行
+  // surfaces.value = processor.processMessages(mockData);
 });
 
 // 从 A2UI TextField 发送消息
@@ -165,18 +442,12 @@ const sendMsgFromA2UI = async (action) => {
         "content-type": "application/json",
       },
     });
-    // const res = await fetch("/api/ticket/change", {
-    //   body: JSON.stringify(payload),
-    //   method: "POST",
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    // });
 
     const data = await res.json();
     if (data.needUi) {
-      // const aa = JSON.parse(data.response);
-      processor.processMessages(data.response, { clearBefore: true });
+      // 处理新的A2UI消息并更新surfaces
+      const newSurfaces = processor.processMessages(data.response);
+      surfaces.value = newSurfaces;
     }
   } catch (error) {
     console.error("Error sending message:", error);
@@ -186,12 +457,6 @@ const sendMsgFromA2UI = async (action) => {
 const handleAction = (action) => {
   console.log("Action received:", action);
   sendMsgFromA2UI(action);
-  // // 从 action.context 中获取提交的文本
-  // const submittedText = action.context?.submitted_text;
-  // if (submittedText && submittedText.trim()) {
-  //   // 使用 A2UI TextField 中的文本发送消息
-  //   sendMsgFromA2UI(action);
-  // }
 };
 </script>
 
@@ -213,7 +478,7 @@ const handleAction = (action) => {
     </div> -->
 
     <div class="user-interface-container">
-      <a2uiRender @action="handleAction" />
+      <a2uiRender :surfaceList="surfaces" @action="handleAction" />
     </div>
   </main>
 </template>

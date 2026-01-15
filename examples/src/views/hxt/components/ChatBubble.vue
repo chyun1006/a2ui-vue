@@ -12,6 +12,8 @@ const props = defineProps({
   },
 });
 
+console.log("ChatBubble message:", props.message.type, props.message);
+
 const emit = defineEmits(["actionClick"]); // Propagate actions
 
 // Handle action from A2UI components
@@ -44,20 +46,24 @@ const timeString = computed(() => {
     -->
 
     <!-- Agent Avatar (Left) -->
-    <div
+    <!-- <div
       v-if="isAgent || isLoader"
       class="w-8 h-8 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center mr-2 shrink-0 overflow-hidden"
     >
-      <!-- <HongXiaoTongLogo class="w-5 h-5" /> -->
       <img src="@/assets/logo.png" alt="" srcset="" />
-    </div>
+    </div> -->
 
     <!-- Message Content -->
-    <div class="max-w-[85%] flex flex-col" :class="isUser ? 'items-end' : 'items-start'">
-      <!-- Sender Name (Agent only) -->
-      <span v-if="isAgent" class="text-[10px] text-slate-400 mb-1 ml-1"
-        >鸿小通 {{ timeString }}</span
-      >
+    <div class="flex flex-col" :class="isUser ? 'items-end' : 'items-start'">
+      <div class="flex items-center mb-2">
+        <div
+          v-if="isAgent || isLoader"
+          class="w-6 h-6 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center mr-2 shrink-0 overflow-hidden"
+        >
+          <img src="@/assets/logo.png" alt="" srcset="" />
+        </div>
+        <span v-if="isAgent" class="text-[10px] text-slate-400">鸿小通 {{ timeString }}</span>
+      </div>
 
       <!-- Loader -->
       <div
@@ -75,7 +81,7 @@ const timeString = computed(() => {
         v-else-if="isUser"
         class="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md text-sm leading-relaxed"
       >
-        {{ message.content }}
+        {{ message.content }}123
       </div>
 
       <!-- Agent Widget/Content -->
@@ -88,34 +94,32 @@ const timeString = computed(() => {
           <div class="flex items-center gap-1.5 mb-1">
             <Sparkles class="w-3 h-3 text-indigo-400" />
             <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide"
-              >Thought Process</span
+              >思考中...</span
             >
           </div>
           <p class="text-[11px] text-indigo-800/80 leading-relaxed italic">{{ message.thought }}</p>
         </div>
 
         <!-- Main Content -->
-        <div
-          class="bg-white border border-slate-200 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-1 shadow-sm overflow-hidden w-full"
-        >
+        <div class="bg-white border-slate-200 shadow-sm overflow-hidden w-full">
           <!-- Widget Header -->
-          <div
+          <!-- <div
             v-if="message.widgetPayload?.title"
             class="px-4 py-2 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center"
           >
             <span class="text-xs font-bold text-slate-500">{{ message.widgetPayload.title }}</span>
-            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded font-bold"
-              >A2UI</span
-            >
-          </div>
+          </div> -->
 
           <!-- Render Widget Root Node -->
-          <div class="p-3">
+          <div>
             <div
-              v-if="message.content && !message.widgetPayload"
-              class="text-sm text-slate-700 whitespace-pre-wrap"
+              v-if="message.content"
+              class="bg-white border border-slate-100 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-4 shadow-sm"
             >
-              {{ message.content }}
+              <div class="flex items-center gap-2 text-slate-500 text-xs">
+                <!-- <Loader2 class="w-4 h-4 animate-spin text-blue-500" /> -->
+                <span class="text-xs font-bold text-slate-500">{{ message.content }}</span>
+              </div>
             </div>
 
             <!-- <HXTWidgetRenderer

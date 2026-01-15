@@ -20,8 +20,8 @@ const props = defineProps({
   },
 })
 
-const surfaceId = inject('a2ui-surface-id')
-const { resolveValue } = useDataBinding(surfaceId.value)
+// surfaceId no longer needed
+const { resolveValue } = useDataBinding()
 
 // 优先使用 icon 属性，如果不存在则使用 name 属性（向后兼容）
 const iconBinding = computed(() => props.icon || props.name)

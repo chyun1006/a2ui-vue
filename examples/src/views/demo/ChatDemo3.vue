@@ -231,10 +231,12 @@ const mockData = [
   },
 ];
 
+const surfaces = ref([]);
 onMounted(() => {
   // 清空所有 surfaces，确保从干净状态开始
   processor.clearSurfaces();
-  processor.processMessages(initSurface);
+  const initialSurfaces = processor.processMessages(initSurface);
+  surfaces.value = initialSurfaces;
   // processor.processMessages(mockData);
 });
 
@@ -304,7 +306,8 @@ const handleAction = (action) => {
 <template>
   <div style="padding: 10px">
     <div v-html="markdownText"></div>
-    <a2uiRender @action="handleAction" />
+    <a2uiRender :surfaceList="surfaces" @action="handleAction" />
+
     <LoadingMask :visible="isLoading" text="正在处理请求..." />
   </div>
 </template>

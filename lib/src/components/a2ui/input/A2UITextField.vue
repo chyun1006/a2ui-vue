@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
+import { getGlobalManager } from '../../../core/singleton.js'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -36,16 +37,15 @@ const props = defineProps({
 
 const emit = defineEmits(['change'])
 
-const surfaceId = inject('a2ui-surface-id')
-const manager = inject('a2ui-manager')
+// 在setup顶层inject surface
+const surface = inject('a2ui-surface')
 
 console.log('[TextField] Component created')
-console.log('[TextField] surfaceId:', surfaceId?.value)
-console.log('[TextField] manager:', manager)
+console.log('[TextField] surface:', surface?.value)
 console.log('[TextField] props.text:', props.text)
 console.log('[TextField] props.textFieldType:', props.textFieldType)
 
-const { resolveValue, getPath } = useDataBinding(surfaceId.value)
+const { resolveValue, getPath } = useDataBinding()
 
 const labelText = computed(() => resolveValue(props.label) || '')
 const initialValue = computed(() => resolveValue(props.text) || '')
@@ -108,13 +108,38 @@ const handleInput = (event) => {
   }
 }
 
+const updateDataModelViaSurface = (path, value) => {
+  if (!surface?.value) {
+    console.warn('[TextField.updateDataModel] surface is missing')
+    return
+  }
+
+  const surfaceId = surface.value.id
+  if (!surfaceId) {
+    console.warn('[TextField.updateDataModel] surfaceId is missing')
+    return
+  }
+
+  try {
+    const processor = getGlobalManager()
+    if (processor && typeof processor.updateData === 'function') {
+      processor.updateData(surfaceId, path, value)
+      console.log('[TextField.updateDataModel] Updated via processor:', surfaceId, path, '=', value)
+    } else {
+      console.error('[TextField.updateDataModel] processor.updateData not available')
+    }
+  } catch (error) {
+    console.error('[TextField.updateDataModel] Error:', error)
+  }
+}
+
 const updateDataModel = () => {
   const path = getPath(props.text)
 
-  if (path && manager) {
-    manager.updateData(surfaceId.value, path, inputValue.value)
+  if (path) {
+    updateDataModelViaSurface(path, inputValue.value)
   } else {
-    console.warn('[TextField.updateDataModel] Skipped: path or manager is missing')
+    console.warn('[TextField.updateDataModel] Skipped: path is missing')
   }
   emit('change', inputValue.value)
 }

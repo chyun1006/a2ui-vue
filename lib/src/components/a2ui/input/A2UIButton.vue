@@ -44,8 +44,8 @@ const props = defineProps({
 
 const emit = defineEmits(['action'])
 
-const surfaceId = inject('a2ui-surface-id')
-const { handleAction } = useA2UIAction(surfaceId.value, emit)
+const surface = inject('a2ui-surface')
+const { handleAction } = useA2UIAction(surface?.value?.id, emit)
 
 // 映射 A2UI 的 primary 和 variant 到 shadcn-vue
 const buttonVariant = computed(() => {

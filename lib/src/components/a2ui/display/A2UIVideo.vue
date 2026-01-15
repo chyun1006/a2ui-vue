@@ -14,8 +14,8 @@ const props = defineProps({
   },
 })
 
-const surfaceId = inject('a2ui-surface-id')
-const { resolveValue } = useDataBinding(surfaceId.value)
+// surfaceId no longer needed
+const { resolveValue } = useDataBinding()
 
 const videoUrl = computed(() => resolveValue(props.url) || '')
 </script>
