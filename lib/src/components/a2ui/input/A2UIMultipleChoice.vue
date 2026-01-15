@@ -148,7 +148,9 @@ const singleSelectedLabel = computed(() => {
       :model-value="selectedValues[0]"
       @update:model-value="handleSingleSelect"
     >
-      <SelectTrigger class="w-full">
+      <SelectTrigger
+        class="w-full bg-slate-100 rounded-md border border-transparent focus:border-blue-200 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm px-4 py-2.5 shadow-none outline-none transition-all h-auto"
+      >
         <SelectValue placeholder="请选择">
           {{ singleSelectedLabel || '请选择' }}
         </SelectValue>

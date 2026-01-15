@@ -65,9 +65,9 @@ const HISTORY_SESSIONS = [
 
 // Mock Function Items
 const FUNCTION_ITEMS = [
-  { id: "flight", label: "我要改期", icon: Plane },
-  { id: "report", label: "我要改签", icon: FileText },
-  { id: "crew", label: "我要定员工票", icon: Users },
+  { id: "refund_ticket", label: "我要改期", icon: Plane },
+  { id: "refund_ticket", label: "我要改签", icon: FileText },
+  { id: "order_ticket", label: "我要定员工票", icon: Users },
   // { id: "mro", label: "维修工单", icon: Wrench },
   // { id: "dispatch", label: "签派放行", icon: Plane },
   // { id: "marketing", label: "营销数据", icon: FileText },
@@ -95,10 +95,23 @@ const messagesEndRef = ref(null);
 const fileInputRef = ref(null);
 
 // Scroll to bottom
+// Scroll to bottom
 const scrollToBottom = async () => {
   await nextTick();
   if (messagesEndRef.value) {
-    messagesEndRef.value.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.value.scrollIntoView({ behavior: "smooth", block: "end" });
+
+    // Retry to handle async component rendering (like A2UI)
+    setTimeout(() => {
+      if (messagesEndRef.value) {
+        messagesEndRef.value.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 100);
+    setTimeout(() => {
+      if (messagesEndRef.value) {
+        messagesEndRef.value.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 500);
   }
 };
 
@@ -504,30 +517,28 @@ const mockData = [
 const apiFlag = ref("order_ticket");
 // API Call
 const callGeminiDirectly = async (message, systemInstruction) => {
-  // const url = `https://${PROXY_HOST}/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
-
-  // const payload = {
-  //   contents: history,
-  //   systemInstruction: {
-  //     parts: [{ text: systemInstruction }],
-  //   },
-  //   generationConfig: {
-  //     responseMimeType: "application/json",
-  //   },
-  // };
-
-  // let lastError;
   const maxRetries = 3;
   const apiMap = {
-    refund_ticket: "/api/agent/chat",
+    refund_ticket: "/api/ticket/change",
     order_ticket: "/api/chat",
   };
   try {
-    const payload = {
-      message: message,
-      sessionId: +new Date(),
-      workNo: "1760023",
-    };
+    let payload = {};
+    if (apiFlag.value == "order_ticket") {
+      payload = {
+        message: message,
+        sessionId: sessionId,
+        workNo: "1760023",
+      };
+    } else {
+      payload = {
+        userId: "123456",
+        memberId: "232568004001",
+        sessionId: "12345689",
+        query: JSON.stringify(message),
+      };
+    }
+
     const res = await fetch(apiMap[apiFlag.value], {
       method: "POST",
       headers: {
@@ -557,19 +568,6 @@ const callGeminiDirectly = async (message, systemInstruction) => {
         };
       }
     }
-
-    // if (!response.ok) {
-    //   if (response.status === 503) {
-    //     throw new Error(`503 Service Unavailable (Attempt ${attempt + 1})`);
-    //   }
-    //   const errorText = await response.text();
-    //   throw new Error(
-    //     `API Request Failed: ${response.status} ${response.statusText} - ${errorText}`,
-    //   );
-    // }
-
-    // const data = await response.json();
-    // return data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
   } catch (e) {
     console.warn(` API Request failed `, e);
   }
@@ -598,36 +596,6 @@ const triggerDirectAIGeneration = async (prompt) => {
 
     // mockData
     const res = await callGeminiDirectly(history);
-
-    // let jsonResponse = {};
-    // try {
-    //   const cleanText = rawText
-    //     .replace(/^```json/, "")
-    //     .replace(/^```/, "")
-    //     .replace(/```$/, "")
-    //     .trim();
-    //   jsonResponse = JSON.parse(cleanText);
-    // } catch (e) {
-    //   console.error("JSON Parse Error", e);
-    //   jsonResponse = {};
-    // }
-
-    // let finalRootNode = jsonResponse.rootNode;
-    // if (!finalRootNode && jsonResponse.type) finalRootNode = jsonResponse;
-
-    // if (!finalRootNode) {
-    //   finalRootNode = {
-    //     type: "container",
-    //     style: { className: "p-3 bg-red-50 rounded-xl border border-red-100" },
-    //     children: [
-    //       {
-    //         type: "text",
-    //         props: { text: "无法生成该通知的详情界面。" },
-    //         style: { className: "text-xs text-red-500" },
-    //       },
-    //     ],
-    //   };
-    // }
 
     messages.value = messages.value.filter((m) => m.id !== loaderId);
     messages.value.push({
@@ -789,9 +757,12 @@ const processUserMessage = async (text) => {
   }
 };
 
-const processUserAction = async (action) => {
-  // if (!text.trim()) return;
+const quickActionHandler = (action, flag) => {
+  apiFlag.value = flag;
+  processUserAction(action);
+};
 
+const processUserAction = async (action) => {
   const userMsg = {
     id: Date.now().toString(),
     sender: "USER",
@@ -933,9 +904,12 @@ const toggleGrid = (type) => {
 
 // Initial session
 const hasInitialized = ref(false);
+let sessionId = null;
 onMounted(() => {
+  sessionId = +new Date();
   if (!hasInitialized.value) {
     hasInitialized.value = true;
+
     startNewSession();
   }
 });
@@ -1093,7 +1067,7 @@ onMounted(() => {
           <button
             v-for="item in FUNCTION_ITEMS"
             :key="item.id"
-            @click="processUserAction({ action: item.label })"
+            @click="quickActionHandler({ action: item.label }, item.id)"
             class="flex-shrink-0 bg-white/90 backdrop-blur-sm border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1"
           >
             <span>{{ item.label }}</span>

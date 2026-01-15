@@ -2,12 +2,8 @@
 import { ref, computed, watch, inject } from 'vue'
 import { useDataBinding } from '../../../composables/useDataBinding.js'
 import { getGlobalManager } from '../../../core/singleton.js'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { Label } from '@/components/ui/label'
 import { cn } from '../../../core/utils.js'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
 
 const formatDate = (date) => {
   if (!date) return ''
@@ -100,27 +96,16 @@ const updateDataModel = (newDate) => {
 
 <template>
   <div class="space-y-2 flex flex-col">
-    <Label v-if="labelText">{{ labelText }}</Label>
-    <Popover>
-      <PopoverTrigger as-child>
-        <Button
-          variant="outline"
-          :class="
-            cn('w-[280px] justify-start text-left font-normal', !date && 'text-muted-foreground')
-          "
-        >
-          <CalendarIcon class="mr-2 h-4 w-4" />
-          <span>{{ date ? formatDate(date) : 'Pick a date' }}</span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent class="w-auto p-0">
-        <Calendar
-          v-model="date"
-          mode="single"
-          initial-focus
-          @update:model-value="updateDataModel"
-        />
-      </PopoverContent>
-    </Popover>
+    <Label v-if="labelText" class="text-xs font-semibold text-slate-500 ml-1">{{
+      labelText
+    }}</Label>
+    <div class="relative w-[280px]">
+      <input
+        type="date"
+        :value="date ? date.toISOString().split('T')[0] : ''"
+        @input="(e) => updateDataModel(e.target.value ? new Date(e.target.value) : null)"
+        class="flex w-full bg-slate-100 rounded-md border border-transparent focus:border-blue-200 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm px-4 py-2.5 shadow-none outline-none transition-all h-auto"
+      />
+    </div>
   </div>
 </template>

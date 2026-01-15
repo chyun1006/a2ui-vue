@@ -113,7 +113,7 @@ const timeString = computed(() => {
           <!-- Render Widget Root Node -->
           <div>
             <div
-              v-if="message.content"
+              v-if="message.content && !message.widgetPayload?.surfaces?.length"
               class="bg-white border border-slate-100 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-4 shadow-sm"
             >
               <div class="flex items-center gap-2 text-slate-500 text-xs">
