@@ -374,53 +374,45 @@ const generateLocalBriefing = (role) => {
 
 // API Call
 const callGeminiDirectly = async (history, systemInstruction) => {
-  const url = `https://${PROXY_HOST}/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+  // const url = `https://${PROXY_HOST}/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
-  const payload = {
-    contents: history,
-    systemInstruction: {
-      parts: [{ text: systemInstruction }],
-    },
-    generationConfig: {
-      responseMimeType: "application/json",
-    },
-  };
+  // const payload = {
+  //   contents: history,
+  //   systemInstruction: {
+  //     parts: [{ text: systemInstruction }],
+  //   },
+  //   generationConfig: {
+  //     responseMimeType: "application/json",
+  //   },
+  // };
 
-  let lastError;
+  // let lastError;
   const maxRetries = 3;
 
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-      if (!response.ok) {
-        if (response.status === 503) {
-          throw new Error(`503 Service Unavailable (Attempt ${attempt + 1})`);
-        }
-        const errorText = await response.text();
-        throw new Error(
-          `API Request Failed: ${response.status} ${response.statusText} - ${errorText}`,
-        );
+    if (!response.ok) {
+      if (response.status === 503) {
+        throw new Error(`503 Service Unavailable (Attempt ${attempt + 1})`);
       }
-
-      const data = await response.json();
-      return data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-    } catch (e) {
-      console.warn(`Gemini API Request failed (Attempt ${attempt + 1}/${maxRetries}):`, e);
-      lastError = e;
-      if (attempt < maxRetries - 1) {
-        const delay = 1000 * Math.pow(2, attempt);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
+      const errorText = await response.text();
+      throw new Error(
+        `API Request Failed: ${response.status} ${response.statusText} - ${errorText}`,
+      );
     }
+
+    const data = await response.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+  } catch (e) {
+    console.warn(`Gemini API Request failed (Attempt ${attempt + 1}/${maxRetries}):`, e);
   }
-  throw lastError;
 };
 
 const triggerDirectAIGeneration = async (prompt) => {

@@ -12,12 +12,7 @@ const isLoading = ref(false);
 const markdownText = ref("");
 
 const mockData = [
-  {
-    beginRendering: {
-      surfaceId: "flight-card",
-      root: "mainColumn",
-    },
-  },
+  { beginRendering: { surfaceId: "flight-card", root: "mainColumn" } },
   {
     surfaceUpdate: {
       surfaceId: "flight-card",
@@ -38,34 +33,21 @@ const mockData = [
           id: "applicantSection",
           component: {
             Column: {
-              children: {
-                explicitList: ["applicantTitle", "applicantRow1"],
-              },
-              distribution: "start",
-              alignment: "stretch",
+              children: { explicitList: ["applicantTitle", "applicantRow1", "phoneField"] },
+              title: "申请人信息",
             },
           },
         },
         {
           id: "applicantTitle",
-          component: {
-            Text: {
-              text: {
-                literalString: "申请人信息：",
-              },
-              usageHint: "h3",
-            },
-          },
+          component: { Text: { text: { literalString: "申请人信息：" }, usageHint: "h3" } },
         },
         {
           id: "applicantRow1",
           component: {
             Row: {
-              children: {
-                explicitList: ["nameField", "employeeIdField"],
-              },
+              children: { explicitList: ["nameField", "employeeIdField"] },
               distribution: "spaceBetween",
-              alignment: "stretch",
             },
           },
         },
@@ -73,13 +55,9 @@ const mockData = [
           id: "nameField",
           component: {
             TextField: {
-              label: {
-                literalString: "姓名",
-              },
-              text: {
-                path: "/applicant/realName",
-              },
-              textFieldType: "shortText",
+              label: { literalString: "姓名" },
+              path: "/applicant/realName",
+              type: "shortText",
             },
           },
         },
@@ -87,13 +65,9 @@ const mockData = [
           id: "employeeIdField",
           component: {
             TextField: {
-              label: {
-                literalString: "工号",
-              },
-              text: {
-                path: "/applicant/workNo",
-              },
-              textFieldType: "shortText",
+              label: { literalString: "工号" },
+              path: "/applicant/workNo",
+              type: "shortText",
             },
           },
         },
@@ -101,13 +75,9 @@ const mockData = [
           id: "phoneField",
           component: {
             TextField: {
-              label: {
-                literalString: "电话号码",
-              },
-              text: {
-                path: "/applicant/phone",
-              },
-              textFieldType: "shortText",
+              label: { literalString: "电话号码" },
+              path: "/applicant/phone",
+              type: "shortText",
             },
           },
         },
@@ -126,37 +96,20 @@ const mockData = [
                   "travelRemarks",
                 ],
               },
-              distribution: "start",
-              alignment: "stretch",
+              title: "行程信息",
             },
           },
         },
         {
           id: "travelTitle",
-          component: {
-            Text: {
-              text: {
-                literalString: "行程信息：",
-              },
-              usageHint: "h3",
-            },
-          },
+          component: { Text: { text: { literalString: "行程信息：" }, usageHint: "h3" } },
         },
         {
           id: "travelFlightNumberMC",
           component: {
             MultipleChoice: {
-              selections: {
-                path: "/travel/flightNumber",
-              },
-              options: [
-                {
-                  label: {
-                    literalString: "A67719",
-                  },
-                  value: "A67719",
-                },
-              ],
+              selections: { path: "/travel/flightNumber" },
+              options: [{ label: { literalString: "A67719" }, value: "A67719" }],
               maxAllowedSelections: 1,
             },
           },
@@ -165,34 +118,12 @@ const mockData = [
           id: "travelDepartureMC",
           component: {
             MultipleChoice: {
-              selections: {
-                path: "/travel/departure",
-              },
+              selections: { path: "/travel/departure" },
               options: [
-                {
-                  label: {
-                    literalString: "昆明",
-                  },
-                  value: "KMG",
-                },
-                {
-                  label: {
-                    literalString: "长沙",
-                  },
-                  value: "CsX",
-                },
-                {
-                  label: {
-                    literalString: "无锡",
-                  },
-                  value: "WUX",
-                },
-                {
-                  label: {
-                    literalString: "成都天府",
-                  },
-                  value: "TFU",
-                },
+                { label: { literalString: "成都天府" }, value: "TFU" },
+                { label: { literalString: "无锡" }, value: "WUX" },
+                { label: { literalString: "长沙" }, value: "CsX" },
+                { label: { literalString: "昆明" }, value: "KMG" },
               ],
               maxAllowedSelections: 1,
             },
@@ -202,34 +133,12 @@ const mockData = [
           id: "travelDestinationMC",
           component: {
             MultipleChoice: {
-              selections: {
-                path: "/travel/arrival",
-              },
+              selections: { path: "/travel/arrival" },
               options: [
-                {
-                  label: {
-                    literalString: "昆明",
-                  },
-                  value: "KMG",
-                },
-                {
-                  label: {
-                    literalString: "长沙",
-                  },
-                  value: "CsX",
-                },
-                {
-                  label: {
-                    literalString: "无锡",
-                  },
-                  value: "WUX",
-                },
-                {
-                  label: {
-                    literalString: "成都天府",
-                  },
-                  value: "TFU",
-                },
+                { label: { literalString: "成都天府" }, value: "TFU" },
+                { label: { literalString: "无锡" }, value: "WUX" },
+                { label: { literalString: "长沙" }, value: "CsX" },
+                { label: { literalString: "昆明" }, value: "KMG" },
               ],
               maxAllowedSelections: 1,
             },
@@ -238,26 +147,16 @@ const mockData = [
         {
           id: "travelDate",
           component: {
-            DateTimeInput: {
-              value: {
-                path: "/travel/date",
-              },
-              enableDate: true,
-              enableTime: false,
-            },
+            DateTimeInput: { value: { path: "/travel/date" }, enableDate: true, enableTime: false },
           },
         },
         {
           id: "travelIdCard",
           component: {
             TextField: {
-              label: {
-                literalString: "身份证",
-              },
-              text: {
-                path: "/travel/idCard",
-              },
-              textFieldType: "shortText",
+              label: { literalString: "身份证" },
+              path: "/travel/idCard",
+              type: "shortText",
             },
           },
         },
@@ -265,106 +164,42 @@ const mockData = [
           id: "travelRemarks",
           component: {
             TextField: {
-              label: {
-                literalString: "备注",
-              },
-              text: {
-                path: "/travel/remarks",
-              },
-              textFieldType: "longText",
+              label: { literalString: "备注" },
+              path: "/travel/remarks",
+              type: "longText",
             },
           },
         },
         {
           id: "submitButtonWrapper",
           component: {
-            Row: {
-              children: {
-                explicitList: ["submitButton"],
-              },
-              distribution: "center",
-              alignment: "stretch",
-            },
+            Row: { children: { explicitList: ["submitButton"] }, distribution: "center" },
           },
         },
         {
           id: "submitButton",
           component: {
             Button: {
-              child: "submitButtonText",
+              child: "Text",
               primary: true,
               action: {
                 name: "我要订员工票，这是我的订票信息",
                 context: [
-                  {
-                    key: "realName",
-                    value: {
-                      path: "/applicant/realName",
-                    },
-                  },
-                  {
-                    key: "workNo",
-                    value: {
-                      path: "/applicant/workNo",
-                    },
-                  },
-                  {
-                    key: "phone",
-                    value: {
-                      path: "/applicant/phone",
-                    },
-                  },
-                  {
-                    key: "flightNumber",
-                    value: {
-                      path: "/travel/flightNumber",
-                    },
-                  },
-                  {
-                    key: "departure",
-                    value: {
-                      path: "/travel/departure",
-                    },
-                  },
-                  {
-                    key: "arrival",
-                    value: {
-                      path: "/travel/arrival",
-                    },
-                  },
-                  {
-                    key: "departureDate",
-                    value: {
-                      path: "/travel/date",
-                    },
-                  },
-                  {
-                    key: "idCard",
-                    value: {
-                      path: "/travel/idCard",
-                    },
-                  },
-                  {
-                    key: "remark",
-                    value: {
-                      path: "/travel/remarks",
-                    },
-                  },
+                  { key: "realName", value: { path: "/applicant/realName" } },
+                  { key: "workNo", value: { path: "/applicant/workNo" } },
+                  { key: "phone", value: { path: "/applicant/phone" } },
+                  { key: "flightNumber", value: { path: "/travel/flightNumber" } },
+                  { key: "departure", value: { path: "/travel/departure" } },
+                  { key: "arrival", value: { path: "/travel/arrival" } },
+                  { key: "departureDate", value: { path: "/travel/date" } },
+                  { key: "idCard", value: { path: "/travel/idCard" } },
+                  { key: "remark", value: { path: "/travel/remarks" } },
                 ],
               },
             },
           },
         },
-        {
-          id: "submitButtonText",
-          component: {
-            Text: {
-              text: {
-                literalString: "提交申请",
-              },
-            },
-          },
-        },
+        { id: "Text", component: { Text: { text: { literalString: "提交申请" } } } },
       ],
     },
   },
@@ -375,47 +210,20 @@ const mockData = [
         {
           key: "/applicant",
           valueMap: [
-            {
-              key: "realName",
-              valueString: "",
-            },
-            {
-              key: "workNo",
-              valueString: "1760007",
-            },
-            {
-              key: "phone",
-              valueString: "",
-            },
+            { key: "realName", valueString: "" },
+            { key: "workNo", valueString: "1760007" },
+            { key: "phone", valueString: "" },
           ],
         },
         {
           key: "/travel",
           valueMap: [
-            {
-              key: "flightNumber",
-              valueString: "",
-            },
-            {
-              key: "departure",
-              valueString: "",
-            },
-            {
-              key: "arrival",
-              valueString: "",
-            },
-            {
-              key: "date",
-              valueString: "",
-            },
-            {
-              key: "idCard",
-              valueString: "",
-            },
-            {
-              key: "remarks",
-              valueString: "",
-            },
+            { key: "flightNumber", valueString: "" },
+            { key: "departure", valueString: "" },
+            { key: "arrival", valueString: "" },
+            { key: "date", valueString: "" },
+            { key: "idCard", valueString: "" },
+            { key: "remarks", valueString: "" },
           ],
         },
       ],

@@ -110,10 +110,10 @@ const timeString = computed(() => {
               {{ message.content }}
             </div>
 
-            <HXTWidgetRenderer
+            <!-- <HXTWidgetRenderer
               v-if="message.widgetPayload?.rootNode"
               :node="message.widgetPayload.rootNode"
-            />
+            /> -->
           </div>
         </div>
       </div>
