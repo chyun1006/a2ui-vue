@@ -29,7 +29,8 @@ const iconName = computed(() => resolveValue(iconBinding.value) || '')
 
 const resolvedIcon = computed(() => {
   if (iconName.value) {
-    const a = iconName.value
+    // 首字母大写
+    const a = iconName.value.replace(/\b\w/g, (char) => char.toUpperCase())
     return LucideIcons[a]
   }
   return LucideIcons.HelpCircle
