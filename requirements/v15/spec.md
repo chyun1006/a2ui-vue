@@ -12,10 +12,11 @@
             <a2uiRender :surfaceList="surfaceList" @action="handleAction"></a2uiRender>
   ```
 
-- a2ui 不再是单例，而是通过 surfaceId 来管理
-- a2uiRender 通过 surfaceList 去渲染
-- 优化后不要影响渲染和按钮的点击逻辑
+- a2uiRender 只用来展示传递给它的surfaceList, surfaceList
+- 取消process 对消息状态的管理，去掉单例的概念
+- surfaceList -> a2uiRender -> 处理surfaceList -> 内部渲染出对应组件。
 
-## bugFix:
+## 注意
 
-- 消息列表中，a2uiRender 组件渲染出来的，但是渲染到上一个消息记录里面去了，也就是在问题的问题上方展示了，这是不对的，作为回答，应该始终在问题的下方展示
+- 不要影响组件的渲染功能
+- 不要影响按钮点击后的取值功能

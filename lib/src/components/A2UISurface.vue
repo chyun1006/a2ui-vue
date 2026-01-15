@@ -1,36 +1,21 @@
 <script setup>
-import { computed, watch, onMounted, onUnmounted } from 'vue'
+import { computed, watch } from 'vue'
 import A2UIProvider from './A2UIProvider.vue'
 import A2UIRenderer from './A2UIRenderer.vue'
 
 const props = defineProps({
-  surfaceId: {
-    type: String,
-    default: '',
-  },
-  manager: {
-    type: Object,
-    default: null,
-  },
   surface: {
     type: Object,
-    default: null,
+    required: true,
   },
 })
 
 const emit = defineEmits(['action', 'error'])
 
-const surfaceObj = computed(() => {
-  if (props.surface) {
-    return props.surface
-  }
-  if (props.manager && props.surfaceId) {
-    return props.manager.getSurface(props.surfaceId)
-  }
-  return null
-})
+// 直接使用传入的surface对象
+const surfaceObj = computed(() => props.surface)
 
-const rootComponentId = computed(() => surfaceObj.value?.rootComponentId)
+const rootComponentId = computed(() => surfaceObj.value?.root)
 
 const styles = computed(() => surfaceObj.value?.styles || {})
 
@@ -52,31 +37,16 @@ const handleAction = (actionData) => {
   emit('action', actionData)
 }
 
-let unsubscribe = null
-
-onMounted(() => {
-  if (props.manager) {
-    unsubscribe = props.manager.on('surface:updated', (data) => {
-      if (data.surfaceId === props.surfaceId) {
-        console.log('Surface updated:', data)
-      }
-    })
-  }
-})
+// 移除manager相关的生命周期钩子
+// 不再需要监听surface更新，因为surface是通过prop传入的响应式对象
 
 watch(
-  () => props.surfaceId,
-  (newId) => {
-    console.log('Surface changed:', newId)
+  () => props.surface,
+  (newSurface) => {
+    console.log('Surface changed:', newSurface?.id)
   },
   { immediate: true },
 )
-
-onUnmounted(() => {
-  if (unsubscribe) {
-    unsubscribe()
-  }
-})
 </script>
 
 <template>

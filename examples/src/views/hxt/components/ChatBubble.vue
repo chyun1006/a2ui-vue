@@ -10,13 +10,15 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  manager: {
-    type: Object,
-    default: null,
-  },
 });
 
 const emit = defineEmits(["actionClick"]); // Propagate actions
+
+// Handle action from A2UI components
+const handleAction = (actionData) => {
+  console.log("ChatBubble received action:", actionData);
+  emit("actionClick", actionData);
+};
 
 const isUser = computed(() => props.message.sender === "USER");
 const isAgent = computed(() => props.message.sender === "AGENT");
@@ -122,9 +124,9 @@ const timeString = computed(() => {
             /> -->
 
             <a2uiRender
-              v-if="message.widgetPayload?.rootNode"
-              :surfaceList="message.widgetPayload.rootNode"
-              :manager="manager"
+              v-if="message.widgetPayload?.surfaces"
+              :surfaceList="message.widgetPayload.surfaces"
+              @action="handleAction"
             ></a2uiRender>
           </div>
         </div>
