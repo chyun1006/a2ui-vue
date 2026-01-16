@@ -39,12 +39,12 @@ const router = createRouter({
       path: "/chat",
       component: EmptyLayout,
       children: [
-        {
-          path: "demo1",
-          name: "demo1",
-          component: () => import("../views/demo/Demo1.vue"),
-          meta: { title: "Demo1" },
-        },
+        // {
+        //   path: "demo1",
+        //   name: "demo1",
+        //   component: () => import("../views/demo/Demo1.vue"),
+        //   meta: { title: "Demo1" },
+        // },
         {
           path: "/hxt",
           name: "hxt",

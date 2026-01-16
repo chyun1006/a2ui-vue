@@ -112,7 +112,7 @@ const timeString = computed(() => {
         </div>
 
         <!-- Main Content -->
-        <div class="bg-white border-slate-200 shadow-sm overflow-hidden w-full">
+        <div class="bg-white border-slate-200 overflow-hidden w-full">
           <!-- Widget Header -->
           <!-- <div
             v-if="message.widgetPayload?.title"
