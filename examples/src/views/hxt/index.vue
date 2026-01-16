@@ -310,12 +310,15 @@ const callGeminiDirectly = async (message, systemInstruction) => {
 
     // 浩哥的数据结构
     if (apiFlag.value == "refund_ticket") {
-      if (data.needUi) {
-        return {
-          parsedA2UI: data.response,
-          rawText: "",
-        };
-      }
+      let a2UIJson = [];
+      let rawText = "";
+      if (data.needUi) a2UIJson = data.response;
+      else rawText = data.response;
+
+      return {
+        parsedA2UI: a2UIJson,
+        rawText: rawText,
+      };
     } else {
       // 立哥
       const [rawText, jsonText] = data.message.split("---a2ui_JSON---");
