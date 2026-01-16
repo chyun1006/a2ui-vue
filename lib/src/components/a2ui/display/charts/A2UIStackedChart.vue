@@ -75,6 +75,14 @@ const chartData = computed(() => {
   return rawData
 })
 
+// 判断是否有有效数据
+const hasData = computed(() => {
+  return (
+    chartData.value.xAxis.length > 0 &&
+    chartData.value.series.some((item) => item.data && item.data.length > 0)
+  )
+})
+
 const titleText = computed(() => resolveValue(props.title) || '')
 
 const chartOption = computed(() => {
@@ -138,12 +146,36 @@ const handleClick = (params) => {
 <template>
   <div class="a2ui-stacked-chart-container">
     <v-chart
+      v-if="hasData"
       :option="chartOption"
       :autoresize="true"
       :style="{ height: `${height}px` }"
       class="a2ui-chart"
       @click="handleClick"
     />
+    <div v-else class="a2ui-chart-empty">
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        class="a2ui-empty-icon"
+      >
+        <path
+          d="M3 3v18h18"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M7 14l4-4 4 4 5-5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="a2ui-empty-text">暂无数据</span>
+    </div>
   </div>
 </template>
 
@@ -155,5 +187,24 @@ const handleClick = (params) => {
 
 .a2ui-chart {
   width: 100%;
+}
+
+.a2ui-chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #94a3b8;
+  gap: 12px;
+}
+
+.a2ui-empty-icon {
+  opacity: 0.5;
+}
+
+.a2ui-empty-text {
+  font-size: 14px;
+  color: #94a3b8;
 }
 </style>

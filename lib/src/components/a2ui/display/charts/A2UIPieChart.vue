@@ -91,6 +91,11 @@ const chartData = computed(() => {
   return rawData.filter((item) => item && typeof item.value === 'number')
 })
 
+// 判断是否有有效数据
+const hasData = computed(() => {
+  return chartData.value.length > 0
+})
+
 const titleText = computed(() => resolveValue(props.title) || '')
 const subtitleText = computed(() => resolveValue(props.subtitle) || '')
 
@@ -183,12 +188,38 @@ const handleClick = (params) => {
 <template>
   <div class="a2ui-pie-chart-container">
     <v-chart
+      v-if="hasData"
       :option="chartOption"
       :autoresize="true"
       :style="{ height: `${height}px` }"
       class="a2ui-chart"
       @click="handleClick"
     />
+    <div v-else class="a2ui-chart-empty">
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        class="a2ui-empty-icon"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M12 6v6l4 2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="a2ui-empty-text">暂无数据</span>
+    </div>
   </div>
 </template>
 
@@ -200,5 +231,24 @@ const handleClick = (params) => {
 
 .a2ui-chart {
   width: 100%;
+}
+
+.a2ui-chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #94a3b8;
+  gap: 12px;
+}
+
+.a2ui-empty-icon {
+  opacity: 0.5;
+}
+
+.a2ui-empty-text {
+  font-size: 14px;
+  color: #94a3b8;
 }
 </style>

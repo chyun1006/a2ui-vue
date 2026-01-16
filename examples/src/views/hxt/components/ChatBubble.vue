@@ -28,6 +28,7 @@ const isAgent = computed(() => props.message.sender === "AGENT");
 const isLoader = computed(() => props.message.type === "LOADER");
 
 const rawTextHtml = computed(() => {
+  debugger;
   if (!props.message.widgetPayload?.rawText) return "";
   try {
     return marked(props.message.widgetPayload.rawText, { breaks: true });
@@ -124,7 +125,11 @@ const timeString = computed(() => {
           <!-- Render Widget Root Node -->
           <div>
             <div
-              v-if="message.content && !message.widgetPayload?.surfaces?.length"
+              v-if="
+                message.content ||
+                message.widgetPayload?.surfaces?.length ||
+                message.widgetPayload?.rawText
+              "
               class="bg-white border border-slate-100 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-4 shadow-sm"
             >
               <div class="items-center gap-2 text-slate-500 text-xs">

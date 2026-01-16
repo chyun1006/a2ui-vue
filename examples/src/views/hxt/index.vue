@@ -34,27 +34,27 @@ const processor = createSignalA2uiMessageProcessor({ useGlobalManager: true });
 const ROLES = ["营销主控", "维修席位", "航班生产控制席位", "签派放行席位"];
 
 const NOTIFICATIONS = [
-  {
-    id: "1",
-    title: "航班延误预警",
-    desc: "A61835 预计延误超过 2 小时",
-    prompt: "处理航班 A61835 延误",
-    time: "10:30",
-  },
-  {
-    id: "2",
-    title: "VIP 服务提醒",
-    desc: "3 位白金卡旅客即将登机 A61102",
-    prompt: "查看 A61102 航班 VIP 旅客名单",
-    time: "11:15",
-  },
-  {
-    id: "3",
-    title: "机组超时风险",
-    desc: "B-1234 机组执勤期预警",
-    prompt: "检查 B-1234 机组执勤时间",
-    time: "11:45",
-  },
+  // {
+  //   id: "1",
+  //   title: "航班延误预警",
+  //   desc: "A61835 预计延误超过 2 小时",
+  //   prompt: "处理航班 A61835 延误",
+  //   time: "10:30",
+  // },
+  // {
+  //   id: "2",
+  //   title: "VIP 服务提醒",
+  //   desc: "3 位白金卡旅客即将登机 A61102",
+  //   prompt: "查看 A61102 航班 VIP 旅客名单",
+  //   time: "11:15",
+  // },
+  // {
+  //   id: "3",
+  //   title: "机组超时风险",
+  //   desc: "B-1234 机组执勤期预警",
+  //   prompt: "检查 B-1234 机组执勤时间",
+  //   time: "11:45",
+  // },
 ];
 
 const HISTORY_SESSIONS = [
@@ -97,225 +97,6 @@ const messagesEndRef = ref(null);
 const fileInputRef = ref(null);
 let chatObserver = null;
 
-const mockadadad = [
-  {
-    beginRendering: {
-      surfaceId: "crew_directory_view",
-      root: "directory_column",
-      styles: {
-        primaryColor: "#2E7D32",
-      },
-    },
-  },
-  {
-    surfaceUpdate: {
-      surfaceId: "crew_directory_view",
-      components: [
-        {
-          id: "directory_column",
-          component: {
-            Column: {
-              children: {
-                explicitList: [
-                  "header_text",
-                  "summary_text",
-                  "crew_card_1",
-                  "crew_card_2",
-                  "crew_card_3",
-                  "crew_card_4",
-                  "crew_card_5",
-                  "crew_card_6",
-                  "footer_hint",
-                ],
-              },
-              distribution: "start",
-              alignment: "stretch",
-            },
-          },
-        },
-        {
-          id: "header_text",
-          component: {
-            Text: {
-              text: { literalString: "航空公司机组人员名录" },
-              usageHint: "h2",
-            },
-          },
-        },
-        {
-          id: "summary_text",
-          component: {
-            Text: {
-              text: {
-                literalString: "当前系统内共有 20 名机组人员，包含机长、副驾驶、乘务员及安全员。",
-              },
-              usageHint: "body",
-            },
-          },
-        },
-        {
-          id: "crew_card_1",
-          component: { Card: { child: "c1_row" } },
-        },
-        {
-          id: "c1_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c1_info", "c1_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c1_info",
-          component: {
-            Text: { text: { literalString: "李强 | 机长 (18年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c1_status",
-          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_2",
-          component: { Card: { child: "c2_row" } },
-        },
-        {
-          id: "c2_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c2_info", "c2_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c2_info",
-          component: {
-            Text: { text: { literalString: "吴磊 | 副驾驶 (4年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c2_status",
-          component: { Text: { text: { literalString: "休息" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_3",
-          component: { Card: { child: "c3_row" } },
-        },
-        {
-          id: "c3_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c3_info", "c3_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c3_info",
-          component: {
-            Text: { text: { literalString: "王静 | 乘务长 (22年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c3_status",
-          component: { Text: { text: { literalString: "培训中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_4",
-          component: { Card: { child: "c4_row" } },
-        },
-        {
-          id: "c4_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c4_info", "c4_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c4_info",
-          component: {
-            Text: { text: { literalString: "赵洋 | 副驾驶 (23年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c4_status",
-          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_5",
-          component: { Card: { child: "c5_row" } },
-        },
-        {
-          id: "c5_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c5_info", "c5_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c5_info",
-          component: {
-            Text: { text: { literalString: "黄敏 | 安全员 (21年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c5_status",
-          component: { Text: { text: { literalString: "培训中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_6",
-          component: { Card: { child: "c6_row" } },
-        },
-        {
-          id: "c6_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c6_info", "c6_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c6_info",
-          component: {
-            Text: { text: { literalString: "周强 | 乘务长 (22年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c6_status",
-          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "footer_hint",
-          component: {
-            Text: {
-              text: {
-                literalString: "您可以根据姓名、角色（机长/副驾驶/乘务员）或基地进行筛选查询。",
-              },
-              usageHint: "caption",
-            },
-          },
-        },
-      ],
-    },
-  },
-];
-
-// Scroll to bottom
-// Scroll to bottom
-// Scroll to bottom
 const scrollToBottom = async () => {
   await nextTick();
   if (messagesEndRef.value && messagesEndRef.value.parentElement) {
@@ -517,19 +298,19 @@ const callGeminiDirectly = async (message, systemInstruction) => {
       };
     }
 
-    const res = await fetch(apiMap[apiFlag.value], {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    // const res = await fetch(apiMap[apiFlag.value], {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(payload),
+    // });
 
-    const data = await res.json();
-    // const data = {
-    //   message:
-    //     "为您查询到 2025-05-15 从成都到长沙的航班动态：\n\n**CZ6775 (南方航空)**\n*   **状态**：已起飞（延误 65 分钟）\n*   **起飞**：计划 17:42 / 实际 18:47（成都双流 CTU，登机口 T3-22）\n*   **到达**：计划 19:42 / 实际 20:47（长沙黄花 CSX）\n*   **机型**：波音 787 (B-6175)",
-    // };
+    // const data = await res.json();
+    debugger;
+    const data = {
+      message: "为您查询到 2025-05-15 从成都到长沙的航班动态",
+    };
 
     // 浩哥的数据结构
     if (apiFlag.value == "refund_ticket") {
@@ -643,7 +424,6 @@ const processUserMessage = async (text) => {
 // 处理快捷操作按钮
 const quickActionHandler = (action, flag) => {
   apiFlag.value = flag;
-
   const params = {
     name: action.action,
     context: { submitted_text: action.action },
@@ -896,7 +676,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Header -->
-    <!-- <header
+    <header
       class="relative flex items-center justify-between px-4 py-3 bg-white/90 backdrop-blur-md sticky top-0 z-20 border-b border-slate-100"
     >
       <button
@@ -907,7 +687,7 @@ onUnmounted(() => {
       </button>
       <div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
         <div class="w-8 h-8 flex items-center justify-center">
-          <HongXiaoTongLogo class="w-full h-full" />
+          <img src="@/assets/logo.png" alt="" srcset="" />
         </div>
         <span class="font-bold text-lg text-slate-800 tracking-tight">鸿小通</span>
       </div>
@@ -926,11 +706,11 @@ onUnmounted(() => {
           <Bell class="w-5 h-5 text-slate-600" />
           <span
             class="absolute top-0.5 right-0.5 min-w-[14px] h-3.5 bg-red-500 border-2 border-white rounded-full text-[8px] flex items-center justify-center text-white font-bold px-0.5"
-            >3</span
+            >0</span
           >
         </button>
       </div>
-    </header> -->
+    </header>
 
     <!-- Chat Area -->
     <main class="flex-1 overflow-y-auto p-4 pb-32 scroll-smooth no-scrollbar bg-white">
