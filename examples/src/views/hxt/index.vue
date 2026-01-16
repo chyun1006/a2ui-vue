@@ -68,7 +68,8 @@ const FUNCTION_ITEMS = [
   { id: "refund_ticket", label: "我要改期", icon: Plane },
   { id: "refund_ticket", label: "我要退票", icon: FileText },
   { id: "order_ticket", label: "我要定员工票", icon: Users },
-  { id: "order_ticket", label: "航班动态查询", icon: Users },
+  { id: "order_ticket", label: "航班动态查询", icon: Plane },
+  { id: "order_ticket", label: "查询审核结果", icon: Wrench },
   // { id: "mro", label: "维修工单", icon: Wrench },
   // { id: "dispatch", label: "签派放行", icon: Plane },
   // { id: "marketing", label: "营销数据", icon: FileText },
@@ -334,112 +335,6 @@ watch(
   { deep: true },
 ); // messages works better with deep watch if pushing new items, though array mutation triggers generally work.
 
-// System Instruction
-const SYSTEM_INSTRUCTION = `
-You are "Hong Xiao Tong" (鸿小通), the central nervous system of a boutique airline.
-You have direct access to ALL real-time backend systems: Flight Ops (AOC), Marketing, Crew, Maintenance (MRO), and Service.
-Your user is an airline employee.
-
-### 0. CRITICAL CONTEXT: COMPANY SCALE (STRICT)
-- **Fleet Size**: Exactly 17 Aircraft.
-- **Daily Volume**: Approx. 70 Flights/Day.
-- **Operations**: Domestic focused, high efficiency.
-- **Data Logic**: All fabricated statistics MUST align with this scale.
-  - *Example*: "Total Flights" should be ~70, not 1000.
-  - *Example*: "Delayed Flights" should be low single digits (e.g., 2-5).
-  - *Example*: "Fleet Status" must sum to 17.
-
-### 1. CORE BEHAVIOR: "MANDATORY DATA FABRICATION"
-The user's request is often short (e.g., "Check flight 835").
-**You MUST ACT as the database.**
-- **NEVER** ask the user for data you should already "know" as the system.
-- **ALWAYS INVENT REALISTIC DATA** to fill the UI, adhering to the Company Scale above.
-- **Flight No**: Default to 'A61835' or similar if missing. Use 'A6' as carrier code.
-- **Time/Date**: Use TODAY (2024-05-20) and specific times (e.g., 14:30).
-- **Names**: Invent crew/passenger names (e.g., "Capt. Zhang", "Ms. Li").
-
-### 2. UI ARCHITECTURE: THE "3-PART" RULE
-Every UI you generate **MUST** strictly follow this 3-section vertical structure inside \`rootNode\`:
-
-**PART A: THE ANSWER (Data & Visuals)**
-- The direct response to the query.
-- MUST be visually rich. Use 'container' with borders, 'badge' for status, 'chart' for trends.
-- **IF USER WANTS TO INPUT DATA**: Use 'input' or 'select' components here.
-- *Example*: A flight information card, a revenue bar chart, or a passenger list.
-
-**PART B: THE ANALYSIS (Intelligence)**
-- Contextual insight based on the data in Part A.
-- Why is it delayed? What is the trend? What is the risk?
-- Use a contrasting background (e.g., \`bg-blue-50\`) with an icon (Sparkles/Info).
-- *Example*: "Delay caused by Cb clouds in ZSSS sector. 85 pax have tight connections."
-
-**PART C: NEXT ACTIONS (Workflow)**
-- What should the user do next?
-- Provide 2-3 specific buttons.
-- *Example*: [Rebook Misconnected Pax], [Send SMS Notification], [View Inbound Flight].
-
-### 3. JSON TEMPLATE (Strict Adherence)
-
-**SCENARIO: FLIGHT CARD (Display Info)**
-{
-  "type": "container",
-  "style": { "className": "flex flex-col gap-4" },
-  "children": [
-    // --- PART A: ANSWER ---
-    {
-      "type": "container",
-      "style": { "className": "bg-white border border-slate-200 rounded-xl p-4 shadow-sm" },
-      "children": [
-         {
-           "type": "container",
-           "style": { "className": "flex justify-between mb-2" },
-           "children": [
-              { "type": "text", "props": { "text": "A61835" }, "style": { "className": "font-bold text-lg text-slate-800" } },
-              { "type": "badge", "props": { "text": "Delayed 2h" }, "style": { "className": "bg-red-50 text-red-600 px-2 py-0.5 rounded text-xs font-bold" } }
-           ]
-         },
-         {
-           "type": "container",
-           "style": { "className": "flex justify-between items-center text-slate-600 text-xs" },
-           "children": [
-              { "type": "text", "props": { "text": "PEK 14:00" } },
-              { "type": "icon", "props": { "iconName": "Plane" }, "style": { "className": "w-4 h-4 text-slate-300 rotate-90" } },
-              { "type": "text", "props": { "text": "SHA 16:15" } }
-           ]
-         }
-      ]
-    },
-    // --- PART B: ANALYSIS ---
-    {
-      "type": "container",
-      "style": { "className": "bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex gap-2" },
-      "children": [
-         { "type": "icon", "props": { "iconName": "Sparkles" }, "style": { "className": "w-4 h-4 text-indigo-500 shrink-0 mt-0.5" } },
-         { "type": "text", "props": { "text": "Insight: Delay due to heavy traffic control in Eastern region. 12 Gold card members onboard." }, "style": { "className": "text-xs text-indigo-800 leading-relaxed" } }
-      ]
-    },
-    // --- PART C: ACTIONS ---
-    {
-      "type": "container",
-      "style": { "className": "grid grid-cols-2 gap-2" },
-      "children": [
-         { "type": "button", "props": { "text": "Notify Pax", "onClickIntent": "notify" }, "style": { "className": "bg-white border border-slate-200 p-2 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50" } },
-         { "type": "button", "props": { "text": "Rebook Options", "onClickIntent": "rebook" }, "style": { "className": "bg-blue-600 text-white p-2 rounded-lg text-xs font-bold shadow-md shadow-blue-200" } }
-      ]
-    }
-  ]
-}
-
-### 4. OUTPUT FORMAT
-Return strictly valid JSON.
-{
-  "thought": "Internal reasoning...",
-  "summary": "Conversational reply...",
-  "title": "Widget Title",
-  "rootNode": { ... }
-}
-`;
-
 // Local Mock Generator
 const generateLocalBriefing = (role) => {
   const flightTotal = 68 + Math.floor(Math.random() * 5);
@@ -596,135 +491,6 @@ const generateLocalBriefing = (role) => {
   };
 };
 
-const mockData = [
-  {
-    beginRendering: {
-      surfaceId: "default",
-      root: "root",
-      styles: {
-        primaryColor: "#FF0000",
-        font: "Roboto",
-      },
-    },
-  },
-  {
-    surfaceUpdate: {
-      surfaceId: "default",
-      components: [
-        {
-          id: "root",
-          component: {
-            List: {
-              children: {
-                template: {
-                  componentId: "orderCard",
-                  dataBinding: "/orders",
-                },
-              },
-              direction: "vertical",
-              alignment: "stretch",
-            },
-          },
-        },
-        {
-          id: "orderCard",
-          component: {
-            Card: {
-              child: "orderCardContent",
-            },
-          },
-        },
-        {
-          id: "orderCardContent",
-          component: {
-            Row: {
-              children: {
-                explicitList: ["orderNumberText", "detailButton"],
-              },
-              distribution: "spaceBetween",
-              alignment: "center",
-            },
-          },
-        },
-        {
-          id: "orderNumberText",
-          component: {
-            Text: {
-              text: {
-                path: "orderNumber",
-              },
-              usageHint: "body",
-            },
-          },
-        },
-        {
-          id: "detailButton",
-          component: {
-            Button: {
-              child: "detailButtonText",
-              action: {
-                name: "s_m_s_refundTicketSkill",
-                context: [
-                  {
-                    key: "orderNumber",
-                    value: {
-                      path: "orderNumber",
-                    },
-                  },
-                  {
-                    key: "method",
-                    value: {
-                      path: "method",
-                    },
-                  },
-                ],
-              },
-              primary: true,
-            },
-          },
-        },
-        {
-          id: "detailButtonText",
-          component: {
-            Text: {
-              text: {
-                literalString: "详情",
-              },
-            },
-          },
-        },
-      ],
-    },
-  },
-  {
-    dataModelUpdate: {
-      surfaceId: "default",
-      path: "/",
-      contents: [
-        {
-          key: "orders",
-          valueMap: [
-            {
-              key: "0", // 第一个订单的索引
-              valueMap: [
-                { key: "orderNumber", valueString: "260112180225620309" },
-                { key: "method", valueString: "queryRefundOrderDetail" },
-              ],
-            },
-            {
-              key: "1",
-              valueMap: [
-                { key: "orderNumber", valueString: "1234" },
-                { key: "method", valueString: "queryRefundO啊啊谁懂发rderDetail" },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  },
-];
-
 const apiFlag = ref("order_ticket");
 // API Call
 const callGeminiDirectly = async (message, systemInstruction) => {
@@ -852,7 +618,6 @@ const startNewSession = async (directGenerationPrompt) => {
     return;
   }
 
-  const localData = generateLocalBriefing(randomRole);
   const initMsg = {
     id: "init_" + Date.now(),
     sender: "AGENT",
@@ -867,112 +632,26 @@ const startNewSession = async (directGenerationPrompt) => {
   messages.value.push(initMsg);
 };
 
+// 处理用户聊天输入框发送的消息
 const processUserMessage = async (text) => {
-  if (!text.trim()) return;
-
-  const userMsg = {
-    id: Date.now().toString(),
-    sender: "USER",
-    type: "TEXT",
-    content: text,
-    timestamp: new Date(),
-  };
-  messages.value.push(userMsg);
-
-  const loaderId = "loader_" + Date.now();
-  // 核心修改 1: 添加 loader 消息到列表
-  messages.value.push({
-    id: loaderId,
-    sender: "AGENT",
-    type: "LOADER",
-    timestamp: new Date(),
+  processUserAction({
+    name: text,
+    context: { submitted_text: text },
   });
-
-  try {
-    const actionPayload = {
-      context: { submitted_text: text },
-      name: "user_input",
-    };
-
-    console.time("API Request");
-    const { rawText, parsedA2UI } = await callGeminiDirectly(actionPayload);
-    console.timeEnd("API Request");
-
-    // 核心修改 2: 不要 filter 删除 loader，而是找到它并在原位更新
-    const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
-    if (loaderIndex === -1) return; // 异常情况
-
-    const messageId = Date.now().toString() + "_ai";
-    const messageTimestamp = new Date();
-
-    try {
-      const uniqueSuffix = `_${messageId}`;
-
-      console.time("Surface Rewrite");
-      if (Array.isArray(parsedA2UI)) {
-        parsedA2UI.forEach((msg) => {
-          let originalId = null;
-          if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
-          else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
-          else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
-
-          if (originalId) {
-            const newId = originalId + uniqueSuffix;
-            if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
-            if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
-            if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
-          }
-        });
-      }
-      const surfaces = processor.processMessages(parsedA2UI);
-      // 核心修改 3: 直接替换数组中的该项
-      messages.value[loaderIndex] = {
-        id: messageId,
-        sender: "AGENT",
-        type: "A2UI_WIDGET",
-        thought: surfaces.length ? "分析完成，界面已生成。" : "思考完成",
-        content: surfaces.length ? "已为您生成相关业务办理界面：" : rawText,
-        widgetPayload: {
-          surfaces: surfaces,
-        },
-        timestamp: messageTimestamp,
-      };
-    } catch (e) {
-      console.error("JSON Parse Error", e);
-      messages.value[loaderIndex] = {
-        id: messageId,
-        sender: "AGENT",
-        type: "A2UI_WIDGET",
-        // thought: "分析完成，界面已生成。",
-        content: "服务端错误",
-        widgetPayload: {
-          surfaces: [],
-        },
-        timestamp: messageTimestamp,
-      };
-    }
-  } catch (error) {
-    // 出错时也替换掉 loader
-    const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
-    if (loaderIndex !== -1) {
-      messages.value[loaderIndex] = {
-        id: Date.now().toString() + "_err",
-        sender: "AGENT",
-        type: "TEXT",
-        content: "抱歉，网络连接或服务暂时不可用，请稍后再试。",
-        timestamp: new Date(),
-      };
-    }
-
-    scrollToBottom();
-  }
 };
 
+// 处理快捷操作按钮
 const quickActionHandler = (action, flag) => {
   apiFlag.value = flag;
-  processUserAction(action);
+
+  const params = {
+    name: action.action,
+    context: { submitted_text: action.action },
+  };
+  processUserAction(params);
 };
 
+// 处理用户操作
 const processUserAction = async (action) => {
   const userMsg = {
     id: Date.now().toString(),
@@ -992,19 +671,6 @@ const processUserAction = async (action) => {
   });
 
   try {
-    const history = messages.value
-      .filter((m) => m.type !== "LOADER")
-      .map((m) => {
-        let contentText = m.content || "";
-        if (m.sender === "AGENT" && m.widgetPayload) {
-          contentText += `\n\n[System Context - Rendered UI]: ${JSON.stringify(m.widgetPayload)}`;
-        }
-        return {
-          role: m.sender === "USER" ? "user" : "model",
-          parts: [{ text: contentText }],
-        };
-      });
-
     const { rawText, parsedA2UI } = await callGeminiDirectly(action);
 
     // 核心修改: 原位替换 loader
@@ -1014,52 +680,38 @@ const processUserAction = async (action) => {
     const messageId = Date.now().toString() + "_ai";
     const messageTimestamp = new Date();
 
-    try {
-      const uniqueSuffix = `_${messageId}`;
+    const uniqueSuffix = `_${messageId}`;
 
-      if (Array.isArray(parsedA2UI)) {
-        parsedA2UI.forEach((msg) => {
-          let originalId = null;
-          if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
-          else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
-          else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
+    if (Array.isArray(parsedA2UI)) {
+      parsedA2UI.forEach((msg) => {
+        let originalId = null;
+        if (msg.beginRendering) originalId = msg.beginRendering.surfaceId;
+        else if (msg.surfaceUpdate) originalId = msg.surfaceUpdate.surfaceId;
+        else if (msg.dataModelUpdate) originalId = msg.dataModelUpdate.surfaceId;
 
-          if (originalId) {
-            const newId = originalId + uniqueSuffix;
-            if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
-            if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
-            if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
-          }
-        });
-      }
-
-      const surfaces = processor.processMessages(parsedA2UI);
-
-      messages.value[loaderIndex] = {
-        id: messageId,
-        sender: "AGENT",
-        type: "A2UI_WIDGET",
-        thought: "分析完成，界面已生成。",
-        content: "已为您生成相关业务办理界面：",
-        widgetPayload: {
-          surfaces: surfaces,
-          rawText: rawText,
-        },
-        timestamp: messageTimestamp,
-      };
-    } catch (e) {
-      messages.value[loaderIndex] = {
-        id: messageId,
-        sender: "AGENT",
-        type: "A2UI_WIDGET",
-        thought: "分析完成，界面已生成。",
-        content: "已为您生成相关业务办理界面：",
-        widgetPayload: {
-          surfaces: [],
-        },
-        timestamp: messageTimestamp,
-      };
+        if (originalId) {
+          const newId = originalId + uniqueSuffix;
+          if (msg.beginRendering) msg.beginRendering.surfaceId = newId;
+          if (msg.surfaceUpdate) msg.surfaceUpdate.surfaceId = newId;
+          if (msg.dataModelUpdate) msg.dataModelUpdate.surfaceId = newId;
+        }
+      });
     }
+
+    const surfaces = processor.processMessages(parsedA2UI);
+
+    messages.value[loaderIndex] = {
+      id: messageId,
+      sender: "AGENT",
+      type: "A2UI_WIDGET",
+      thought: surfaces.length ? "分析完成，界面已生成。" : "思考完成",
+      content: surfaces.length ? "已为您生成相关业务办理界面：" : "",
+      widgetPayload: {
+        surfaces: surfaces,
+        rawText: rawText,
+      },
+      timestamp: messageTimestamp,
+    };
   } catch (error) {
     const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
     if (loaderIndex !== -1) {
