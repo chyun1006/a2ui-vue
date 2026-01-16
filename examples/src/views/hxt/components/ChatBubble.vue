@@ -28,7 +28,6 @@ const isAgent = computed(() => props.message.sender === "AGENT");
 const isLoader = computed(() => props.message.type === "LOADER");
 
 const rawTextHtml = computed(() => {
-  debugger;
   if (!props.message.widgetPayload?.rawText) return "";
   try {
     return marked(props.message.widgetPayload.rawText, { breaks: true });

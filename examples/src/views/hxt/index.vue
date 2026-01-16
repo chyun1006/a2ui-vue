@@ -65,10 +65,10 @@ const HISTORY_SESSIONS = [
 
 // Mock Function Items
 const FUNCTION_ITEMS = [
-  { id: "refund_ticket", label: "我要改期", icon: Plane },
-  { id: "refund_ticket", label: "我要退票", icon: FileText },
-  { id: "order_ticket", label: "我要定员工票", icon: Users },
-  { id: "order_ticket", label: "航班动态查询", icon: Plane },
+  { id: "refund_ticket", label: "改期", icon: Plane },
+  { id: "refund_ticket", label: "退票", icon: FileText },
+  { id: "order_ticket", label: "定员工票", icon: Users },
+  { id: "order_ticket", label: "航班成都动态查询", icon: Plane },
   { id: "order_ticket", label: "查询审核结果", icon: Wrench },
   // { id: "mro", label: "维修工单", icon: Wrench },
   // { id: "dispatch", label: "签派放行", icon: Plane },
