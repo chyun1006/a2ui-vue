@@ -298,19 +298,15 @@ const callGeminiDirectly = async (message, systemInstruction) => {
       };
     }
 
-    // const res = await fetch(apiMap[apiFlag.value], {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(payload),
-    // });
+    const res = await fetch(apiMap[apiFlag.value], {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-    // const data = await res.json();
-    debugger;
-    const data = {
-      message: "为您查询到 2025-05-15 从成都到长沙的航班动态",
-    };
+    const data = await res.json();
 
     // 浩哥的数据结构
     if (apiFlag.value == "refund_ticket") {
