@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { User, Sparkles, Loader2 } from "lucide-vue-next";
+import { marked } from "marked";
 // import HongXiaoTongLogo from "./HongXiaoTongLogo.vue";
 import HXTWidgetRenderer from "./HXTWidgetRenderer.vue";
 import { a2uiRender } from "a2ui-vue";
@@ -25,6 +26,16 @@ const handleAction = (actionData) => {
 const isUser = computed(() => props.message.sender === "USER");
 const isAgent = computed(() => props.message.sender === "AGENT");
 const isLoader = computed(() => props.message.type === "LOADER");
+
+const rawTextHtml = computed(() => {
+  if (!props.message.widgetPayload?.rawText) return "";
+  try {
+    return marked(props.message.widgetPayload.rawText, { breaks: true });
+  } catch (error) {
+    console.error("Markdown parsing error:", error);
+    return props.message.widgetPayload.rawText;
+  }
+});
 
 const timeString = computed(() => {
   if (!props.message.timestamp) return "";
@@ -89,9 +100,9 @@ const timeString = computed(() => {
         <!-- Thought/Reasoning (Optional) -->
         <div
           v-if="message.thought"
-          class="flex bg-indigo-50/50 rounded-xl p-3 border border-indigo-100/50 inline-block w-full"
+          class="flex bg-indigo-50/50 rounded-xl p-3 gap-1 border border-indigo-100/50 inline-block w-full"
         >
-          <div class="flex items-center gap-1.5 mb-1">
+          <div class="flex items-center gap-1.5">
             <Sparkles class="w-3 h-3 text-indigo-400" />
             <!-- <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide"
               >思考中...</span
@@ -116,9 +127,14 @@ const timeString = computed(() => {
               v-if="message.content && !message.widgetPayload?.surfaces?.length"
               class="bg-white border border-slate-100 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-4 shadow-sm"
             >
-              <div class="flex items-center gap-2 text-slate-500 text-xs">
+              <div class="items-center gap-2 text-slate-500 text-xs">
                 <!-- <Loader2 class="w-4 h-4 animate-spin text-blue-500" /> -->
                 <span class="text-xs font-bold text-slate-500">{{ message.content }}</span>
+                <div
+                  v-if="message.widgetPayload?.rawText"
+                  class="prose prose-sm max-w-none text-slate-700 leading-7"
+                  v-html="rawTextHtml"
+                />
               </div>
             </div>
 
@@ -126,6 +142,8 @@ const timeString = computed(() => {
               v-if="message.widgetPayload?.rootNode"
               :node="message.widgetPayload.rootNode"
             /> -->
+
+            <!-- eslint-disable-next-line vue/no-v-html -->
 
             <a2uiRender
               v-if="message.widgetPayload?.surfaces"

@@ -417,221 +417,290 @@ const mockData = [
   },
 ];
 
-const mockadadad = [
-  {
-    beginRendering: {
-      surfaceId: "crew_directory_view",
-      root: "directory_column",
-      styles: {
-        primaryColor: "#2E7D32",
+const mockadadad = {
+  beginRendering: {
+    surfaceId: "chengdu_flights_list",
+    root: "flight_list_container",
+    styles: {
+      primaryColor: "#1A73E8",
+    },
+  },
+
+  surfaceUpdate: {
+    surfaceId: "chengdu_flights_list",
+    components: [
+      {
+        id: "flight_list_container",
+        component: {
+          Column: {
+            children: {
+              explicitList: [
+                "title_text",
+                "card_CA9875",
+                "card_HU7360",
+                "card_CZ8316",
+                "card_CZ1420",
+                "card_MU7806",
+              ],
+            },
+            alignment: "stretch",
+            distribution: "start",
+          },
+        },
       },
-    },
+      {
+        id: "title_text",
+        component: {
+          Text: {
+            text: { literalString: "成都往返航班动态 (2025-05-15)" },
+            usageHint: "h2",
+          },
+        },
+      },
+      {
+        id: "card_CA9875",
+        component: {
+          Card: {
+            child: "row_CA9875",
+          },
+        },
+      },
+      {
+        id: "row_CA9875",
+        component: {
+          Row: {
+            children: {
+              explicitList: ["info_CA9875", "status_CA9875"],
+            },
+            distribution: "spaceBetween",
+          },
+        },
+      },
+      {
+        id: "info_CA9875",
+        component: {
+          Column: {
+            children: {
+              explicitList: ["no_CA9875", "route_CA9875", "time_CA9875"],
+            },
+          },
+        },
+      },
+      {
+        id: "no_CA9875",
+        component: { Text: { text: { literalString: "CA9875 | B787" }, usageHint: "h4" } },
+      },
+      {
+        id: "route_CA9875",
+        component: {
+          Text: { text: { literalString: "西安 (XIY) ✈ 成都 (CTU)" }, usageHint: "body" },
+        },
+      },
+      {
+        id: "time_CA9875",
+        component: {
+          Text: { text: { literalString: "计划 12:16 | 实际 14:02" }, usageHint: "caption" },
+        },
+      },
+      {
+        id: "status_CA9875",
+        component: { Text: { text: { literalString: "正常" }, usageHint: "h4" } },
+      },
+      {
+        id: "card_HU7360",
+        component: {
+          Card: {
+            child: "row_HU7360",
+          },
+        },
+      },
+      {
+        id: "row_HU7360",
+        component: {
+          Row: {
+            children: {
+              explicitList: ["info_HU7360", "status_HU7360"],
+            },
+            distribution: "spaceBetween",
+          },
+        },
+      },
+      {
+        id: "info_HU7360",
+        component: {
+          Column: {
+            children: {
+              explicitList: ["no_HU7360", "route_HU7360", "time_HU7360"],
+            },
+          },
+        },
+      },
+      {
+        id: "no_HU7360",
+        component: { Text: { text: { literalString: "HU7360 | A321" }, usageHint: "h4" } },
+      },
+      {
+        id: "route_HU7360",
+        component: {
+          Text: { text: { literalString: "成都天府 (TFU) ✈ 上海 (SHA)" }, usageHint: "body" },
+        },
+      },
+      {
+        id: "time_HU7360",
+        component: {
+          Text: { text: { literalString: "计划 18:32 | 延误 91分" }, usageHint: "caption" },
+        },
+      },
+      {
+        id: "status_HU7360",
+        component: { Text: { text: { literalString: "计划" }, usageHint: "h4" } },
+      },
+      {
+        id: "card_CZ8316",
+        component: {
+          Card: {
+            child: "row_CZ8316",
+          },
+        },
+      },
+      {
+        id: "row_CZ8316",
+        component: {
+          Row: {
+            children: {
+              explicitList: ["info_CZ8316", "status_CZ8316"],
+            },
+            distribution: "spaceBetween",
+          },
+        },
+      },
+      {
+        id: "info_CZ8316",
+        component: {
+          Column: {
+            children: {
+              explicitList: ["no_CZ8316", "route_CZ8316", "time_CZ8316"],
+            },
+          },
+        },
+      },
+      {
+        id: "no_CZ8316",
+        component: { Text: { text: { literalString: "CZ8316 | ARJ21" }, usageHint: "h4" } },
+      },
+      {
+        id: "route_CZ8316",
+        component: {
+          Text: { text: { literalString: "深圳 (SZX) ✈ 成都天府 (TFU)" }, usageHint: "body" },
+        },
+      },
+      {
+        id: "time_CZ8316",
+        component: {
+          Text: { text: { literalString: "计划 14:23 | 实际到达 17:26" }, usageHint: "caption" },
+        },
+      },
+      {
+        id: "status_CZ8316",
+        component: { Text: { text: { literalString: "已到达" }, usageHint: "h4" } },
+      },
+      {
+        id: "card_CZ1420",
+        component: {
+          Card: {
+            child: "row_CZ1420",
+          },
+        },
+      },
+      {
+        id: "row_CZ1420",
+        component: {
+          Row: {
+            children: {
+              explicitList: ["info_CZ1420", "status_CZ1420"],
+            },
+            distribution: "spaceBetween",
+          },
+        },
+      },
+      {
+        id: "info_CZ1420",
+        component: {
+          Column: {
+            children: {
+              explicitList: ["no_CZ1420", "route_CZ1420", "time_CZ1420"],
+            },
+          },
+        },
+      },
+      {
+        id: "no_CZ1420",
+        component: { Text: { text: { literalString: "CZ1420 | ARJ21" }, usageHint: "h4" } },
+      },
+      {
+        id: "route_CZ1420",
+        component: {
+          Text: { text: { literalString: "成都天府 (TFU) ✈ 深圳 (SZX)" }, usageHint: "body" },
+        },
+      },
+      {
+        id: "time_CZ1420",
+        component: { Text: { text: { literalString: "计划 20:08" }, usageHint: "caption" } },
+      },
+      {
+        id: "status_CZ1420",
+        component: { Text: { text: { literalString: "延误" }, usageHint: "h4" } },
+      },
+      {
+        id: "card_MU7806",
+        component: {
+          Card: {
+            child: "row_MU7806",
+          },
+        },
+      },
+      {
+        id: "row_MU7806",
+        component: {
+          Row: {
+            children: {
+              explicitList: ["info_MU7806", "status_MU7806"],
+            },
+            distribution: "spaceBetween",
+          },
+        },
+      },
+      {
+        id: "info_MU7806",
+        component: {
+          Column: {
+            children: {
+              explicitList: ["no_MU7806", "route_MU7806", "time_MU7806"],
+            },
+          },
+        },
+      },
+      {
+        id: "no_MU7806",
+        component: { Text: { text: { literalString: "MU7806 | B737-800" }, usageHint: "h4" } },
+      },
+      {
+        id: "route_MU7806",
+        component: {
+          Text: { text: { literalString: "昆明 (KMG) ✈ 成都 (CTU)" }, usageHint: "body" },
+        },
+      },
+      {
+        id: "time_MU7806",
+        component: { Text: { text: { literalString: "计划 13:53" }, usageHint: "caption" } },
+      },
+      {
+        id: "status_MU7806",
+        component: { Text: { text: { literalString: "取消" }, usageHint: "h4" } },
+      },
+    ],
   },
-  {
-    surfaceUpdate: {
-      surfaceId: "crew_directory_view",
-      components: [
-        {
-          id: "directory_column",
-          component: {
-            Column: {
-              children: {
-                explicitList: [
-                  "header_text",
-                  "summary_text",
-                  "crew_card_1",
-                  "crew_card_2",
-                  "crew_card_3",
-                  "crew_card_4",
-                  "crew_card_5",
-                  "crew_card_6",
-                  "footer_hint",
-                ],
-              },
-              distribution: "start",
-              alignment: "stretch",
-            },
-          },
-        },
-        {
-          id: "header_text",
-          component: {
-            Text: {
-              text: { literalString: "航空公司机组人员名录" },
-              usageHint: "h2",
-            },
-          },
-        },
-        {
-          id: "summary_text",
-          component: {
-            Text: {
-              text: {
-                literalString: "当前系统内共有 20 名机组人员，包含机长、副驾驶、乘务员及安全员。",
-              },
-              usageHint: "body",
-            },
-          },
-        },
-        {
-          id: "crew_card_1",
-          component: { Card: { child: "c1_row" } },
-        },
-        {
-          id: "c1_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c1_info", "c1_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c1_info",
-          component: {
-            Text: { text: { literalString: "李强 | 机长 (18年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c1_status",
-          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_2",
-          component: { Card: { child: "c2_row" } },
-        },
-        {
-          id: "c2_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c2_info", "c2_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c2_info",
-          component: {
-            Text: { text: { literalString: "吴磊 | 副驾驶 (4年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c2_status",
-          component: { Text: { text: { literalString: "休息" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_3",
-          component: { Card: { child: "c3_row" } },
-        },
-        {
-          id: "c3_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c3_info", "c3_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c3_info",
-          component: {
-            Text: { text: { literalString: "王静 | 乘务长 (22年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c3_status",
-          component: { Text: { text: { literalString: "培训中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_4",
-          component: { Card: { child: "c4_row" } },
-        },
-        {
-          id: "c4_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c4_info", "c4_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c4_info",
-          component: {
-            Text: { text: { literalString: "赵洋 | 副驾驶 (23年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c4_status",
-          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_5",
-          component: { Card: { child: "c5_row" } },
-        },
-        {
-          id: "c5_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c5_info", "c5_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c5_info",
-          component: {
-            Text: { text: { literalString: "黄敏 | 安全员 (21年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c5_status",
-          component: { Text: { text: { literalString: "培训中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "crew_card_6",
-          component: { Card: { child: "c6_row" } },
-        },
-        {
-          id: "c6_row",
-          component: {
-            Row: {
-              children: { explicitList: ["c6_info", "c6_status"] },
-              distribution: "spaceBetween",
-            },
-          },
-        },
-        {
-          id: "c6_info",
-          component: {
-            Text: { text: { literalString: "周强 | 乘务长 (22年经验)" }, usageHint: "h3" },
-          },
-        },
-        {
-          id: "c6_status",
-          component: { Text: { text: { literalString: "飞行中" }, usageHint: "caption" } },
-        },
-
-        {
-          id: "footer_hint",
-          component: {
-            Text: {
-              text: {
-                literalString: "您可以根据姓名、角色（机长/副驾驶/乘务员）或基地进行筛选查询。",
-              },
-              usageHint: "caption",
-            },
-          },
-        },
-      ],
-    },
-  },
-];
+};
 
 onMounted(() => {
   // 处理初始Surface并存储

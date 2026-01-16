@@ -68,6 +68,7 @@ const FUNCTION_ITEMS = [
   { id: "refund_ticket", label: "我要改期", icon: Plane },
   { id: "refund_ticket", label: "我要退票", icon: FileText },
   { id: "order_ticket", label: "我要定员工票", icon: Users },
+  { id: "order_ticket", label: "航班动态查询", icon: Users },
   // { id: "mro", label: "维修工单", icon: Wrench },
   // { id: "dispatch", label: "签派放行", icon: Plane },
   // { id: "marketing", label: "营销数据", icon: FileText },
@@ -759,6 +760,11 @@ const callGeminiDirectly = async (message, systemInstruction) => {
     });
 
     const data = await res.json();
+    // const data = {
+    //   message:
+    //     "为您查询到 2025-05-15 从成都到长沙的航班动态：\n\n**CZ6775 (南方航空)**\n*   **状态**：已起飞（延误 65 分钟）\n*   **起飞**：计划 17:42 / 实际 18:47（成都双流 CTU，登机口 T3-22）\n*   **到达**：计划 19:42 / 实际 20:47（长沙黄花 CSX）\n*   **机型**：波音 787 (B-6175)",
+    // };
+
     // 浩哥的数据结构
     if (apiFlag.value == "refund_ticket") {
       if (data.needUi) {
@@ -770,29 +776,15 @@ const callGeminiDirectly = async (message, systemInstruction) => {
     } else {
       // 立哥
       const [rawText, jsonText] = data.message.split("---a2ui_JSON---");
+
+      let a2UIJson = [];
       if (jsonText) {
-        const cc = JSON.parse(jsonText);
-
-        // 判断cc 是否是数组
-        if (Array.isArray(cc)) {
-          return {
-            parsedA2UI: cc,
-            rawText: rawText,
-          };
-        } else {
-          const surfaces = [];
-          Object.keys(cc).forEach((key) => {
-            surfaces.push({
-              key: cc[key],
-            });
-          });
-
-          return {
-            parsedA2UI: surfaces,
-            rawText: rawText,
-          };
-        }
+        a2UIJson = JSON.parse(jsonText);
       }
+      return {
+        parsedA2UI: a2UIJson,
+        rawText: rawText,
+      };
     }
   } catch (e) {
     console.warn(` API Request failed `, e);
@@ -822,7 +814,6 @@ const triggerDirectAIGeneration = async (prompt) => {
 
     // mockData
     const res = await callGeminiDirectly(history);
-
     messages.value = messages.value.filter((m) => m.id !== loaderId);
     messages.value.push({
       id: Date.now().toString() + "_ai",
@@ -832,12 +823,12 @@ const triggerDirectAIGeneration = async (prompt) => {
       content: jsonResponse.summary || "",
       widgetPayload: {
         title: jsonResponse.title || "详情",
-        surfaces: res.surfaces,
+        surfaces: res.surfaces?.length || [],
+        rawText: res.rawText || "",
       },
       timestamp: new Date(),
     });
   } catch (error) {
-    console.error("AI Error", error);
     messages.value = messages.value.filter((m) => m.id !== loaderId);
     messages.value.push({
       id: Date.now().toString() + "_err",
@@ -933,15 +924,8 @@ const processUserMessage = async (text) => {
           }
         });
       }
-      console.timeEnd("Surface Rewrite");
-
-      console.time("Processor");
       const surfaces = processor.processMessages(parsedA2UI);
-      console.log("Received surfaces from processor:", surfaces);
-      console.timeEnd("Processor");
-
       // 核心修改 3: 直接替换数组中的该项
-      console.time("Vue Update");
       messages.value[loaderIndex] = {
         id: messageId,
         sender: "AGENT",
@@ -953,7 +937,6 @@ const processUserMessage = async (text) => {
         },
         timestamp: messageTimestamp,
       };
-      console.timeEnd("Vue Update");
     } catch (e) {
       console.error("JSON Parse Error", e);
       messages.value[loaderIndex] = {
@@ -969,8 +952,6 @@ const processUserMessage = async (text) => {
       };
     }
   } catch (error) {
-    debugger;
-    console.error("AI Error", error);
     // 出错时也替换掉 loader
     const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
     if (loaderIndex !== -1) {
@@ -1024,7 +1005,7 @@ const processUserAction = async (action) => {
         };
       });
 
-    const { parsedA2UI } = await callGeminiDirectly(action);
+    const { rawText, parsedA2UI } = await callGeminiDirectly(action);
 
     // 核心修改: 原位替换 loader
     const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
@@ -1053,7 +1034,6 @@ const processUserAction = async (action) => {
       }
 
       const surfaces = processor.processMessages(parsedA2UI);
-      console.log("Received surfaces from processor:", surfaces);
 
       messages.value[loaderIndex] = {
         id: messageId,
@@ -1063,11 +1043,11 @@ const processUserAction = async (action) => {
         content: "已为您生成相关业务办理界面：",
         widgetPayload: {
           surfaces: surfaces,
+          rawText: rawText,
         },
         timestamp: messageTimestamp,
       };
     } catch (e) {
-      console.error("JSON Parse Error", e);
       messages.value[loaderIndex] = {
         id: messageId,
         sender: "AGENT",
@@ -1081,7 +1061,6 @@ const processUserAction = async (action) => {
       };
     }
   } catch (error) {
-    console.error("AI Error", error);
     const loaderIndex = messages.value.findIndex((m) => m.id === loaderId);
     if (loaderIndex !== -1) {
       messages.value[loaderIndex] = {
@@ -1093,7 +1072,6 @@ const processUserAction = async (action) => {
       };
     }
   }
-  debugger;
   scrollToBottom();
 };
 
@@ -1102,6 +1080,12 @@ const handleSendMessage = async () => {
   const text = inputValue.value;
   inputValue.value = "";
   activeGrid.value = "none";
+
+  // 根据关键词设置 apiFlag
+  const refundKeywords = ["退票", "改期", "改签"];
+  const hasRefundKeyword = refundKeywords.some((keyword) => text.includes(keyword));
+  apiFlag.value = hasRefundKeyword ? "refund_ticket" : "order_ticket";
+
   await processUserMessage(text);
 };
 

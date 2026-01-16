@@ -22,12 +22,6 @@ const router = createRouter({
           meta: { title: "综合演示" },
         },
         {
-          path: "chat-demo1",
-          name: "chat-demo1",
-          component: () => import("../views/demo/ChatDemo1.vue"),
-          meta: { title: "聊天演示1" },
-        },
-        {
           path: "chat-demo2",
           name: "chat-demo2",
           component: () => import("../views/demo/ChatDemo2.vue"),
@@ -52,16 +46,10 @@ const router = createRouter({
           meta: { title: "Demo1" },
         },
         {
-          path: "/demo2",
-          name: "demo2",
-          component: () => import("../views/demo/Demo2.vue"),
-          meta: { title: "聊天Demo" },
-        },
-        {
           path: "/hxt",
           name: "hxt",
           component: () => import("../views/hxt/index.vue"),
-          meta: { title: "航小通" },
+          meta: { title: "鸿小通" },
         },
       ],
     },
