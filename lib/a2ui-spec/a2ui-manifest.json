@@ -1,5 +1,422 @@
 {
   "components": {
+    "BarChart": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "数据绑定对象，包含图表数据，格式: { categories: string[], values: number[] }",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "enum": [
+            "{ categories: string[]",
+            "values: number[] }"
+          ]
+        },
+        "title": {
+          "type": "object",
+          "description": "数据绑定对象，图表标题",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "xAxisLabel": {
+          "type": "object",
+          "description": "数据绑定对象，X轴标签",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "yAxisLabel": {
+          "type": "object",
+          "description": "数据绑定对象，Y轴标签",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "horizontal": {
+          "type": "boolean",
+          "description": "是否为横向柱状图 默认值: false"
+        },
+        "showGrid": {
+          "type": "boolean",
+          "description": "是否显示网格线 默认值: true"
+        },
+        "barColor": {
+          "type": "string",
+          "description": "柱子颜色 默认值: '#5470c6'"
+        },
+        "barWidth": {
+          "type": "number",
+          "description": "柱子宽度百分比"
+        },
+        "height": {
+          "type": "number",
+          "description": "图表高度(px) 默认值: 400"
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "LineChart": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "数据绑定对象，包含一条或多条折线数据，格式: { xAxis: string[], series: Array<{ name: string, data: number[] }> }",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "enum": [
+            "{ xAxis: string[]",
+            "series: Array<{ name: string",
+            "data: number[] }> }"
+          ]
+        },
+        "title": {
+          "type": "object",
+          "description": "数据绑定对象，图表标题",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "xAxisLabel": {
+          "type": "object",
+          "description": "数据绑定对象，X轴标签",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "yAxisLabel": {
+          "type": "object",
+          "description": "数据绑定对象，Y轴标签",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "smooth": {
+          "type": "boolean",
+          "description": "是否平滑曲线 默认值: false"
+        },
+        "showArea": {
+          "type": "boolean",
+          "description": "是否显示面积 默认值: false"
+        },
+        "showPoints": {
+          "type": "boolean",
+          "description": "是否显示数据点 默认值: true"
+        },
+        "showLegend": {
+          "type": "boolean",
+          "description": "是否显示图例（多条线时） 默认值: true"
+        },
+        "height": {
+          "type": "number",
+          "description": "图表高度(px) 默认值: 400"
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "PieChart": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "数据绑定对象，包含图表数据数组，格式: [{ name: string, value: number }]",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "enum": [
+            "[{ name: string",
+            "value: number }]"
+          ]
+        },
+        "title": {
+          "type": "object",
+          "description": "数据绑定对象，图表标题",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "subtitle": {
+          "type": "object",
+          "description": "数据绑定对象，图表副标题",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "showLegend": {
+          "type": "boolean",
+          "description": "是否显示图例 默认值: true"
+        },
+        "legendPosition": {
+          "type": "string",
+          "description": "图例位置: 'top', 'right', 'bottom', 'left' 默认值: 'right'",
+          "enum": [
+            "'top'",
+            "'right'",
+            "'bottom'",
+            "'left'"
+          ]
+        },
+        "showLabel": {
+          "type": "boolean",
+          "description": "是否显示数据标签 默认值: true"
+        },
+        "labelFormat": {
+          "type": "string",
+          "description": "标签格式: 'percent', 'value', 'name' 默认值: 'percent'",
+          "enum": [
+            "'percent'",
+            "'value'",
+            "'name'"
+          ]
+        },
+        "radius": {
+          "type": "number",
+          "description": "饼图半径百分比 (0-100) 默认值: 75"
+        },
+        "innerRadius": {
+          "type": "number",
+          "description": "内半径百分比，大于0时为环形图 默认值: 0"
+        },
+        "colors": {
+          "type": "string",
+          "description": "自定义颜色数组"
+        },
+        "height": {
+          "type": "number",
+          "description": "图表高度(px) 默认值: 400"
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "ScatterChart": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "数据绑定对象，包含散点数据，格式: { name: string, data: Array<[number, number]> } 或 { series: Array<{ name: string, data: Array<[number, number]> }> }",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "enum": [
+            "{ name: string",
+            "data: Array<[number",
+            "number]> }",
+            "{ series: Array<{ name: string",
+            "data: Array<[number",
+            "number]> }> }"
+          ]
+        },
+        "title": {
+          "type": "object",
+          "description": "数据绑定对象，图表标题",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "xAxisLabel": {
+          "type": "object",
+          "description": "数据绑定对象，X轴标签",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "yAxisLabel": {
+          "type": "object",
+          "description": "数据绑定对象，Y轴标签",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "symbolSize": {
+          "type": "number",
+          "description": "散点大小 默认值: 10"
+        },
+        "symbolShape": {
+          "type": "string",
+          "description": "散点形状: 'circle', 'rect', 'triangle', 'diamond' 默认值: 'circle'",
+          "enum": [
+            "'circle'",
+            "'rect'",
+            "'triangle'",
+            "'diamond'"
+          ]
+        },
+        "showGrid": {
+          "type": "boolean",
+          "description": "是否显示网格线 默认值: true"
+        },
+        "height": {
+          "type": "number",
+          "description": "图表高度(px) 默认值: 400"
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "StackedChart": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "object",
+          "description": "数据绑定对象，包含多个系列数据，格式: { xAxis: string[], series: Array<{ name: string, data: number[] }> }",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "enum": [
+            "{ xAxis: string[]",
+            "series: Array<{ name: string",
+            "data: number[] }> }"
+          ]
+        },
+        "title": {
+          "type": "object",
+          "description": "数据绑定对象，图表标题",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
+        "type": {
+          "type": "string",
+          "description": "图表类型: 'bar' 或 'area' 默认值: 'bar'",
+          "enum": [
+            "'bar'",
+            "'area'"
+          ]
+        },
+        "percentage": {
+          "type": "boolean",
+          "description": "是否显示为百分比堆积 默认值: false"
+        },
+        "showLegend": {
+          "type": "boolean",
+          "description": "是否显示图例 默认值: true"
+        },
+        "height": {
+          "type": "number",
+          "description": "图表高度(px) 默认值: 400"
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
     "AudioPlayer": {
       "type": "object",
       "additionalProperties": false,
@@ -268,7 +685,7 @@
       "properties": {
         "label": {
           "type": "object",
-          "description": "数据绑定对象，包含复选框标签文本",
+          "description": "数据绑定对象，包含标签文本",
           "additionalProperties": false,
           "properties": {
             "literalString": {
@@ -279,19 +696,13 @@
             }
           }
         },
-        "value": {
+        "selected": {
           "type": "object",
-          "description": "数据绑定对象，包含选中状态（布尔值）",
+          "description": "数据绑定对象，绑定布尔值 默认值: null",
           "additionalProperties": false,
           "properties": {
             "literalString": {
               "type": "string"
-            },
-            "literalNumber": {
-              "type": "number"
-            },
-            "literalBoolean": {
-              "type": "boolean"
             },
             "path": {
               "type": "string"
@@ -300,17 +711,29 @@
         }
       },
       "required": [
-        "label",
-        "value"
+        "label"
       ]
     },
     "DateTimeInput": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "label": {
+          "type": "object",
+          "description": "数据绑定对象，包含标签文本",
+          "additionalProperties": false,
+          "properties": {
+            "literalString": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        },
         "value": {
           "type": "object",
-          "description": "数据绑定对象，包含当前日期时间值",
+          "description": "数据绑定对象，包含当前日期/时间",
           "additionalProperties": false,
           "properties": {
             "literalString": {
@@ -327,16 +750,13 @@
             }
           }
         },
-        "enableDate": {
+        "includeTime": {
           "type": "boolean",
-          "description": "是否启用日期选择 默认值: true"
-        },
-        "enableTime": {
-          "type": "boolean",
-          "description": "是否启用时间选择 默认值: false"
+          "description": "是否包含时间选择（暂未完全支持） 默认值: false"
         }
       },
       "required": [
+        "label",
         "value"
       ]
     },
@@ -406,7 +826,7 @@
       "properties": {
         "label": {
           "type": "object",
-          "description": "数据绑定对象，包含滑块标签文本 默认值: null",
+          "description": "数据绑定对象，包含标签文本",
           "additionalProperties": false,
           "properties": {
             "literalString": {
@@ -419,7 +839,7 @@
         },
         "value": {
           "type": "object",
-          "description": "数据绑定对象，包含当前滑块值",
+          "description": "数据绑定对象，包含当前值",
           "additionalProperties": false,
           "properties": {
             "literalString": {
@@ -438,18 +858,19 @@
         },
         "min": {
           "type": "number",
-          "description": "滑块最小值 默认值: 0"
+          "description": "最小值 默认值: 0"
         },
         "max": {
           "type": "number",
-          "description": "滑块最大值 默认值: 100"
+          "description": "最大值 默认值: 100"
         },
         "step": {
           "type": "number",
-          "description": "滑块步长 默认值: 1"
+          "description": "步长 默认值: 1"
         }
       },
       "required": [
+        "label",
         "value"
       ]
     },

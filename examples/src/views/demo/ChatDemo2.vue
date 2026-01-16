@@ -29,67 +29,164 @@ const mockData = [
         {
           id: "root",
           component: {
-            Card: {
-              child: "form",
+            List: {
+              children: {
+                template: {
+                  componentId: "orderCard",
+                  dataBinding: "orders",
+                },
+              },
+              direction: "vertical",
+              alignment: "stretch",
             },
           },
         },
         {
-          id: "form",
+          id: "orderCard",
+          component: {
+            Card: {
+              child: "orderCardContent",
+            },
+          },
+        },
+        {
+          id: "orderCardContent",
           component: {
             Column: {
               children: {
-                explicitList: [
-                  "line1",
-                  "line2",
-                  "line3",
-                  "line4",
-                  "line5",
-                  "flightDatePicker",
-                  "confirmBtn",
-                ],
+                explicitList: ["orderHeader", "flightInfoRow", "dateRow"],
               },
               distribution: "start",
-              alignment: "start",
+              alignment: "stretch",
             },
           },
         },
         {
-          id: "line1",
+          id: "orderHeader",
           component: {
-            Text: {
-              text: {
-                literalString: "原航班信息",
+            Row: {
+              children: {
+                explicitList: ["orderNumberLabel", "orderNumberText", "detailButton"],
               },
-              usageHint: "h4",
+              distribution: "spaceBetween",
+              alignment: "center",
             },
           },
         },
         {
-          id: "line2",
+          id: "flightInfoRow",
           component: {
             Row: {
               children: {
                 explicitList: [
-                  "depCityNameText",
+                  "flightNoLabel",
+                  "flightNoText",
+                  "depAirportText",
                   "arrowText",
-                  "arrCityNameText",
-                  "originalDeptDateText",
-                  "departureSuffixText",
+                  "arrAirportText",
                 ],
               },
               distribution: "start",
               alignment: "center",
-              spacing: 2,
             },
           },
         },
         {
-          id: "depCityNameText",
+          id: "dateRow",
+          component: {
+            Row: {
+              children: {
+                explicitList: ["depDateLabel", "depDateText"],
+              },
+              distribution: "start",
+              alignment: "center",
+            },
+          },
+        },
+        {
+          id: "orderNumberLabel",
           component: {
             Text: {
               text: {
-                path: "/form/depCityName",
+                literalString: "订单号: ",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "orderNumberText",
+          component: {
+            Text: {
+              text: {
+                path: "serialNo",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "detailButton",
+          component: {
+            Button: {
+              child: "detailButtonText",
+              action: {
+                name: "我要查看退票订单详情信息",
+                context: [
+                  {
+                    key: "serialNo",
+                    value: {
+                      path: "serialNo",
+                    },
+                  },
+                  {
+                    key: "method",
+                    literalString: "我要查看退票订单详情信息",
+                  },
+                ],
+              },
+              primary: true,
+            },
+          },
+        },
+        {
+          id: "detailButtonText",
+          component: {
+            Text: {
+              text: {
+                literalString: "详情",
+              },
+            },
+          },
+        },
+        {
+          id: "flightNoLabel",
+          component: {
+            Text: {
+              text: {
+                literalString: "航班: ",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "flightNoText",
+          component: {
+            Text: {
+              text: {
+                path: "flightNo",
+              },
+              usageHint: "body",
+            },
+          },
+        },
+        {
+          id: "depAirportText",
+          component: {
+            Text: {
+              text: {
+                path: "depAirport",
               },
               usageHint: "body",
             },
@@ -100,218 +197,42 @@ const mockData = [
           component: {
             Text: {
               text: {
-                literalString: "->",
+                literalString: " -> ",
               },
               usageHint: "body",
             },
           },
         },
         {
-          id: "arrCityNameText",
+          id: "arrAirportText",
           component: {
             Text: {
               text: {
-                path: "/form/arrCityName",
+                path: "arrAirport",
               },
               usageHint: "body",
             },
           },
         },
         {
-          id: "originalDeptDateText",
+          id: "depDateLabel",
           component: {
             Text: {
               text: {
-                path: "/form/originalDeptDate",
+                literalString: "出发时刻: ",
               },
-              usageHint: "body",
+              usageHint: "caption",
             },
           },
         },
         {
-          id: "departureSuffixText",
+          id: "depDateText",
           component: {
             Text: {
               text: {
-                literalString: " 起飞",
+                path: "depDatetime",
               },
-              usageHint: "body",
-            },
-          },
-        },
-        {
-          id: "line3",
-          component: {
-            Text: {
-              text: {
-                literalString: "填写改期信息",
-              },
-              usageHint: "h4",
-            },
-          },
-        },
-        {
-          id: "line4",
-          component: {
-            Row: {
-              children: {
-                explicitList: ["passengerLabel", "passengerNameText"],
-              },
-              distribution: "start",
-              alignment: "center",
-            },
-          },
-        },
-        {
-          id: "passengerLabel",
-          component: {
-            Text: {
-              text: {
-                literalString: "旅客姓名：",
-              },
-              usageHint: "body",
-            },
-          },
-        },
-        {
-          id: "passengerNameText",
-          component: {
-            Text: {
-              text: {
-                path: "/form/passengerName",
-              },
-              usageHint: "body",
-            },
-          },
-        },
-        {
-          id: "line5",
-          component: {
-            Text: {
-              text: {
-                literalString: "选择改期日期",
-              },
-              usageHint: "h4",
-            },
-          },
-        },
-        {
-          id: "flightDatePicker",
-          component: {
-            DateTimeInput: {
-              value: {
-                path: "/form/deptDate",
-              },
-              enableDate: true,
-              enableTime: false,
-            },
-          },
-        },
-        {
-          id: "confirmBtn",
-          component: {
-            Button: {
-              child: "confirmBtnText",
-              primary: true,
-              action: {
-                name: "s_m_checkchange",
-                context: [
-                  {
-                    key: "firstIssueTime",
-                    value: {
-                      path: "/firstIssueTime",
-                    },
-                  },
-                  {
-                    key: "passengerName",
-                    value: {
-                      path: "/passengerName",
-                    },
-                  },
-                  {
-                    key: "issueTime",
-                    value: {
-                      path: "/issueTime",
-                    },
-                  },
-                  {
-                    key: "passengerType",
-                    value: {
-                      path: "/passengerType",
-                    },
-                  },
-                  {
-                    key: "pnr",
-                    value: {
-                      path: "/pnr",
-                    },
-                  },
-                  {
-                    key: "ticketPnr",
-                    value: {
-                      path: "/ticketPnr",
-                    },
-                  },
-                  {
-                    key: "ticketStatus",
-                    value: {
-                      path: "/ticketStatus",
-                    },
-                  },
-                  {
-                    key: "gender",
-                    value: {
-                      path: "/gender",
-                    },
-                  },
-                  {
-                    key: "originalSerialNo",
-                    value: {
-                      path: "/originalSerialNo",
-                    },
-                  },
-                  {
-                    key: "tripType",
-                    value: {
-                      path: "/tripType",
-                    },
-                  },
-                  {
-                    key: "canChange",
-                    value: {
-                      path: "/canChange",
-                    },
-                  },
-                  {
-                    key: "flightNo",
-                    value: {
-                      path: "/flightNo",
-                    },
-                  },
-                  {
-                    key: "arrAirportCode",
-                    value: {
-                      path: "/arrAirportCode",
-                    },
-                  },
-                  {
-                    key: "deptAirportCode",
-                    value: {
-                      path: "/deptAirportCode",
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        },
-        {
-          id: "confirmBtnText",
-          component: {
-            Text: {
-              text: {
-                literalString: "去改期",
-              },
+              usageHint: "caption",
             },
           },
         },
@@ -324,93 +245,126 @@ const mockData = [
       path: "/",
       contents: [
         {
-          key: "form",
+          key: "orders",
           valueMap: [
             {
-              key: "depCityName",
-              valueString: "长沙",
+              key: "0",
+              valueMap: [
+                {
+                  key: "serialNo",
+                  valueString: "260112180225620309",
+                },
+                {
+                  key: "method",
+                  valueString: "queryRefundOrderDetail",
+                },
+                {
+                  key: "flightNo",
+                  valueString: "A67120",
+                },
+                {
+                  key: "depAirport",
+                  valueString: "CSX",
+                },
+                {
+                  key: "arrAirport",
+                  valueString: "KMG",
+                },
+                {
+                  key: "depDatetime",
+                  valueString: "2026-03-19 14:40:00",
+                },
+              ],
             },
             {
-              key: "arrCityName",
-              valueString: "昆明",
+              key: "1",
+
+              valueMap: [
+                {
+                  key: "serialNo",
+                  valueString: "260115110820326331",
+                },
+                {
+                  key: "method",
+                  valueString: "queryRefundOrderDetail",
+                },
+                {
+                  key: "flightNo",
+                  valueString: "A67152",
+                },
+                {
+                  key: "depAirport",
+                  valueString: "CSX",
+                },
+                {
+                  key: "arrAirport",
+                  valueString: "KMG",
+                },
+                {
+                  key: "depDatetime",
+                  valueString: "2026-03-27 21:50:00",
+                },
+              ],
             },
             {
-              key: "originalDeptDate",
-              valueString: "2026-03-23",
+              key: "2",
+              valueMap: [
+                {
+                  key: "serialNo",
+                  valueString: "260115155307335334",
+                },
+                {
+                  key: "method",
+                  valueString: "queryRefundOrderDetail",
+                },
+                {
+                  key: "flightNo",
+                  valueString: "A67120",
+                },
+                {
+                  key: "depAirport",
+                  valueString: "CSX",
+                },
+                {
+                  key: "arrAirport",
+                  valueString: "KMG",
+                },
+                {
+                  key: "depDatetime",
+                  valueString: "2026-03-22 14:45:00",
+                },
+              ],
             },
             {
-              key: "passengerName",
-              valueString: "测试",
-            },
-            {
-              key: "deptDate",
-              valueString: "2026-03-24",
-            },
-            {
-              key: "origIssueDate",
-              valueString: "2026-01-15 17:20:00",
+              key: "3",
+              valueMap: [
+                {
+                  key: "serialNo",
+                  valueString: "260115155328880335",
+                },
+                {
+                  key: "method",
+                  valueString: "queryRefundOrderDetail",
+                },
+                {
+                  key: "flightNo",
+                  valueString: "A67120",
+                },
+                {
+                  key: "depAirport",
+                  valueString: "CSX",
+                },
+                {
+                  key: "arrAirport",
+                  valueString: "KMG",
+                },
+                {
+                  key: "depDatetime",
+                  valueString: "2026-03-23 14:45:00",
+                },
+              ],
             },
           ],
-        },
-        {
-          key: "firstIssueTime",
-          valueString: "2026-01-15 17:20:00",
-        },
-        {
-          key: "passengerName",
-          valueString: "测试",
-        },
-        {
-          key: "issueTime",
-          valueString: "2026-01-15 17:20:00",
-        },
-        {
-          key: "passengerType",
-          valueString: "ADT",
-        },
-        {
-          key: "pnr",
-          valueString: "NV0178",
-        },
-        {
-          key: "ticketPnr",
-          valueString: "NV0178",
-        },
-        {
-          key: "ticketStatus",
-          valueString: "OPEN FOR USE",
-        },
-        {
-          key: "gender",
-          valueString: "F",
-        },
-        {
-          key: "originalSerialNo",
-          valueString: "260115171854118341",
-        },
-        {
-          key: "tripType",
-          valueString: "OW",
-        },
-        {
-          key: "birthday",
-          valueString: "20050728",
-        },
-        {
-          key: "canChange",
-          valueString: "true",
-        },
-        {
-          key: "flightNo",
-          valueString: "A67120",
-        },
-        {
-          key: "arrAirportCode",
-          valueString: "KMG",
-        },
-        {
-          key: "depAirportCode",
-          valueString: "CSX",
         },
       ],
     },
@@ -704,7 +658,7 @@ const mockadadad = {
 
 onMounted(() => {
   // 处理初始Surface并存储
-  const initialSurfaces = processor.processMessages(mockadadad);
+  const initialSurfaces = processor.processMessages(mockData);
   surfaces.value = initialSurfaces;
   console.log("Loaded initial surfaces:", initialSurfaces);
   // 如果要使用mockData，取消注释下面这行

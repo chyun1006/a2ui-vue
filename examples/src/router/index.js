@@ -33,6 +33,12 @@ const router = createRouter({
           component: () => import("../views/demo/ChatDemo3.vue"),
           meta: { title: "立哥" },
         },
+        {
+          path: "charts",
+          name: "charts",
+          component: () => import("../views/demo/ChartsDemo.vue"),
+          meta: { title: "图表示例" },
+        },
       ],
     },
     {

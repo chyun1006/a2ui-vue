@@ -39,8 +39,23 @@ const dynamicComponent = computed(() => {
   const name = componentName.value
   if (!name) return null
 
+  const type = componentType.value
+  const chartComponents = ['PieChart', 'BarChart', 'LineChart', 'StackedChart', 'ScatterChart']
+
+  // 图表组件需要特殊处理，因为它们在 display/charts 子目录中
+  if (chartComponents.includes(type)) {
+    return defineAsyncComponent(() =>
+      import(`./a2ui/display/charts/${name}.vue`).catch((err) => {
+        console.error(`Failed to load chart component: ${name}`, err)
+        return null
+      }),
+    )
+  }
+
+  // 其他组件使用原有逻辑
+  const categoryPath = getCategoryPath(type)
   return defineAsyncComponent(() =>
-    import(`./a2ui/${getCategoryPath(componentType.value)}/${name}.vue`).catch((err) => {
+    import(`./a2ui/${categoryPath}/${name}.vue`).catch((err) => {
       console.error(`Failed to load component: ${name}`, err)
       return null
     }),
@@ -58,10 +73,12 @@ function getCategoryPath(type) {
     'MultipleChoice',
     'Slider',
   ]
+  const chartComponents = ['PieChart', 'BarChart', 'LineChart', 'StackedChart', 'ScatterChart']
 
   if (displayComponents.includes(type)) return 'display'
   if (layoutComponents.includes(type)) return 'layout'
   if (inputComponents.includes(type)) return 'input'
+  if (chartComponents.includes(type)) return 'display/charts'
 
   return 'display'
 }
