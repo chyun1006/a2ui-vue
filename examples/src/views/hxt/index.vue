@@ -116,166 +116,8 @@ watch(
   { deep: true },
 ); // messages works better with deep watch if pushing new items, though array mutation triggers generally work.
 
-// Local Mock Generator
-const generateLocalBriefing = (role) => {
-  const flightTotal = 68 + Math.floor(Math.random() * 5);
-  const flightDelayed = 2 + Math.floor(Math.random() * 3);
-  const normalcy = (100 - (flightDelayed / flightTotal) * 100).toFixed(1) + "%";
-
-  return {
-    type: "container",
-    style: { className: "flex flex-col gap-4" },
-    children: [
-      {
-        type: "container",
-        style: { className: "bg-white border border-slate-200 rounded-xl p-4 shadow-sm" },
-        children: [
-          {
-            type: "text",
-            props: { text: "关键运行指标 (KPI)" },
-            style: {
-              className: "text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-wider",
-            },
-          },
-          {
-            type: "container",
-            style: { className: "grid grid-cols-3 gap-2 mb-4" },
-            children: [
-              {
-                type: "container",
-                style: {
-                  className:
-                    "bg-blue-50/50 p-2 rounded-lg border border-blue-100 flex flex-col items-center justify-center",
-                },
-                children: [
-                  {
-                    type: "text",
-                    props: { text: normalcy },
-                    style: { className: "text-lg font-bold text-blue-700" },
-                  },
-                  {
-                    type: "text",
-                    props: { text: "正常率" },
-                    style: { className: "text-[9px] text-blue-400 mt-0.5" },
-                  },
-                ],
-              },
-              {
-                type: "container",
-                style: {
-                  className:
-                    "bg-slate-50 p-2 rounded-lg border border-slate-100 flex flex-col items-center justify-center",
-                },
-                children: [
-                  {
-                    type: "text",
-                    props: { text: flightTotal.toString() },
-                    style: { className: "text-lg font-bold text-slate-700" },
-                  },
-                  {
-                    type: "text",
-                    props: { text: "今日航班" },
-                    style: { className: "text-[9px] text-slate-400 mt-0.5" },
-                  },
-                ],
-              },
-              {
-                type: "container",
-                style: {
-                  className:
-                    "bg-orange-50/50 p-2 rounded-lg border border-orange-100 flex flex-col items-center justify-center",
-                },
-                children: [
-                  {
-                    type: "text",
-                    props: { text: flightDelayed.toString() },
-                    style: { className: "text-lg font-bold text-orange-600" },
-                  },
-                  {
-                    type: "text",
-                    props: { text: "当前积压" },
-                    style: { className: "text-[9px] text-orange-400 mt-0.5" },
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: "chart",
-            props: {
-              chartType: "area",
-              height: "100px",
-              chartData: [
-                { name: "08:00", value: 92 },
-                { name: "10:00", value: 88 },
-                { name: "12:00", value: 95 },
-                { name: "14:00", value: 90 },
-                { name: "16:00", value: 85 },
-                { name: "18:00", value: 93 },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        type: "container",
-        style: { className: "bg-indigo-50 border border-indigo-100 rounded-xl p-3 flex gap-3" },
-        children: [
-          {
-            type: "icon",
-            props: { iconName: "Sparkles" },
-            style: { className: "w-4 h-4 text-indigo-500 shrink-0 mt-0.5" },
-          },
-          {
-            type: "text",
-            props: {
-              text: `今日${role}重点关注：午后华东区域有雷雨覆盖，预计造成进出港流控，建议提前预留备份运力。`,
-            },
-            style: { className: "text-xs text-indigo-800 leading-relaxed" },
-          },
-        ],
-      },
-      {
-        type: "container",
-        style: { className: "flex flex-col gap-2" },
-        children: [
-          {
-            type: "text",
-            props: { text: "建议操作" },
-            style: { className: "text-[10px] font-bold text-slate-400 mb-1 ml-1" },
-          },
-          {
-            type: "container",
-            style: { className: "grid grid-cols-2 gap-2" },
-            children: [
-              {
-                type: "button",
-                props: { text: "查看延误详情", onClickIntent: "Show Delays" },
-                style: {
-                  className:
-                    "bg-white border border-slate-200 p-2.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-sm",
-                },
-              },
-              {
-                type: "button",
-                props: { text: "生成日报草稿", onClickIntent: "Draft Report" },
-                style: {
-                  className:
-                    "bg-blue-600 text-white p-2.5 rounded-lg text-xs font-bold shadow-md shadow-blue-200 hover:bg-blue-700",
-                },
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-};
-
 const apiFlag = ref("order_ticket");
-// API Call
 const callGeminiDirectly = async (message, systemInstruction) => {
-  const maxRetries = 3;
   const apiMap = {
     // refund_ticket: "/api/ticket/change",
     refund_ticket: "/api/agent/chat",
@@ -291,9 +133,9 @@ const callGeminiDirectly = async (message, systemInstruction) => {
       };
     } else {
       payload = {
-        userId: "123456",
+        userId: "1760023",
         memberId: "232568004001",
-        sessionId: "12345689",
+        sessionId: sessionId,
         query: JSON.stringify(message),
       };
     }
@@ -390,7 +232,7 @@ const triggerDirectAIGeneration = async (prompt) => {
 const startNewSession = async (directGenerationPrompt) => {
   const randomRole = ROLES[Math.floor(Math.random() * ROLES.length)];
   currentUserRole.value = randomRole;
-
+  sessionId = +new Date();
   messages.value = [];
 
   if (directGenerationPrompt) {
@@ -553,7 +395,6 @@ const toggleGrid = (type) => {
 const hasInitialized = ref(false);
 let sessionId = null;
 onMounted(() => {
-  sessionId = +new Date();
   if (!hasInitialized.value) {
     hasInitialized.value = true;
 
