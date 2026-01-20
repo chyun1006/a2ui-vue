@@ -27,35 +27,18 @@ import FunctionGrid from "./components/FunctionGrid.vue";
 // import HongXiaoTongLogo from "./components/HongXiaoTongLogo.vue";
 import { createSignalA2uiMessageProcessor, a2uiRender } from "a2ui-vue";
 // import initSurface from "../../mock/init-surface.json";
+import { useRoute } from "vue-router";
 
 // 使用全局 manager，确保与 A2UIRender 组件共享同一个 manager
 const processor = createSignalA2uiMessageProcessor({ useGlobalManager: true });
 
 const ROLES = ["营销主控", "维修席位", "航班生产控制席位", "签派放行席位"];
 
-const NOTIFICATIONS = [
-  // {
-  //   id: "1",
-  //   title: "航班延误预警",
-  //   desc: "A61835 预计延误超过 2 小时",
-  //   prompt: "处理航班 A61835 延误",
-  //   time: "10:30",
-  // },
-  // {
-  //   id: "2",
-  //   title: "VIP 服务提醒",
-  //   desc: "3 位白金卡旅客即将登机 A61102",
-  //   prompt: "查看 A61102 航班 VIP 旅客名单",
-  //   time: "11:15",
-  // },
-  // {
-  //   id: "3",
-  //   title: "机组超时风险",
-  //   desc: "B-1234 机组执勤期预警",
-  //   prompt: "检查 B-1234 机组执勤时间",
-  //   time: "11:45",
-  // },
-];
+// 路由中获取workNo
+const route = useRoute();
+const workno = route.query.workno;
+
+const NOTIFICATIONS = [];
 
 const HISTORY_SESSIONS = [
   { id: "s1", title: "昨日早班运营分析", date: "昨天" },
@@ -65,16 +48,9 @@ const HISTORY_SESSIONS = [
 
 // Mock Function Items
 const FUNCTION_ITEMS = [
-  { id: "refund_ticket", label: "改期", icon: Plane },
-  { id: "refund_ticket", label: "退票", icon: FileText },
   { id: "order_ticket", label: "定员工票", icon: Users },
-  { id: "order_ticket", label: "航班成都动态查询", icon: Plane },
-  { id: "order_ticket", label: "查询审核结果", icon: Wrench },
-  // { id: "mro", label: "维修工单", icon: Wrench },
-  // { id: "dispatch", label: "签派放行", icon: Plane },
-  // { id: "marketing", label: "营销数据", icon: FileText },
-  // { id: "service", label: "旅客服务", icon: Users },
-  // { id: "system", label: "系统设置", icon: Wrench },
+  { id: "order_ticket", label: "查询成都出发的航班动态", icon: Plane },
+  { id: "order_ticket", label: "待审核项目", icon: Wrench },
 ];
 
 // Mock Media Items
@@ -97,6 +73,9 @@ const messagesEndRef = ref(null);
 const fileInputRef = ref(null);
 let chatObserver = null;
 
+// const BASE_URL = "http://10.30.32.110:8080";
+const BASE_URL = "";
+
 const scrollToBottom = async () => {
   await nextTick();
   if (messagesEndRef.value && messagesEndRef.value.parentElement) {
@@ -116,31 +95,16 @@ watch(
   { deep: true },
 ); // messages works better with deep watch if pushing new items, though array mutation triggers generally work.
 
-const apiFlag = ref("order_ticket");
+// const apiFlag = ref("order_ticket");
 const callGeminiDirectly = async (message, systemInstruction) => {
-  const apiMap = {
-    // refund_ticket: "/api/ticket/change",
-    refund_ticket: "/api/agent/chat",
-    order_ticket: "/api/chat",
-  };
   try {
-    let payload = {};
-    if (apiFlag.value == "order_ticket") {
-      payload = {
-        message: message,
-        sessionId: sessionId,
-        workNo: "1760023",
-      };
-    } else {
-      payload = {
-        userId: "1760023",
-        memberId: "232568004001",
-        sessionId: sessionId,
-        query: JSON.stringify(message),
-      };
-    }
+    let payload = {
+      message: message,
+      sessionId: sessionId,
+      workNo: workno,
+    };
 
-    const res = await fetch(apiMap[apiFlag.value], {
+    const res = await fetch(`${BASE_URL}/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -150,30 +114,16 @@ const callGeminiDirectly = async (message, systemInstruction) => {
 
     const data = await res.json();
 
-    // 浩哥的数据结构
-    if (apiFlag.value == "refund_ticket") {
-      let a2UIJson = [];
-      let rawText = "";
-      if (data.needUi) a2UIJson = data.response;
-      else rawText = data.response;
+    const [rawText, jsonText] = data.message.split("---a2ui_JSON---");
 
-      return {
-        parsedA2UI: a2UIJson,
-        rawText: rawText,
-      };
-    } else {
-      // 立哥
-      const [rawText, jsonText] = data.message.split("---a2ui_JSON---");
-
-      let a2UIJson = [];
-      if (jsonText) {
-        a2UIJson = JSON.parse(jsonText);
-      }
-      return {
-        parsedA2UI: a2UIJson,
-        rawText: rawText,
-      };
+    let a2UIJson = [];
+    if (jsonText) {
+      a2UIJson = JSON.parse(jsonText);
     }
+    return {
+      parsedA2UI: a2UIJson,
+      rawText: rawText,
+    };
   } catch (e) {
     console.warn(` API Request failed `, e);
   }
@@ -264,7 +214,7 @@ const processUserMessage = async (text) => {
 
 // 处理快捷操作按钮
 const quickActionHandler = (action, flag) => {
-  apiFlag.value = flag;
+  // apiFlag.value = flag;
   const params = {
     name: action.action,
     context: { submitted_text: action.action },
@@ -354,11 +304,6 @@ const handleSendMessage = async () => {
   inputValue.value = "";
   activeGrid.value = "none";
 
-  // 根据关键词设置 apiFlag
-  const refundKeywords = ["退票", "改期", "改签"];
-  const hasRefundKeyword = refundKeywords.some((keyword) => text.includes(keyword));
-  apiFlag.value = hasRefundKeyword ? "refund_ticket" : "order_ticket";
-
   await processUserMessage(text);
 };
 
@@ -391,13 +336,32 @@ const toggleGrid = (type) => {
   }
 };
 
+const applyCount = ref(0);
+async function getApplyCount() {
+  const params = {
+    approvalWorkNo: workno,
+  };
+  const res = await fetch(`${BASE_URL}/api/approvalList`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    applyCount.value = data.data;
+  }
+}
+
 // Initial session
 const hasInitialized = ref(false);
 let sessionId = null;
 onMounted(() => {
   if (!hasInitialized.value) {
     hasInitialized.value = true;
-
+    getApplyCount();
     startNewSession();
   }
 
@@ -423,7 +387,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen bg-white max-w-md relative shadow-2xl overflow-hidden">
+  <div
+    class="flex flex-col h-screen bg-white max-w-md relative shadow-2xl overflow-hidden glow-container"
+  >
     <!-- Left Sidebar (Drawer) -->
     <div v-if="showLeftPanel" class="absolute inset-0 z-50 flex">
       <div class="w-[80%] h-full bg-white shadow-xl animate-slide-in-left flex flex-col">
@@ -516,7 +482,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Header -->
-    <header
+    <!-- <header
       class="relative flex items-center justify-between px-4 py-3 bg-white/90 backdrop-blur-md sticky top-0 z-20 border-b border-slate-100"
     >
       <button
@@ -550,7 +516,7 @@ onUnmounted(() => {
           >
         </button>
       </div>
-    </header>
+    </header> -->
 
     <!-- Chat Area -->
     <main class="flex-1 overflow-y-auto p-4 pb-32 scroll-smooth no-scrollbar bg-white">
@@ -569,15 +535,22 @@ onUnmounted(() => {
       <div class="flex items-center justify-between px-4 pb-2 pointer-events-auto">
         <!-- Scrollable Chips -->
         <div
-          class="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2 pr-2 mask-linear-fade"
+          class="flex-1 overflow-x-auto overflow-y-visible no-scrollbar flex items-center gap-2 pr-2 mask-linear-fade py-2"
         >
           <button
             v-for="item in FUNCTION_ITEMS"
             :key="item.id"
             @click="quickActionHandler({ action: item.label }, item.id)"
-            class="flex-shrink-0 bg-white/90 backdrop-blur-sm border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1"
+            class="flex-shrink-0 bg-white/90 backdrop-blur-sm border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1 relative"
           >
             <span>{{ item.label }}</span>
+            <!-- Badge for 待审核项目 -->
+            <span
+              v-if="item.label === '待审核项目' && applyCount > 0"
+              class="absolute -top-1 -right-1 min-w-[16px] h-4 bg-red-500 border border-white rounded-full text-[9px] flex items-center justify-center text-white font-bold px-1"
+            >
+              {{ applyCount }}
+            </span>
           </button>
         </div>
 
@@ -694,6 +667,66 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* ============================================
+   Glow Effect
+   ============================================ */
+.glow-container::before {
+  content: "";
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  filter: blur(80px);
+  top: -100px;
+  left: -100px;
+  pointer-events: none;
+  animation: glow-pulse-1 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+.glow-container::after {
+  content: "";
+  position: fixed;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  filter: blur(80px);
+  bottom: -80px;
+  right: -80px;
+  pointer-events: none;
+  animation: glow-pulse-2 10s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes glow-pulse-1 {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 1.3;
+    transform: translate(15px, 10px) scale(1.1);
+  }
+}
+
+@keyframes glow-pulse-2 {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 1.2;
+    transform: translate(-12px, -8px) scale(1.1);
+  }
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

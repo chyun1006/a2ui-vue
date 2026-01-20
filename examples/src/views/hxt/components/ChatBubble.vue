@@ -112,7 +112,7 @@ const timeString = computed(() => {
         </div>
 
         <!-- Main Content -->
-        <div class="bg-white border-slate-200 overflow-hidden w-full">
+        <div class="bg-white border-slate-200 overflow-hidden">
           <!-- Widget Header -->
           <!-- <div
             v-if="message.widgetPayload?.title"
@@ -122,42 +122,33 @@ const timeString = computed(() => {
           </div> -->
 
           <!-- Render Widget Root Node -->
-          <div>
-            <div
-              v-if="
-                message.content ||
-                message.widgetPayload?.surfaces?.length ||
-                message.widgetPayload?.rawText
-              "
-              class="bg-white border border-slate-100 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-4 shadow-sm"
-            >
-              <div class="items-center gap-2 text-slate-500 text-xs">
-                <!-- <Loader2 class="w-4 h-4 animate-spin text-blue-500" /> -->
-                <span class="text-xs font-bold text-slate-500">{{ message.content }}</span>
-                <div
-                  v-if="message.widgetPayload?.rawText"
-                  class="prose prose-sm max-w-none text-slate-700 leading-7"
-                  v-html="rawTextHtml"
-                />
-              </div>
+
+          <div
+            v-if="
+              message.content ||
+              message.widgetPayload?.surfaces?.length ||
+              message.widgetPayload?.rawText
+            "
+            class="bg-white border border-slate-100 rounded-bl-2xl rounded-tr-2xl rounded-br-2xl p-4 shadow-sm mb-2"
+          >
+            <div class="items-center gap-2 text-slate-500 text-xs">
+              <!-- <Loader2 class="w-4 h-4 animate-spin text-blue-500" /> -->
+              <span class="text-xs font-bold text-slate-500">{{ message.content }}</span>
+              <div
+                v-if="message.widgetPayload?.rawText"
+                class="prose prose-sm max-w-none text-slate-700 leading-7"
+                v-html="rawTextHtml"
+              />
             </div>
-
-            <!-- <HXTWidgetRenderer
-              v-if="message.widgetPayload?.rootNode"
-              :node="message.widgetPayload.rootNode"
-            /> -->
-
-            <!-- eslint-disable-next-line vue/no-v-html -->
-
-            <a2uiRender
-              v-if="message.widgetPayload?.surfaces"
-              :surfaceList="message.widgetPayload.surfaces"
-              @action="handleAction"
-            ></a2uiRender>
           </div>
         </div>
       </div>
 
+      <a2uiRender
+        v-if="message.widgetPayload?.surfaces"
+        :surfaceList="message.widgetPayload.surfaces"
+        @action="handleAction"
+      ></a2uiRender>
       <!-- User timestamp (Right) -->
       <span v-if="isUser" class="text-[9px] text-slate-300 mt-1 mr-1">{{ timeString }}</span>
     </div>

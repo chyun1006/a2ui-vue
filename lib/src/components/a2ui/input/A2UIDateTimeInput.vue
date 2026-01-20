@@ -99,7 +99,7 @@ const updateDataModel = (newDate) => {
     <Label v-if="labelText" class="text-xs font-semibold text-slate-500 ml-1">{{
       labelText
     }}</Label>
-    <div class="relative w-[280px]">
+    <div class="relative">
       <input
         type="date"
         :value="date ? date.toISOString().split('T')[0] : ''"

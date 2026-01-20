@@ -43,9 +43,9 @@ const tag = computed(() => TEXT_TAG_MAP[props.usageHint] || 'p')
 
 const textClasses = computed(() => {
   const styleMap = {
-    h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
-    h2: 'scroll-m-20 text-3xl font-semibold tracking-tight',
-    h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
+    h1: 'scroll-m-20 text-xl font-extrabold tracking-tight lg:text-5xl',
+    h2: 'scroll-m-20 text-xl font-semibold tracking-tight',
+    h3: 'scroll-m-20 text-xl font-semibold tracking-tight',
     h4: 'scroll-m-20 text-xl font-semibold tracking-tight',
     h5: 'scroll-m-20 text-lg font-semibold tracking-tight',
     caption: 'text-sm text-muted-foreground',

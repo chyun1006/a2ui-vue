@@ -65,14 +65,14 @@ const onClick = () => {
 </script>
 
 <template>
-  <!-- <Button :variant="buttonVariant" :size="buttonSize" @click="onClick">
+  <Button :variant="buttonVariant" :size="buttonSize" @click="onClick">
     <A2UIRenderer :component-id="child" @action="emit('action', $event)" />
-  </Button> -->
+  </Button>
 
-  <button
+  <!-- <button
     class="transition-all active:scale-[0.98] duration-200 bg-blue-600 text-white py-1 px-4 rounded-lg text-xs px-2font-bold flex items-center justify-center gap-2"
     @click="onClick"
   >
     <A2UIRenderer :component-id="child" @action="emit('action', $event)" />
-  </button>
+  </button> -->
 </template>
